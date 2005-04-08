@@ -44,7 +44,8 @@ class GithubMonitor
 
   def backdate_commit(repo)
     msg = @git.repos.commits.list(ENV["USERNAME"], repo)[0]["commit"]["author"]["date"]
-    %x[git commit -m --date=#{msg}]
+    %x[git commit --date=#{msg}]
+
   end
 
 end
