@@ -11,24 +11,33 @@ class WeatherForecast
   VALID_FORMATS = [:json]
   MID_SANDWICH = "&mode=json&units=metric&cnt="
 
-  def initialize(location, num_days)
+  def initialize(location = "Truro,UK", num_days = 5)
     @location = location
     @num_days = num_days
     validate_num_days!(num_days)
     validate_location!(location)
-    send_request(@location, @num_days)
   end
 
   def hi_temps
+    trim_and_request(@location, @num_days).each do |day|
+      puts day["temp"]["max"]
+    end
   end
 
   def low_temps
+    trim_and_request(@location, @num_days).each do |day|
+      puts day["temp"]["min"]
+    end
   end
 
   def today
+    today = trim_and_request(@location, @num_days)[0]
+    puts "Today's forecast: \n humidity of #{today["humidity"]} %, with #{today["weather"][0]["description"]}, and wind at #{today["speed"]} kilometers an hour"
   end
 
   def tomorrow
+    today = trim_and_request(@location, @num_days)[1]
+    puts "Tomorrow's forecast: \n humidity of #{today["humidity"]} %, with #{today["weather"][0]["description"]}, and wind at #{today["speed"]} kilometers an hour"
   end
 
   #three more
@@ -37,15 +46,17 @@ class WeatherForecast
   private
 
   def send_request(location, num_days)
-    return unless location && num_days
-
     uri = [ BASE_URI, location, MID_SANDWICH, num_days ].join("")
-    binding.pry
-    params = 0
+    params = { "api-key" => API_KEY }
 
-    request = 0
+    request = Typhoeus::Request.new( uri, :method => :get, :params => params )
 
-    # request.run
+    request.run
+  end
+
+  def trim_and_request(location, num_days)
+    response = send_request(location, num_days)
+    return JSON.parse( response.response_body )["list"]
   end
 
   def validate_num_days!(num_days)
@@ -60,4 +71,6 @@ class WeatherForecast
 
 end
 
-hi = WeatherForecast.new("Truro,UK",5)
+hi = WeatherForecast.new("Superior,MT,USA",12)
+hi.today
+hi.tomorrow
