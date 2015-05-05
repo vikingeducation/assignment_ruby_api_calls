@@ -42,7 +42,6 @@ class WeatherForecast
 
   #three more
 
-
   private
 
   def send_request(location, num_days)
@@ -71,6 +70,8 @@ class WeatherForecast
 
 end
 
-hi = WeatherForecast.new("Superior,MT,USA",12)
-hi.today
-hi.tomorrow
+#USER INSTRUCTIONS HERE
+
+# e.g. my_weather = WeatherForecast.new("Superior,MT,USA",12)
+# my_weather.today
+# my_weather.tomorrow
