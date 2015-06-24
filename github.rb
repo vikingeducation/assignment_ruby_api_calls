@@ -3,7 +3,7 @@ require 'github_api'
 class GithubExplorer
 
   def initialize
-    @github = Github.new oauth_token: "d09e7a9e346740eb4b8bd26626dab2176fae36e5"
+    @github = Github.new oauth_token: ENV["GITHUB_API_OAUTH"]
   end
 
 
