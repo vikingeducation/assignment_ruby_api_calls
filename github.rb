@@ -53,15 +53,15 @@ class GithubExplorer
     return nil
   end
 
-
+  # All notification calls are coming in empty???
   def latest_notifications(repo)
-    all_notifications = @github.activity.notifications.list user: 'peter-murach', repo: 'github'
+    all_notifications = @github.activity.notifications.list user: repo.owner.login, repo: repo.name
 
-    #latest_notes = all_notifications.sort_by { |note| note.updated_at }.reverse[0..9]
+    latest_notes = all_notifications.sort_by { |note| note.updated_at }.reverse[0..9]
 
-    #latest_notes.each do |note|
-    #  puts "#{note.updated_at}: #{note.subject}"
-    #end
+    latest_notes.each do |note|
+      puts "#{note.updated_at}: #{note.subject}"
+    end
   end
 
 
