@@ -41,3 +41,6 @@ PLATFORMS
 DEPENDENCIES
   github_api
   httparty
+
+BUNDLED WITH
+   1.10.1
