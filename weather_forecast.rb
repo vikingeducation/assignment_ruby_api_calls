@@ -9,6 +9,7 @@ class WeatherForecast
     url = create_url(location, days)
 
     response = HTTParty.get(url)
+    response.history_added = Proc.new { sleep 0.5 }
     @body = response.parsed_response
 
   end

@@ -1,7 +1,5 @@
 require "github_api"
 
-
-
 def last_10_repo(repo_list)
   arr = []
   0.upto(9).each {|i| arr << repo_list[i]["name"]}
@@ -21,6 +19,7 @@ def last_10_commits(github_obj, repo_list)
 end
 
 github_obj = Github.new(oauth_token: ENV["GITHUB_VCS_API"])
+github_obj.history_added = Proc.new { sleep 0.5 }
 repo_list = github_obj.repos.list(user: ENV["USERNAME"], sort: "created", direction: "desc")
 
 array_r = last_10_repo(repo_list)
