@@ -18,8 +18,8 @@ class WeatherForecast
   #number of days beyond 16 raises error
 
   def initialize(zipcode = 93546, num_of_days = 3)
-    validate_zip!(zipcode)
-    validate_numofdays!(num_of_days)
+    # validate_zip!(zipcode)
+    # validate_numofdays!(num_of_days)
 
     @zipcode = zipcode
     @num_of_days = num_of_days
@@ -38,12 +38,14 @@ class WeatherForecast
   end
 
   def zipcode_uri
+    string =""
     string << "zip=#{@zipcode},us"
   end
 
 
   def send_request
     uri = [BASE_URI, @forecast_type, zipcode_uri].join("")
+    puts uri.inspect
 
     params = { "api-key" => API_KEY }
 
