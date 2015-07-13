@@ -8,6 +8,7 @@ require 'pp'
 
 class WeatherForecast
 
+  attr_accessor 
   # BASE_URI = "http://api.openweathermap.org/data/2.5/"
 
   API_KEY = ENV["API_KEY"]
@@ -19,7 +20,7 @@ class WeatherForecast
 
   include HTTParty
 
-  base_uri('http://api.openweather.org/data/2.5/')
+  base_uri('http://api.openweather.org/')
 
   def initialize(city_name, num_of_days)
     @options = { :query => { :q => city_name, :mode => "json", :cnt => num_of_days, :APPID => API_KEY }}
@@ -29,11 +30,11 @@ class WeatherForecast
 
 
   def current
-    self.class.get("weather?", @options)
+    self.class.get('weather?', @options)
   end
 
   def forecast
-    self.class.get("forecast/daily?", @options)
+    self.class.get('forecast/daily?', @options)
   end
 
   # def send_request
