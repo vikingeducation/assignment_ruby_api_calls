@@ -6,10 +6,11 @@ class WeatherForecast
 
   def initialize (location="London", days=5)
     @results=HTTParty.get(generate_results(location, days))
-    print
+    # print
+    @city=location
+
     @daily_results = @results["list"]
-    #@results = load_json(@results)
-    #http://api.openweathermap.org/data/2.5/forecast/city?id=524901&APPID={APIKEY}
+    
   end
 
   def generate_results(location, days)
@@ -34,13 +35,15 @@ class WeatherForecast
     results
   end
 
-  def compare_temps(location, days)
-    results = []
-    @other_results = HTTParty.get(generate_results(location, days))["list"]
-    @daily_results.each do |res|
-      
+  def compare_temps(location)
+    
+    @other_results = HTTParty.get(generate_results(location, @daily_results.length))["list"]
+    0.upto(@daily_results.length-1) do |i|
+      puts " #{@city} has T= #{@other_results[i]["main"]["temp"]} and #{location} has T= #{@daily_results[i]["main"]["temp"]}"
     end
+      
   end
+
 
 
   def today
@@ -64,11 +67,17 @@ class WeatherForecast
     pp @results
   end
 
+  def pressure
+    @daily_results.each do |day|
+      puts "#{Time.at(day["dt"]).strftime("%B %d")} pressure is #{day["main"]["pressure"]}hpa"
+    end
+  end
+
 
 end
 weather = WeatherForecast.new
-
-p "High temps: #{weather.hi_temps}"
-p "Low temps: #{weather.lo_temps}"
-p "Wind speeds: #{weather.wind_speed}"
-weather.today
+weather.pressure
+# p "High temps: #{weather.hi_temps}"
+# p "Low temps: #{weather.lo_temps}"
+ # p "Wind speeds: #{weather.wind_speed}"
+# weather.today
