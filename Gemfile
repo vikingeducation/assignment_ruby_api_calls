@@ -1,4 +1,4 @@
 source "https://rubygems.org"
-gem 'httparty'
+#gem 'httparty'
 gem 'github_api'
 #gem 'pp'
