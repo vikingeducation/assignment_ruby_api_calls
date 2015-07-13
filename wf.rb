@@ -50,7 +50,7 @@ class WeatherForecast
     params = { "api-key" => API_KEY }
 
     request = HTTParty.get(uri, params)
-    pp request.body
+    request.body
 
   end
 
