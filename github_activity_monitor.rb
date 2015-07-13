@@ -2,14 +2,16 @@ require "github_api"
 
 class GithubMonitor
 
-  token = ENV["TOKEN"]
-
-  @git = Github.new(oauth_token: token)
-
-  def create_repo
-
-    @git.repos.create(name: "forkcommithistory")
-
+  def initialize
+    @git = Github.new(oauth_token: ENV["TOKEN"])
+    @repo = create_repo
   end
 
+  def create_repo
+    @git.repos.create(name: "forkcommithistory")
+  end
+
+  def add_commit
+    
+  end
 end
