@@ -5,18 +5,17 @@ class NotGitHub
   def initialize(username)
     @github = Github.new user: username, oauth_token: ENV["GITHUB"]
     @username = username
-    responses = @github.repos.list
-    last_ten(responses)
-    # last_ten_messages(responses)
+    responses = last_ten
+    #last_ten_messages_per_repo
+    last_ten_messages_for_10_repos(responses)
   end
 
-  def last_ten(responses)
-    arr = responses.map {|repo| [repo.updated_at, repo.name]}
-    arr = arr.sort_by{|x,y|x}.reverse[0..9]
-    arr.each {|i| puts i[1]}
+  def last_ten
+    responses = @github.repos.list.map {|repo| [repo.updated_at, repo.name]}
+    responses = responses.sort_by{|x,y|x}.reverse[0..9]
   end
 
-  def last_ten_messages_per_repo(responses)
+  def last_ten_messages_per_repo
     msg = @github.repos.commits.list @username, 'assignment_ruby_api_calls' #, sha: "32d74e2dcee2c8ca963fcf472d6006ea110fa692"
     msg.map do |m|
       p m["commit"]["message"]
@@ -24,8 +23,14 @@ class NotGitHub
   end
 
   def last_ten_messages_for_10_repos(responses)
-    arr.each ||
-    msg = @github.repos.commits.list @username, 'assignment_ruby_api_calls'
+    all_messages = []
+    responses.each do |repos|
+      msg_list = @github.repos.commits.list @username, repos[1]
+      msg_list.map.with_index do |m, index|
+        index == 10 ? break : all_messages << "#{repos[1]}: #{m["commit"]["message"]}"
+      end
+    end
+    p all_messages
   end
 
 
