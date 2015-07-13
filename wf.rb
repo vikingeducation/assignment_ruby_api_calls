@@ -58,7 +58,7 @@ class WeatherForecast
 
 
   def send_request
-    uri = [BASE_URI, @forecast_type, zipcode_uri].join("")
+    uri = [BASE_URI, @forecast_type, zipcode_uri, "&cnt=#{@num_of_days}"].join
     # puts uri.inspect
 
     params = { "api-key" => API_KEY }
