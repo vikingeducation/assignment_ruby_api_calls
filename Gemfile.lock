@@ -49,6 +49,3 @@ DEPENDENCIES
   github_api
   httparty
   pry
-
-BUNDLED WITH
-   1.10.5
