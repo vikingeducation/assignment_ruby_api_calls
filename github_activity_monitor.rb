@@ -6,7 +6,7 @@ class GithubMonitor
 
   def initialize
     @git = Github.new(oauth_token: ENV["TOKEN"]) #obj
-    @repo = create_repo
+    @repo = "forkcommithistory"
   end
 
   def create_repo
