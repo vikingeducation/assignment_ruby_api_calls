@@ -44,6 +44,7 @@ class WeatherForecast
 
   def send_request
     uri = [BASE_URI, @forecast_type, zipcode_uri].join("")
+    puts uri
 
     params = { "api-key" => API_KEY }
 
