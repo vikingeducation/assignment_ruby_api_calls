@@ -1,4 +1,5 @@
 require 'httparty'
+require 'nokogiri'
 
 
 class WeatherForecast
@@ -10,7 +11,7 @@ class WeatherForecast
 	end
 
 	def request
-		options = { :query => {location: "#{@location}", cnt: "#{@days}", APPID: ENV["TOKEN"]} }
+		options = { :query => {q: "#{@location}", cnt: "#{@days}", APPID: ENV["TOKEN"]} }
 		HTTParty.get("http://api.openweathermap.org/data/2.5/forecast/daily?", options)
 	end
 
