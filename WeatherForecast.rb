@@ -12,7 +12,8 @@ class WeatherForecast
 
   def initialize(location = "New_York,US", num_days = "3")
 
-    @options = { :query => { :q => location, :cnt => num_days, :mode => "JSON", :units => "imperial", APPID => ENV[API_KEY] } }
+    @options = { :query => { :q => location, :cnt => num_days, :mode => "JSON", :units => "imperial",  } }
+    #APPID => ENV[API_KEY]
 
   end
 
@@ -25,19 +26,33 @@ class WeatherForecast
 
   def forecast
 
-    self.class.get('/data/2.5/forecast?', @options)
+    @fore = self.class.get('/data/2.5/forecast?', @options)
+    binding.pry
 
   end
 
   def parse(response)
 
-    @weather_info = response.to_hash
+    @weather_info = JSON.parse(response.body)
+  end
+
+  def hi_temps #this creates array of high temp 
+    #@weather_info["list"][0]["main"]["temp_max"] gives day 1 high temp
+    hi_temps = []
+
+    @weather_info["list"].each do |day|
+      hi_temps << [day["main"]["temp_max"],day["dt_txt"]]
+    end
 
   end
 
-  def hi_temps
+  def hi_temps #this creates array of lo temp 
+    #@weather_info["list"][0]["main"]["temp_max"] gives day 1 high temp
+    lo_temps = []
 
-
+    @weather_info["list"].each do |day|
+      lo_temps << [day["main"]["temp_min"],day["dt_txt"]]
+    end
 
   end
 
