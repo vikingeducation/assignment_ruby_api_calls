@@ -1,13 +1,14 @@
 
 require 'github_api'
 github = Github.new oauth_token: File.readlines('key.md')[1]
-
+name = File.readlines('key.md')[2].to_s
+puts name
 # github.repos.list(user: 'shadefinale').each{|r| puts r["updated_at"]}
 repos=[]
 
 #Sorted by date list of repos
 
-repos = github.repos.list(user: 'shadefinale', sort: 'created')#.map{|r| r[:name]}
+repos = github.repos.list(user: name, sort: 'created')#.map{|r| r[:name]}
 repos = repos[0..9]
 
 #10 latest commits for 10 repos
@@ -17,7 +18,7 @@ repos = repos[0..9]
 # end
 repos.each do |reponame|
   sleep(1)
-  github.repos.commits.list('shadefinale', reponame[:name]).each_with_index do |c, index|
+  github.repos.commits.list(name, reponame[:name]).each_with_index do |c, index|
     break if index >= 10
     p c["commit"]["message"]
   end
