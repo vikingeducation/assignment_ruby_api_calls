@@ -15,6 +15,6 @@ class GithubMonitor
 
   def add_commit
     contents = Github::Client::Repos::Contents.new
-    @git.repos.contents.create( ENV['USERNAME'], @repo, 'README.md')
+    contents.create( ENV['USERNAME'], g.repo.name, "README.md", path: "README.md", message: "create readme file", content: "testing")
   end
 end
