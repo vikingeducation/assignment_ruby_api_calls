@@ -1,6 +1,6 @@
 require 'github_api'
 
-class NotGitHub
+class API
 
   def initialize(username)
     @github = Github.new user: username, oauth_token: ENV["GITHUB"]
@@ -35,6 +35,26 @@ class NotGitHub
 
 
 end
+
+
+class ReplicateRepo
+
+
+def initialize(username)
+
+  @github = Github.new name: username, oauth_token: ENV["TOKEN"]  
+
+
+end
+
+def create_repo(repo_name)
+
+  @github.repos.create name: repo_name
+  @github.repos.contents.create username, repo_name, 'commithistory.txt', path: 'commithistory.txt', content: "did a commit message", message: "a commit message"
+
+
+end
+
 
 gh = NotGitHub.new('joseph-lozano')
 # gh2 = NotGitHub.new('alokpradhan')
