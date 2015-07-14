@@ -45,10 +45,28 @@ class GithubAuth
 
   end
 
+  def create_repo(name = 'forkcommithistory')
+
+    @github_user.repos.create(name: 'forkcommithistory')
+
+  end
+
+  def create_file(repo = 'forkcommithistory', name = 'README.md')
+
+    @github_user.repos.contents.create(user: @user_name, repo: repo, path: name)
+
+  end
+
+  def to_terminal(message)
+    %x( message )
+  end
+
 end
 
 g1 = GithubAuth.new
 
 # g1.print_names
 # g1.print_commits
-g1.github_user.repos.create(name: “forkcommithistory”)
+# g1.github_user.repos.create(name: 'forkcommithistory')
+
+
