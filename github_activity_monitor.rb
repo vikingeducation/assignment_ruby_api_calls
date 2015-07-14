@@ -30,4 +30,14 @@ class GithubMonitor
     @git.repos.contents.update( ENV['USERNAME'], @repo, "README.md", path: "README.md", message: "#{msg}: add private commit to #{repo}", content: msg, sha: file.sha)
   end
 
+  def clone_repo(repo)
+    url = "https://github.com/#{ENV["USERNAME"]}/#{repo}.git"
+    %x[git clone #{url}]
+  end
+
+  def backdate_commit(repo)
+    msg = @git.repos.commits.list(ENV["USERNAME"], repo)[0]["commit"]["author"]["date"]
+    %x[git commit --date=#{msg}]
+  end
+
 end
