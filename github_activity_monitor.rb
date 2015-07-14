@@ -27,14 +27,17 @@ class GithubMonitor
     # commits[0]["commit"]["author"]["date"]
     msg = @git.repos.commits.list(ENV["USERNAME"],
                                 repo)[0]["commit"]["author"]["date"]
+
     file = @git.repos.contents.find(user: ENV["USERNAME"],
-                                    repo: @repo, path: "README.md")
+                                    repo: @repo,
+                                    path: "README.md")
+
     @git.repos.contents.update( ENV['USERNAME'],
                                 @repo, "README.md",
-                                { path: "README.md",
-                                  message: "#{msg}: add private commit to #{repo}",
-                                  content: msg,
-                                  sha: file.sha})
+                              { path: "README.md",
+                                message: "#{msg}: add private commit to #{repo}",
+                                content: msg,
+                                sha: file.sha})
   end
 
   def clone_repo(repo)
@@ -44,7 +47,7 @@ class GithubMonitor
 
   def backdate_commit(repo)
     msg = @git.repos.commits.list(ENV["USERNAME"], repo)[0]["commit"]["author"]["date"]
-    %x[git commit --date=#{msg}]
+    %x[git commit --date=#{msg} -m "backdating"]
 
   end
 
