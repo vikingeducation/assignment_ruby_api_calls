@@ -3,37 +3,24 @@ require 'pp'
 
 class GitThing
 
-  TOKEN = ENV["GIT_TOKEN"]
+  TOKEN = ENV["GITHUB_TOKEN"]
 
   def initialize
     @github = Github.new oauth_token: TOKEN
     @sorted_repo_array = []
-    @short_repo_arr =[]
-    recent_repos
   end
 
   def recent_repos
     @sorted_repo_array = @github.repos.list.sort_by {|item| item.created_at }
-    i = @sorted_repo_array.length - 1 
-    10.times do 
-      # puts @sorted_repo_array[i].name
-      @short_repo_arr << @sorted_repo_array[i]
-      i -= 1
-    end
+    (@sorted_repo_array.length-1..@sorted_repo_array.length-10).map {|i| @sorted_repo_array[i]}
   end
 
   def recent_commits
-    commit_num = 1
-    commits = @github.repos.commits.list 'gweinert', 'assignment_ruby_api_calls'
-    # print "@short_repo_arr.inspect"
-    @short_repo_arr.each do |repo|
-      commit_num = 1
-      sleep(2)
+    recent_repos.each do |repo|
       commits = @github.repos.commits.list 'gweinert', repo.name
-      print "Repo: #{repo.name}\n"
-      commits.each do |commit|
-        print "      commit #{commit_num}: #{commit.commit.message}\n" 
-        commit_num += 1
+      puts "Repo: #{repo.name}"
+      commits.each_with_index do |commit, commit_num|
+        puts "      commit #{commit_num}: #{commit.commit.message}"
       end
     end
   end
@@ -60,7 +47,7 @@ end
 class MakeGitRepo
 
   def initialize
-    @github = Github.new oauth_token: "396a1c70604556a4bbdad7e226abe00be65a4c8e"
+    @github = Github.new oauth_token: TOKEN
   end
 
   def create_new_repo(repo_name = "forkcommithistory")
@@ -72,10 +59,24 @@ class MakeGitRepo
     `git clone #{repo.html_url} ~/Desktop/VCS/#{repo_name}`
   end
 
-end
+  def commit_to_repo(repo_name = "forkcommithistory", 
+                     file_name = "README.md", 
+                     file_path = "README.md", 
+                     new_content)
+    file = contents.find 'facingsouth', repo_name, file_path
+    contents.create 'facingsouth', repo_name, file_path, 
+                path: file_path, 
+                message: "New commit", 
+                content: new_content, 
+                sha: file.sha
+  end
 
-m = MakeGitRepo.new
-m.clone_git_repo
+  def get_commit(repo_name = "project_dom_tree")
+    commits = @github.repos.commits.list 'facingsouth', repo_name
+
+  end
+
+end
 
 
 
