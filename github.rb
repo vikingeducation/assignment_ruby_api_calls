@@ -33,30 +33,32 @@ class API
     p all_messages
   end
 
-
 end
-
 
 class ReplicateRepo
+  def initialize(username)
+    @github = Github.new name: username, oauth_token: ENV["TOKEN"]
+    @username = username
+  end
 
+  def create_repo(repo_name)
+    @github.repos.create name: repo_name
+  end
 
-def initialize(username)
+  def make_a_commit(repo_name, sha = nil)
+    @github.repos.contents.create @username, repo_name, 'README.md',
+    path: 'README.md', content: "Alok Pradhan", message: "First Commit", sha: sha
+  end
 
-  @github = Github.new name: username, oauth_token: ENV["TOKEN"]  
-
+  def get_repo_data(repo_name = 'assignment_ruby_api_calls', file_name = 'github.rb')
+    commit = @github.repos.contents.find @username, repo_name, file_name
+    result = @github.repos.commits.list @username, repo_name, commit.sha
+    date_authored = result.first.commit.author.date
+  end
 
 end
 
-def create_repo(repo_name)
-
-  @github.repos.create name: repo_name
-  @github.repos.contents.create username, repo_name, 'commithistory.txt', path: 'commithistory.txt', content: "did a commit message", message: "a commit message"
-
-
-end
-
-
-gh = NotGitHub.new('joseph-lozano')
+# gh = NotGitHub.new('joseph-lozano')
 # gh2 = NotGitHub.new('alokpradhan')
 
 # github = Github.new
