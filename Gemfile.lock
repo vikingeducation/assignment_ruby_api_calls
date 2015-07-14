@@ -36,6 +36,3 @@ PLATFORMS
 
 DEPENDENCIES
   github_api
-
-BUNDLED WITH
-   1.10.5
