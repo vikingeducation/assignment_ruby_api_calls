@@ -3,9 +3,12 @@ require 'pry'
 
 class GithubAuth
 
+  attr_reader :github_user, :user_name
+
   def initialize
     @github_user = Github.new oauth_token: ENV['my_api']
-    binding.pry
+    @user_name = @github_user.repos.list.first["owner"]["login"]
+    #binding.pry
   end
 
   def print_names
@@ -21,30 +24,21 @@ class GithubAuth
 
   def print_commits
 
-    commits_info = []
+    repo_names = []
 
-    10.times do |i| # First 10 repos
+    # Gets your username and the name of the repositories for which you want to print commits
+    @github_user.repos.all.each { |repo| repo_names << repo["name"] }
 
-      # Gets your username and the name of the repositories for which you want to print commits
+    repo_names.each_with_index do |repo_name, index|
 
-      commits_info << [
-                  @github_user.repos.list[i]["owner"]["login"],
-                  @github_user.repos.list[i].name
-      ]
-
-      puts "Grabbing repo names... Please wait"
-
-    end
-
-    for index in (0...10)
-
-      commits = @github_user.repos.commits.list commits_info[index][0], commits_info[index][1]
+      all_commits = @github_user.repos.commits.list @user_name, repo_name
       puts "-" * 30
-      puts "Current Repo: #{commits_info[index][1]}"
+      puts "Current Repo: #{repo_names[index]}"
       sleep 0.5
-      for idx2 in (0...10)
-        puts commits[idx2]["commit"]["message"]
-        break if commits[idx2+1].nil?
+      all_commits.each do |commit|
+        commit_date = commit["commit"]["author"]["date"]
+        puts "Commit message on: #{commit_date[0..9]}"
+        puts ".................. #{commit["commit"]["message"]}"
         #binding.pry
       end
     end
@@ -55,5 +49,6 @@ end
 
 g1 = GithubAuth.new
 
-#g1.print_names
+# g1.print_names
 # g1.print_commits
+g1.github_user.repos.create(name: “forkcommithistory”)
