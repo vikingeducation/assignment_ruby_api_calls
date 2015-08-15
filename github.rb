@@ -17,13 +17,12 @@ class VikingGithub < Github::Client
     repos = recent_repos
 
     repos.each do |repo|
-      name = repo["name"]
       sleep(0.2)
-      commits = self.repos.commits.list 'nonadmin', name, sort: "updated",
+      commits = self.repos.commits.list 'nonadmin', repo.name, sort: "updated",
                                         per_page: 10
-      commits_list[name.to_sym] = []
+      commits_list[repo.name.to_sym] = []
       commits.each do |commit|
-        commits_list[name.to_sym] << commit["commit"]["message"]
+        commits_list[repo.name.to_sym] << commit.commit.message
       end
 
     end
