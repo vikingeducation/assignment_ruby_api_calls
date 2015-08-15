@@ -27,15 +27,25 @@ class GenerateHistory < Github::Client
 
 
   def append_timestamps
-    %x(git clone git@github.com:nonadmin/forkcommithistory.git /tmp/forkcommithistory)
-    get_timestamps.each do |timestamp|
+    Dir.chdir('/tmp'){
 
-      File.open('/tmp/forkcommithistory/README.md', 'a') do |file|
-        file.write("#{timestamp} - Fork Repo Commit\r\n")
+      %x(git clone git@github.com:nonadmin/forkcommithistory.git)
+
+      Dir.chdir('forkcommithistory'){
+
+      get_timestamps.each do |timestamp|
+
+        File.open('README.md', 'a') do |file|
+          file.write("#{timestamp} - Fork Repo Commit\r\n")
+        end
+
+
+        %x(git commit --date "#{timestamp}" -am "Forked Repo Commit")
       end
 
-      %x(git commit --date="#{timestamp}" -am="Forked Repo Commit")
-    end
+      }
+
+    }
   end
 
 
