@@ -21,6 +21,7 @@ class GenerateHistory < Github::Client
       get_timestamps.each do |timestamp|
 
         puts "Adding... #{timestamp}"
+        
         File.open('README.md', 'a') do |file|
           file.puts "#{timestamp} - Fork Repo Commit  \r\n"
         end
