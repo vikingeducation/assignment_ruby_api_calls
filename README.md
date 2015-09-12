@@ -7,7 +7,7 @@ Simple Ruby API Call Assignment
 
 Generates weather forecast data from a public API at [Open Weather Map][weather].
 
-## Usage
+## Usage (WeatherForecast)
 
 1. If you prefer API key security use a YAML file and the ENVLoader class
 
@@ -69,5 +69,15 @@ Generates weather forecast data from a public API at [Open Weather Map][weather]
 	puts "Lows"
 	p weather_forecast.lows
 	```
+
+## Run Examples (WeatherForecast)
+
+	```shell
+	$ cd to/this/directory
+	$ ruby weather.rb
+	```
+
+
+
 
 [weather]: http://openweathermap.org/api
