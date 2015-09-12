@@ -132,6 +132,7 @@ Retrieves repository names and commit messages using the [Ruby the Github API][g
 	```
 
 1. Get the last commit messages for an array of repo names, limit defaults to 10 messages per repo
+	- NOTE: this method takes time, it sleeps inbetween API calls to avoid sending too many requests too fast!
 
 	```ruby
 	puts "Commit Messages"

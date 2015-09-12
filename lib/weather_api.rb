@@ -1,5 +1,4 @@
 require 'httparty'
-require_relative '../weather_results.rb'
 
 class WeatherAPI
 	END_POINT = 'http://api.openweathermap.org/data/2.5/forecast/daily'
@@ -27,9 +26,8 @@ class WeatherAPI
 	end
 
 	def get
-		# build_url
-		# @data = HTTParty.get(@url)
-		@data = $results
+		build_url
+		@data = HTTParty.get(@url)
 	end
 
 	def filter
