@@ -3,6 +3,15 @@ Simple Ruby API Call Assignment
 
 ## Bideo Wego
 
+## Installation
+
+Make sure to run `bundle install` before using to install the dependencies.
+
+```shell
+$ cd to/this/directory
+$ bundle install
+```
+
 # WeatherForecast
 
 Generates weather forecast data from a public API at [Open Weather Map][weather].
