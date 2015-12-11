@@ -41,6 +41,16 @@ class WeatherForecast
     puts "-" * (34 + @location.length)
     day = @forecast.first
 
+    render_day(day)
+  end
+
+  def tomorrow
+
+  end
+
+  private
+
+  def render_day(day)
     date = Time.at(day['dt']).stamp("Mon, Dec 3")
     high_temp = day['temp']['max']
     low_temp = day['temp']['min']
@@ -52,12 +62,6 @@ class WeatherForecast
     puts "          Humidity: #{humidity}%"
     puts "        Conditions: #{conditions}"
   end
-
-  def tomorrow
-
-  end
-
-  private
 
   def send_request(location, days)
     uri_loc = location.gsub(' ', '%20')
