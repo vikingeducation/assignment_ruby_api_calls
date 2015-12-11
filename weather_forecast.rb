@@ -35,6 +35,15 @@ class WeatherForecast
     end
   end
 
+  def humidities
+    puts "Humidity for the next #{@days} days in #{@location}:"
+    @forecast.each do |day|
+      date = Time.at(day['dt']).stamp("Mon, Dec 3")
+      humidity = day['humidity']
+      puts " - #{date}: #{humidity}%"
+    end
+  end
+
   def today
     puts "-" * (34 + @location.length)
     puts "Today in #{@location} (degrees in Fahrenheit):"
@@ -51,6 +60,27 @@ class WeatherForecast
     day = @forecast[1]
 
     render_day(day)
+  end
+
+  def pretty_forecast
+    puts "-" * (37 + @location.length)
+    puts "Forecast in #{@location} (degrees in Fahrenheit):"
+    puts "-" * (37 + @location.length)
+
+    @forecast.each do |day|
+      render_day(day)
+      puts "-" * (37 + @location.length)
+    end
+  end
+
+  def wind
+    puts "Wind speed & direction for the next #{@days} days in #{@location}:"
+    @forecast.each do |day|
+      date = Time.at(day['dt']).stamp("Mon, Dec 3")
+      wind = day['speed']
+      direction = get_cardinal_direction(day['deg'])
+      puts " - #{date}: #{wind} mph #{direction}"
+    end
   end
 
   private
@@ -77,10 +107,53 @@ class WeatherForecast
 
     response["list"]
   end
+
+  def get_cardinal_direction(degrees)
+    case degrees
+    when 0...11
+      'N'
+    when 11...34
+      'NNE'
+    when 34...56
+      'NE'
+    when 56...79
+      'ENE'
+    when 79...101
+      'E'
+    when 101...124
+      'ESE'
+    when 124...146
+      'SE'
+    when 146...169
+      'SSE'
+    when 169...191
+      'S'
+    when 191...214
+      'SSW'
+    when 214...236
+      'SW'
+    when 236...259
+      'WSW'
+    when 259...281
+      'W'
+    when 281...304
+      'WNW'
+    when 304...326
+      'NW'
+    when 326...349
+      'NNW'
+    else
+      'N'
+    end
+  end
+
 end
 
 forecast = WeatherForecast.new
 # forecast.hi_temps
 # forecast.lo_temps
-forecast.today
-forecast.tomorrow
+# forecast.today
+# forecast.tomorrow
+# forecast.humidities
+# forecast.pretty_forecast
+forecast.wind
