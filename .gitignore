@@ -1,1 +1,2 @@
-env.yml
+weather_app/env.yml
+.DS_Store
