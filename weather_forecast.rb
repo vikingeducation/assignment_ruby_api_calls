@@ -26,6 +26,15 @@ class WeatherForecast
     end
   end
 
+  def lo_temps
+    puts "Low Temperatures for the next #{@days} days in #{@location} (Fahrenheit):"
+    @forecast.each do |day|
+      date = Time.at(day['dt']).stamp("Mon, Dec 3")
+      low_temp = day['temp']['min']
+      puts " - #{date}: #{low_temp}"
+    end
+  end
+
   private
 
   def send_request(location, days)
@@ -41,3 +50,4 @@ end
 
 forecast = WeatherForecast.new
 forecast.hi_temps
+forecast.lo_temps
