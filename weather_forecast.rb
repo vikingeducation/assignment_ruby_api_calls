@@ -35,6 +35,28 @@ class WeatherForecast
     end
   end
 
+  def today
+    puts "-" * (34 + @location.length)
+    puts "Today in #{@location} (degrees in Fahrenheit):"
+    puts "-" * (34 + @location.length)
+    day = @forecast.first
+
+    date = Time.at(day['dt']).stamp("Mon, Dec 3")
+    high_temp = day['temp']['max']
+    low_temp = day['temp']['min']
+    humidity = day['humidity']
+    conditions = day['weather'].first['description']
+
+    puts "              Date: #{date}"
+    puts " Low to High Temps: #{low_temp} to #{high_temp}"
+    puts "          Humidity: #{humidity}%"
+    puts "        Conditions: #{conditions}"
+  end
+
+  def tomorrow
+
+  end
+
   private
 
   def send_request(location, days)
@@ -49,5 +71,6 @@ class WeatherForecast
 end
 
 forecast = WeatherForecast.new
-forecast.hi_temps
-forecast.lo_temps
+# forecast.hi_temps
+# forecast.lo_temps
+forecast.today
