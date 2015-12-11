@@ -45,7 +45,12 @@ class WeatherForecast
   end
 
   def tomorrow
+    puts "-" * (34 + @location.length)
+    puts "Tomorrow in #{@location} (degrees in Fahrenheit):"
+    puts "-" * (34 + @location.length)
+    day = @forecast[1]
 
+    render_day(day)
   end
 
   private
@@ -78,3 +83,4 @@ forecast = WeatherForecast.new
 # forecast.hi_temps
 # forecast.lo_temps
 forecast.today
+forecast.tomorrow
