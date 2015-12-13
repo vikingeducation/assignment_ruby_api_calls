@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+
+gem 'envyable'
+gem 'httparty'
+gem 'stamp'
+gem 'github_api'
