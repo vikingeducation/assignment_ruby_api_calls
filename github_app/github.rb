@@ -22,7 +22,7 @@ class GitHubRepos
       puts '-' * 80
       date_string = repo.updated_at
       date = DateTime.parse(date_string).to_date
-      puts "(#{index + 1}) #{repo.name}: #{repo.description} (updated: #{date.stamp('12/30/15')})"
+      puts "(#{index + 1}) #{repo.name}: #{repo.description} (updated: #{date.stamp('12/30/99')})"
 
       if show_commits
         repo_commits = @github.repos.commits.list('siakaramalegos', repo.name, page: 1, per_page: 10).body
@@ -30,7 +30,7 @@ class GitHubRepos
         repo_commits.each do |c|
           date_string = c.commit.author.date
           date = DateTime.parse(date_string).to_date
-          puts "    #{c.commit.message} (#{date.stamp('12/30/15')})"
+          puts "    #{c.commit.message} (#{date.stamp('12/30/99')})"
         end
       end
     end
