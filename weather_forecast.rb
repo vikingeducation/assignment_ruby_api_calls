@@ -22,7 +22,8 @@ class WeatherForecast
   end
 
   def get_base_uri
-    uri = BASE_URI + "#{@daily_str}&#{@location}&#{JSON_FORMAT}&#{@api_str}"
+    uri = BASE_URI + "#{@daily_str}?#{@location}&#{JSON_FORMAT}&#{@api_str}"
+    puts "The URI is #{uri}"
     @response = HTTParty.get(uri)
   end
 
@@ -32,24 +33,6 @@ class WeatherForecast
 
 end
 
-w_api = WeatherForecast.new("London,us",3,false)
+w_api = WeatherForecast.new("London,us",3,true)
 w_api.get_base_uri
 p w_api.trim_response
-
-
-# # Actually run the request using their `get` convenience method
-#   def questions
-#     self.class.get("/2.2/questions", @options)
-#   end
-
-#   def users
-#     self.class.get("/2.2/users", @options)
-#   end
-# end
-
-# # This creates a link to `api.stackexchange.com/?site=stackoverflow&page=1`
-# stack_exchange = StackExchange.new("stackoverflow", 1)
-# puts stack_exchange.questions
-# puts stack_exchange.users
-
-#api.openweathermap.org/data/2.5/forecast?q=London,us&mode=xml
