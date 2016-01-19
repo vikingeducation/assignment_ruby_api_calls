@@ -1,13 +1,16 @@
 require 'github_api'
 require 'rainbow'
 require 'pp'
+require_relative 'github_figaro_setup'
 
 
 class GithubPrinter
 
-  def initialize(oauth_token, username)
+
+  def initialize(username)
+    @oauth_token = ENV["viking_github_api_key"]
     @username = username
-    @github = Github.new(oauth_token: oauth_token, user: username)
+    @github = Github.new(oauth_token: @oauth_token, user: username)
   end
 
 
