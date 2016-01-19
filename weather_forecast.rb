@@ -1,4 +1,3 @@
-
 require 'httparty'
 require 'figaro'
 require 'pp'
@@ -12,7 +11,7 @@ class WeatherForecast
   def initialize( location=DES_MOINES, num_days=5 )
     @location = location
     @num_days = num_days
-    Figaro.application = Figaro::Application.new({environment: "development", path:"./config/application.yml"} )
+    Figaro.application = Figaro::Application.new( {environment: "development", path:"./config/application.yml"} )
     Figaro.load
   end
 
@@ -23,8 +22,8 @@ class WeatherForecast
   def get_forecast
     @api_call = "http://api.openweathermap.org/data/2.5/forecast?id=#{@location}"
     @api_call << "&APPID=#{get_api_key}"
-
     @forecast_hash = HTTParty.get( @api_call )
+    sleep(0.5)
   end
 
   def parse_forecast_hash
