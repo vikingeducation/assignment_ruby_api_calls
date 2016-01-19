@@ -4,4 +4,4 @@ require 'github_api'
 
 result = GithubHttps.new
 parser = GithubParser.new(result.github)
-p parser.list
+pp parser.list_commits
