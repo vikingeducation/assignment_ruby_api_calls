@@ -50,7 +50,7 @@ class WeatherForecast
 
   def hi_temps
     hi_temps = []
-
+    puts "\nHigh Temperature Forecast:\n"
     @forecast.each do |element|
       puts "Day #{element["dt"]} -> #{element["temp"]["max"]}"
       hi_temps << [ element["dt"],element["temp"]["max"]]
@@ -60,7 +60,7 @@ class WeatherForecast
 
   def lo_temps
     lo_temps = []
-
+    puts "\nLow Temperature Forecast:\n"
     @forecast.each do |element|
       puts "Day #{element["dt"]} -> #{element["temp"]["min"]}"
       lo_temps << [ element["dt"],element["temp"]["min"]]
@@ -68,8 +68,18 @@ class WeatherForecast
     lo_temps
   end
 
+  def avg_temps
+    avg = []
+    puts "\nAverage Temperature Forecast:\n"
+    @forecast.each do |element|
+      puts "Day #{element["dt"]} -> #{element["temp"]["day"]}"
+      avg << [ element["dt"],element["temp"]["day"]]
+    end
+    avg
+  end
+
   def today
-    puts "\n\nToday's forecast\n" 
+    puts "\nToday's forecast\n"
     today = @forecast[0]
     today.each do |key,value|
       puts "#{key} -> #{value}"
@@ -78,7 +88,7 @@ class WeatherForecast
   end
 
   def tomorrow
-    puts "\n\nTomorrow's forecast\n" 
+    puts "\nTomorrow's forecast\n"
     tomorrow = @forecast[1]
     tomorrow.each do |key,value|
       puts "#{key} -> #{value}"
@@ -86,12 +96,35 @@ class WeatherForecast
     tomorrow
   end
 
+  def weather_descriptions
+    desc = []
+    puts "\nWeather Description Forecast:\n"
+    @forecast.each do |element|
+      puts "Day #{element["dt"]} -> #{element["weather"][0]["description"]}"
+      desc << [ element["dt"],element["weather"][0]["description"]]
+    end
+    desc
+  end
+
+  def wind_speeds
+    speed = []
+    puts "\nWind Speed Forecast:\n"
+    @forecast.each do |element|
+      puts "Day #{element["dt"]} -> #{element["speed"]}"
+      speed << [ element["dt"],element["speed"]]
+    end
+    speed
+  end
+
 end
 
-w_api = WeatherForecast.new("London,us",3,true)
+w_api = WeatherForecast.new("London,us",10,true)
 w_api.send_request
 w_api.parse_json
 w_api.hi_temps
 w_api.lo_temps
+w_api.avg_temps
 w_api.today
 w_api.tomorrow
+w_api.weather_descriptions
+w_api.wind_speeds
