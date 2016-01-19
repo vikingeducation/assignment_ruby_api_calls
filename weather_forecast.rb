@@ -43,7 +43,7 @@ class WeatherForecast
     forecast.select(&:rain?)
   end
 
-  def windiest_days
+  def windiest_day
     forecast.max_by(&:wind_speed)
   end
 
@@ -57,11 +57,3 @@ class WeatherForecast
 
 end
 
-weather = WeatherForecast.new("New York", 16)
-pp weather.forecast
-# pp weather.hi_temps
-# pp weather.today
-# pp weather.tomorrow
-# pp weather.rainy_days
-# pp weather.windiest_days
-# pp weather.absolute_worst_day

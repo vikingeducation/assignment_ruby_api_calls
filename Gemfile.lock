@@ -29,6 +29,7 @@ GEM
       multi_xml (~> 0.5)
       rack (~> 1.2)
     rack (1.6.4)
+    rainbow (2.0.0)
     thread_safe (0.3.5)
 
 PLATFORMS
@@ -37,6 +38,4 @@ PLATFORMS
 DEPENDENCIES
   github_api
   httparty
-
-BUNDLED WITH
-   1.11.2
+  rainbow
