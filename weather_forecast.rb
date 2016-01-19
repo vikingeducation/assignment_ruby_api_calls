@@ -1,5 +1,6 @@
 require 'httparty'
 require 'pp'
+require 'date'
 
 class Day
   attr_accessor :date, :min, :max, :humidity, :weather_description, :wind_speed, :wind_direction
@@ -30,7 +31,28 @@ class Day
   def date_string
     date.strftime("%D")
   end
+
+  def today?
+    date.to_date == Time.now.to_date
+  end
+
+  def tomorrow?
+    date.to_date == Time.now.to_date+1
+  end
+
+  def rain?
+    weather_description =~ /[rR]ain/
+  end
+
+  def to_kelvin
+    (min + 459.67) * (5/9.0)
+  end
+
 end
+
+
+
+
 
 class WeatherForecast
   include HTTParty
@@ -60,7 +82,38 @@ class WeatherForecast
       {day.date_string => day.min}
     end
   end
+
+  def today
+    forecast.find(&:today?)
+  end
+
+  def tomorrow
+    forecast.find(&:tomorrow?)
+  end
+
+  def rainy_days
+    forecast.select(&:rain?)
+  end
+
+  def windiest_days
+    forecast.max_by(&:wind_speed)
+  end
+
+  def absolute_worst_day
+    if forecast.any? {|day| day.to_kelvin == 0 }
+      puts "Atoms have stopped moving! Take cover! Bundle up!" 
+    else 
+      puts "You're safe, no days will be 0 Kelvin."
+    end
+  end
+
 end
 
-weather = WeatherForecast.new("New York", 3)
-pp weather.hi_temps
+weather = WeatherForecast.new("New York", 16)
+# pp weather.forecast
+# pp weather.hi_temps
+# pp weather.today
+# pp weather.tomorrow
+# pp weather.rainy_days
+# pp weather.windiest_days
+pp weather.absolute_worst_day
