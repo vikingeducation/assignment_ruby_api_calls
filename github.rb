@@ -2,6 +2,8 @@ require 'github_api'
 require 'figaro'
 require 'pp'
 
+Repo = Struct.new( :name, :push_time, :messages )
+
 Figaro.application = Figaro::Application.new( {
   environment: "development",
   path:"./config/application.yml"} )
@@ -12,31 +14,26 @@ github = Github.new(oauth_token: Figaro.env.github_key)
 repo_list = github.repos.list user: 'koziscool'
 repo_names = repo_list.map { |repo| repo['name'] }
 
-repo_list.each do | repo |
-  pp repo["name"], repo["pushed_at"]
+
+our_list = repo_list.map do | repo |
+  push_string = repo["pushed_at"]
+  push_time = Time.new( push_string[0..3].to_i, push_string[5..6].to_i, push_string[8..9].to_i )
+
+  new_repo = Repo.new( )
+  new_repo.name = repo["name"]
+  new_repo.push_time = push_time
+  new_repo
 end
 
-test_time = Time.new(repo_list[0]["pushed_at"])
-pp test_time
-# pp repo_names
-# a_repo = repo_list[0]
+our_list.sort! { |a, b| b.push_time <=> a.push_time }
 
-# commits = github.repos.commits.list 'koziscool', '134141414kjkjfksjafsakfjl', '...'
+our_list[0...10].each do |repo|
+  puts
+  pp repo["name"]
+  commits = github.repos.commits.list 'koziscool', repo["name"], '...'
+  commits.each do |commit|
+    print "    "
+    puts commit["commit"]["message"]
+  end
+end
 
-# commits.each do |commit|
-#   puts commit["commit"]["message"]
-# end
-
-
-
-# commit_msgs = []
-# repo_names.each do |name|
-#   commit_list = github.repos.commits.get('jmazzy', name, '...')
-#   commit_list = commit_list[0..9]
-#   commit_msgs << commit_list.map { |commit| commit['message']}
-# end
-#
-# pp commit_msgs
-#
-# # commit_list = github.repos.commits.list('jmazzy', 'assignment_ruby_api_calls')
-# # pp commit_list
