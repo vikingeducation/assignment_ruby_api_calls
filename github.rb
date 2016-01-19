@@ -9,11 +9,25 @@ Figaro.load
 
 github = Github.new(oauth_token: Figaro.env.github_key)
 
-repo_list = github.repos.list user: 'jmazzy'
-repo_list = repo_list
+repo_list = github.repos.list user: 'koziscool'
 repo_names = repo_list.map { |repo| repo['name'] }
 
-pp repo_names
+repo_list.each do | repo |
+  pp repo["name"], repo["pushed_at"]
+end
+
+test_time = Time.new(repo_list[0]["pushed_at"])
+pp test_time
+# pp repo_names
+# a_repo = repo_list[0]
+
+# commits = github.repos.commits.list 'koziscool', '134141414kjkjfksjafsakfjl', '...'
+
+# commits.each do |commit|
+#   puts commit["commit"]["message"]
+# end
+
+
 
 # commit_msgs = []
 # repo_names.each do |name|
