@@ -6,6 +6,7 @@ require 'pp'
 
 class WeatherForecast
   include HTTParty
+  attr_reader :uri
 
   API_KEY = ENV["WEATHER_API"]
 
@@ -14,10 +15,11 @@ class WeatherForecast
   VALID_FORMATS = [:json]
 
 
-  def initialize(location="London", day=nil, forecast="forecast/daily")
+  def initialize(location="London", day=nil, forecast="forecast/daily", units="imperial")
     @location = location
     @days = day.to_s
     @forecast_type = forecast
+    @units = units
     @uri = nil
     create_uri
   end
@@ -29,10 +31,11 @@ class WeatherForecast
   private
 
     def create_uri
-      @uri = BASE_URI + @forecast_type + "&q=" + @location + "&cnt=" + @days + "&APPID=" + "#{API_KEY}"
-      binding.pry
+      @uri = BASE_URI + @forecast_type + "?" + "&q=" + @location + "&cnt=" + @days + "&units=" + @unit + "&appid=" + "#{API_KEY}"
+      #binding.pry
     end
 end
 
 wf = WeatherForecast.new("London", 7)
-pp wf.weather
+print wf.uri
+pp wf.weather["day"]
