@@ -1,7 +1,2 @@
-
-api-key.txt
-api-key.yml
-.gitignore
-
 # Ignore application configuration
 /config/application.yml
