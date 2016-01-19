@@ -56,7 +56,13 @@ class WeatherForecast
   end
 
   def tomorrow
+    day = @daily_forecast['list'][1]
+    date = day['dt']
+    low = day['temp']['min']
+    high = day['temp']['max']
+    description = day['weather'][0]['description']
 
+    print "Tomorrow's date is #{convert_date(date)}. The low is #{(low-273.16).round(3)} Celsius and the high is #{(high-273.16).round(3)} Celsius. Expect #{description}."
   end
 
 end
