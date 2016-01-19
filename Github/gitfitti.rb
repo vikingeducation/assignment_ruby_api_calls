@@ -23,13 +23,13 @@ class GithubAPI
 
   def get_repos
     #binding.pry
-    @repos = @client.repos.list(sort: "updated").first(5)
+    @repos = @client.repos.list(sort: "updated").first(1)
   end
 
-  def get_commits
+  def get_commits(names)
     commits = []
-    @names.each do |name|
-      #pp name
+    names.each do |name|
+      next if name.nil?
       commits << @client.repos.commits.list(USERNAME, name)
     end
     commits
@@ -48,10 +48,22 @@ class GithubAPI
     @names = @repos.map{|repo| repo['name']}
   end
 
+  def get_fork_names
+    @forkname = @repos.map{|repo| repo['name'] if repo['fork'] == true}
+  end
+
+  def get_fork_dates
+    @hash = {}
+    get_commits(@forkname).each do |repo|
+      @hash[repo['name']] = repo
+  end
+
   def run
     get_repos
     get_name
-    get_commit_messages
+    # get_commit_messages
+    get_fork_names
+    pp get_fork_dates
   end
 
 end
