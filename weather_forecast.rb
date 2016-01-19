@@ -3,7 +3,7 @@ require 'httparty'
 require 'figaro'
 require 'pp'
 
-WeatherStatus = Struct.new( :time, :hi_temp, :lo_temp, :pressure )
+WeatherStatus = Struct.new( :time, :hi_temp, :lo_temp, :pressure, :windspeed, :cloud_cover )
 
 class WeatherForecast
 
@@ -33,7 +33,10 @@ class WeatherForecast
       hi_temp = k_to_f(weather_hash["main"]["temp_max"])
       lo_temp = k_to_f(weather_hash["main"]["temp_min"])
       pressure = weather_hash["main"]["pressure"]
-      @status_list << WeatherStatus.new(time, hi_temp, lo_temp, pressure)
+      wind = weather_hash["wind"]["speed"]
+      cloud_cover = weather_hash["clouds"]["all"]
+      @status_list << WeatherStatus.new(time, hi_temp, lo_temp,
+        pressure, wind, cloud_cover )
     end
 
   end
@@ -52,7 +55,7 @@ class WeatherForecast
         date_temps[date_str] = temp
       end
     end
-    pp date_temps
+    date_temps
   end
 
   def hi_temps
@@ -64,15 +67,51 @@ class WeatherForecast
         date_temps[date_str] = temp
       end
     end
-    pp date_temps
+    date_temps
   end
 
   def today
-
+    today_status = WeatherStatus.new
+    time_today = Time.now
+    today_str = "#{time_today.month}-#{time_today.day}"
+    @status_list.each do |status|
+      status_date_str = "#{status.time.month}-#{status.time.day}"
+      if status_date_str == today_str 
+        if !today_status.hi_temp || status.hi_temp > today_status.hi_temp
+          today_status.hi_temp = status.hi_temp
+        end
+        if !today_status.lo_temp || status.lo_temp < today_status.lo_temp
+          today_status.lo_temp = status.lo_temp
+        end
+        today_status.pressure = status.pressure
+        today_status.windspeed = status.windspeed
+        today_status.cloud_cover = status.cloud_cover
+      end
+    end
+    today_status.time = time_today
+    today_status
   end
 
   def tomorrow
-
+    tomorrow_status = WeatherStatus.new
+    time_tomorrow = Time.now + 24 * 3600
+    tomorrow_str = "#{time_tomorrow.month}-#{time_tomorrow.day}"
+    @status_list.each do |status|
+      status_date_str = "#{status.time.month}-#{status.time.day}"
+      if status_date_str == tomorrow_str 
+        if !tomorrow_status.hi_temp || status.hi_temp > tomorrow_status.hi_temp
+          tomorrow_status.hi_temp = status.hi_temp
+        end
+        if !tomorrow_status.lo_temp || status.lo_temp < tomorrow_status.lo_temp
+          tomorrow_status.lo_temp = status.lo_temp
+        end
+        tomorrow_status.pressure = status.pressure
+        tomorrow_status.windspeed = status.windspeed
+        tomorrow_status.cloud_cover = status.cloud_cover
+      end
+    end
+    tomorrow_status.time = time_tomorrow
+    tomorrow_status
   end
 
 end
@@ -80,5 +119,8 @@ end
 w = WeatherForecast.new
 # puts w.get_api_key
 forecast = w.get_forecast
+# pp forecast
 w.parse_forecast_hash
 pp w.hi_temps
+pp w.today
+pp w.tomorrow
