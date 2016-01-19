@@ -2,6 +2,7 @@ require 'github_api'
 require 'pry-byebug'
 require 'figaro'
 require 'pp'
+require 'rainbow'
 
 Figaro.application = Figaro::Application.new(
   environment: "development",
@@ -13,7 +14,7 @@ class GithubAPI
   TOKEN = Figaro.env.GITHUB_API
   USERNAME = Figaro.env.USERNAME
 
-  attr_accessor :client, :repos
+  attr_accessor :client, :repos, :names
 
   def initialize
     @client = Github.new
@@ -21,12 +22,25 @@ class GithubAPI
   end
 
   def get_repos
+    #binding.pry
     @repos = @client.repos.list(sort: "updated").first(10)
   end
 
   def get_commits
+    commits = []
     @names.each do |name|
-      @client.repos.commits.list(USERNAME, name)
+      #pp name
+      commits << @client.repos.commits.list(USERNAME, name)
+    end
+    commits
+  end
+
+  def get_commit_messages
+    get_commits.each_with_index do |repo,index|
+      puts Rainbow("Repository: #{@names[index]}").cyan
+      repo.each do |commit|
+        puts Rainbow(commit['commit']['message']).green
+      end
     end
   end
 
@@ -40,7 +54,8 @@ git = GithubAPI.new
 # binding.pry
 git.get_repos
 git.get_name
-pp git.get_commits
+git.get_commit_messages
+
 
 
 # git.repos.commit.list(USERNAME, 'assignment_ruby_api_calls')

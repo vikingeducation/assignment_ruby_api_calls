@@ -3,3 +3,4 @@ source "https://rubygems.org"
 
 gem "github_api"
 gem "figaro"
+gem "rainbow"
