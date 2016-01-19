@@ -7,7 +7,9 @@ WeatherStatus = Struct.new( :time, :hi_temp, :lo_temp, :pressure, :windspeed, :c
 
 class WeatherForecast
 
-  def initialize( location=4853828, num_days=5 )
+  DES_MOINES = 4853828
+
+  def initialize( location=DES_MOINES, num_days=5 )
     @location = location
     @num_days = num_days
     Figaro.application = Figaro::Application.new({environment: "development", path:"./config/application.yml"} )
@@ -47,71 +49,56 @@ class WeatherForecast
   end
 
   def lo_temps
-    date_temps = {}
-    @status_list.each do |status|
-      date_str = "#{status.time.month}-#{status.time.day}"
-      temp = status.lo_temp
-      if !date_temps[date_str] || temp < date_temps[date_str]
-        date_temps[date_str] = temp
-      end
-    end
-    date_temps
+    temps(false)
   end
 
   def hi_temps
+    temps(true)
+  end
+
+  def temps(is_max_temp)
     date_temps = {}
     @status_list.each do |status|
       date_str = "#{status.time.month}-#{status.time.day}"
-      temp = status.hi_temp
-      if !date_temps[date_str] || temp > date_temps[date_str]
-        date_temps[date_str] = temp
+      if is_max_temp
+        temp = status.hi_temp
+        best_temp = !date_temps[date_str] || temp > date_temps[date_str]
+      else
+        temp = status.lo_temp
+        best_temp = !date_temps[date_str] || temp < date_temps[date_str]
       end
+      date_temps[date_str] = temp.round(2) if best_temp
     end
     date_temps
   end
 
   def today
-    today_status = WeatherStatus.new
-    time_today = Time.now
-    today_str = "#{time_today.month}-#{time_today.day}"
-    @status_list.each do |status|
-      status_date_str = "#{status.time.month}-#{status.time.day}"
-      if status_date_str == today_str 
-        if !today_status.hi_temp || status.hi_temp > today_status.hi_temp
-          today_status.hi_temp = status.hi_temp
-        end
-        if !today_status.lo_temp || status.lo_temp < today_status.lo_temp
-          today_status.lo_temp = status.lo_temp
-        end
-        today_status.pressure = status.pressure
-        today_status.windspeed = status.windspeed
-        today_status.cloud_cover = status.cloud_cover
-      end
-    end
-    today_status.time = time_today
-    today_status
+    daily_status(Time.now)
   end
 
   def tomorrow
-    tomorrow_status = WeatherStatus.new
-    time_tomorrow = Time.now + 24 * 3600
-    tomorrow_str = "#{time_tomorrow.month}-#{time_tomorrow.day}"
+    daily_status(Time.now + 24 * 3600)
+  end
+
+  def daily_status(time)
+    day_status = WeatherStatus.new
+    tomorrow_str = "#{time.month}-#{time.day}"
     @status_list.each do |status|
       status_date_str = "#{status.time.month}-#{status.time.day}"
-      if status_date_str == tomorrow_str 
-        if !tomorrow_status.hi_temp || status.hi_temp > tomorrow_status.hi_temp
-          tomorrow_status.hi_temp = status.hi_temp
+      if status_date_str == tomorrow_str
+        if !day_status.hi_temp || status.hi_temp > day_status.hi_temp
+          day_status.hi_temp = status.hi_temp.round(2)
         end
-        if !tomorrow_status.lo_temp || status.lo_temp < tomorrow_status.lo_temp
-          tomorrow_status.lo_temp = status.lo_temp
+        if !day_status.lo_temp || status.lo_temp < day_status.lo_temp
+          day_status.lo_temp = status.lo_temp.round(2)
         end
-        tomorrow_status.pressure = status.pressure
-        tomorrow_status.windspeed = status.windspeed
-        tomorrow_status.cloud_cover = status.cloud_cover
+        day_status.pressure = status.pressure
+        day_status.windspeed = status.windspeed
+        day_status.cloud_cover = status.cloud_cover
       end
     end
-    tomorrow_status.time = time_tomorrow
-    tomorrow_status
+    day_status.time = time
+    day_status
   end
 
 end
@@ -121,6 +108,15 @@ w = WeatherForecast.new
 forecast = w.get_forecast
 # pp forecast
 w.parse_forecast_hash
+puts "High Temperatures: "
 pp w.hi_temps
+puts
+puts "Low Temperatures: "
+pp w.lo_temps
+puts
+puts "Today's Forecast: "
 pp w.today
+puts
+puts "Tomorrow's Forcast: "
 pp w.tomorrow
+puts
