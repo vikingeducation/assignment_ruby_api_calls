@@ -21,20 +21,29 @@ class GithubAPI
   end
 
   def get_repos
-    @repos = @client.repos.list(user: "bla")[0]
+    @repos = @client.repos.list(sort: "updated").first(10)
   end
 
   def get_commits
-    binding.pry
-    @repos.commits.list
+    @names.each do |name|
+      @client.repos.commits.list(USERNAME, name)
+    end
+  end
+
+  def get_name
+    @names = @repos.map{|repo| repo['name']}
   end
 
 end
 
 git = GithubAPI.new
-binding.pry
+# binding.pry
 git.get_repos
-git.repos.commit.list(USERNAME, 'assignment_ruby_api_calls')
+git.get_name
+pp git.get_commits
+
+
+# git.repos.commit.list(USERNAME, 'assignment_ruby_api_calls')
 # pp git.client.repos.commits.list('jgisin', 'assignment_ruby_api_calls')
 # binding.pry
 # pp git.client.repos.list[0]
