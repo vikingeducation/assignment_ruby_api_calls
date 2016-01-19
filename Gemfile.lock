@@ -12,6 +12,7 @@ PLATFORMS
 
 DEPENDENCIES
   httparty
+  json
 
 BUNDLED WITH
    1.11.2

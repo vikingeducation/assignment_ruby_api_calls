@@ -1,4 +1,6 @@
 require 'httparty'
+require 'json'
+require 'pp'
 
 class WeatherForecast
 
@@ -14,25 +16,51 @@ class WeatherForecast
     #validate_time_period!(time_period)
     #validate_format!(response_format)
     @location = location
-    @days = days
-    @daily_str = daily ? "/daily" : ""
+    @days = "cnt=#{days}"
+    @daily = daily ? "/daily" : ""
     @location = location.is_a?(String) ? "q=#{location}" : "id=#{location}"
     @response = nil
-    @api_str = "APPID=#{API_KEY}"
+    @api = "APPID=#{API_KEY}"
   end
 
-  def get_base_uri
-    uri = BASE_URI + "#{@daily_str}?#{@location}&#{JSON_FORMAT}&#{@api_str}"
-    puts "The URI is #{uri}"
+  def send_request
+    uri = BASE_URI + "#{@daily}?#{@location}&#{@days}&#{JSON_FORMAT}&#{@api}"
     @response = HTTParty.get(uri)
   end
 
-  def trim_response
+  def parse_json
     response_body = JSON.parse(@response.body)
+    forecast = response_body["list"]
+    forecast.map do |element|
+      {
+        :day_id       =>    element["dt"]
+        :temp         =>    element["temp"],
+        :pressure     =>    element["pressure"],
+        :humidity     =>    element["humidity"],
+        :weather      =>    element["weather"],
+        :speed        =>    element["speed"],
+        :deg          =>    element["deg"],
+        :clouds       =>    element["clouds"],
+        :snow         =>    element["snow"]
+      }
+    end
+  end
+
+  def hi_temps
+    
+  end
+
+  def lo_temps
+  end
+
+  def today
+  end
+
+  def tomorrow
   end
 
 end
 
 w_api = WeatherForecast.new("London,us",3,true)
-w_api.get_base_uri
-p w_api.trim_response
+w_api.send_request
+w_api.parse_json
