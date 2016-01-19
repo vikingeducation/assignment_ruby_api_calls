@@ -6,7 +6,8 @@ require 'pp'
 
 class WeatherForecast
   include HTTParty
-  attr_reader :uri
+  
+  attr_accessor :response
 
   API_KEY = ENV["WEATHER_API"]
 
@@ -25,17 +26,45 @@ class WeatherForecast
   end
 
   def weather
-    response = HTTParty.get(@uri)
+    @response = HTTParty.get(@uri)
   end
+
+  def hi_temp
+    hi_temp = []
+    @response['list'].each do |day|
+      hi_temp << day['temp']['max']
+    end
+    hi_temp
+  end
+
+  def low_temp
+    low_temp = []
+    @response['list'].each do |day|
+      low_temp << day['temp']['min']
+    end
+    low_temp
+  end
+
+  def today
+    @response['list'][0]
+  end
+
+  def tomorrow
+    @response['list'][1]
+  end
+
+  
 
   private
 
     def create_uri
-      @uri = BASE_URI + @forecast_type + "?" + "&q=" + @location + "&cnt=" + @days + "&units=" + @unit + "&appid=" + "#{API_KEY}"
-      #binding.pry
+      @uri = BASE_URI + @forecast_type + "?" + "&q=" + @location + "&cnt=" + @days + "&units=" + @units + "&appid=" + "#{API_KEY}"
     end
 end
 
+# binding.pry
+
 wf = WeatherForecast.new("London", 7)
-print wf.uri
-pp wf.weather["day"]
+wf.weather
+pp wf.low_temp
+pp wf.today
