@@ -3,16 +3,16 @@ require 'json'
 require 'pp'
 
 class GithubParser
-  
-  attr_reader :github 
+
+  attr_reader :github
 
   def initialize(github)
     @github = github
   end
 
-  def list(user=nil,repo=nil)
-    @github.repo.list
+  def list(user=nil)
+    #user_name = user ? user : nil
+    @github.repos.list
   end
-  
 
 end
