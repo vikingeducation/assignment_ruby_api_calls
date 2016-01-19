@@ -45,6 +45,22 @@ class WeatherForecast
     low_temp
   end
 
+  def avg_temp
+    avg_temp = []
+    @response['list'].each do |day|
+      avg_temp << day['temp']['day']
+    end
+    avg_temp
+  end
+
+  def description
+    description = []
+    @response['list'].each do |day|
+      description << day['weather'][0]['description']
+    end
+    description
+  end
+
   def today
     @response['list'][0]
   end
@@ -53,6 +69,17 @@ class WeatherForecast
     @response['list'][1]
   end
 
+  def chance_rain
+    rain = []
+    @response['list'].each do |day|
+      unless day['rain'].nil?
+        rain << "Chance of rain: #{day['rain']}"
+      else
+        rain << "No rain"
+      end
+    end
+    rain
+  end
   
 
   private
@@ -67,4 +94,4 @@ end
 wf = WeatherForecast.new("London", 7)
 wf.weather
 pp wf.low_temp
-pp wf.today
+pp wf.chance_rain
