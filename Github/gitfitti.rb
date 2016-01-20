@@ -16,16 +16,19 @@ class Gitfitti
   USERNAME = Figaro.env.USERNAME
   NAME = Figaro.env.NAME
   URL = Figaro.env.URL
+  CLONE = Figaro.env.CLONE
+  PASSWORD = Figaro.env.PASSWORD
 
   attr_accessor :client, :repos, :names
 
   def initialize
     @client = Github.new
     @client.current_options[:oauth_token] = TOKEN
+    @writer = ReadmeWriter.new
   end
 
   def get_repos
-    @repos = @client.repos.list(sort: "updated").first(10)
+    @repos = @client.repos.list(sort: "updated").first(2)
   end
 
   def get_commits(names)
@@ -75,10 +78,17 @@ class Gitfitti
     dm = []
     @hash.each do |repo, commits|
       commits[:date].each_with_index do |date, index|
-        dm = [date, commits[:messages][index]]
+        #binding.pry
+        dm = [date, commits[:message][index]]
+        @writer.write(dm)
+        Dir.chdir("#{CLONE}") do
+          %x(git commit --date="#{date}" -am="#{commits[:message][index]}")
+        end
       end
     end
-    dm
+    Dir.chdir("#{CLONE}") do
+      %x(git push origin master)
+    end
   end
 
   def run
@@ -86,8 +96,9 @@ class Gitfitti
     get_name
     # get_commit_messages
     get_fork_names
-    pp create_fork_hash
-    %x(git clone #{URL})
+    create_fork_hash
+    create_dm
+    # %x(git clone #{URL})
   end
 
 end
