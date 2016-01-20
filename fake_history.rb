@@ -43,9 +43,9 @@ class FakeHistory
     `git clone #{mirror_repo.ssh_url}`
   end
 
-  def update_readme(date)
+  def update_readme(date, repo)
     File.open('README', 'a+') do |file|
-      file.write "#{date} Mirror commit msg\n"
+      file.write "#{date} Mirror commit msg for #{repo}\n"
     end
   end
 
@@ -56,38 +56,57 @@ class FakeHistory
 
   def push
     # set upstream version of mirror-repo
-    `git push -u origin master`
+    Dir.chdir('mirror-repo') do
+      `git push -u origin master`
+    end
   end
 
+  def select_forks
+    selected_forks = forks.map do |fork|
+      puts "Would you like to mirror #{fork}? (y/n)"
+      answer = gets.chomp
+      case answer
+      when /^[Yy]/
+        fork
+      else
+        nil
+      end
+    end.compact
+    selected_forks
+  end
+
+  def run
+    selected_forks = select_forks
+    clone_mirror
+    selected_forks.each do |fork|
+      mirror_history(fork)
+    end
+    push
+    remove_mirror_folder
+  end
+
+  def remove_mirror_folder
+    `rm -rf mirror-repo`
+  end
 
   def mirror_history(repo)
-    clone_mirror
-    Dir.chdir('mirror-repo') do 
+    Dir.chdir('mirror-repo') do
       # loop through original commits
       get_commits(repo).reverse.each do |commit|
         date = commit[:date]
-        update_readme(date)
+        update_readme(date, repo)
         fake_commit(date)
       end
-      push
     end
   end
-
 
   def forks
     forked_repos = @github.repos.list.select(&:fork).map(&:name)
-    forked_repos.each do |repo|
-  # grab a user's repos
-  # determine which ones are forks
-  # prompt user if they want to mirror that repo
-  # run mirror_history
-    end
   end
-
 end
 
-fake = FakeHistory.new('cadyherron')
+fake = FakeHistory.new('kitlangton')
 # pp fake.mirror_repo
 # pp fake.mirror_history('assignment_ruby_api_calls')
 # pp fake.get_commits('Private-Test')[0]
-pp fake.forks
+fake.run

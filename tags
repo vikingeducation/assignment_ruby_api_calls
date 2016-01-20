@@ -9,10 +9,14 @@ FakeHistory	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/fake_histor
 GithubPrinter	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/github_printer.rb	/^class GithubPrinter$/;"	c
 WeatherForecast	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/weather_forecast.rb	/^class WeatherForecast$/;"	c
 absolute_worst_day	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/weather_forecast.rb	/^  def absolute_worst_day$/;"	f
+clone_mirror	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/fake_history.rb	/^  def clone_mirror$/;"	f	class:FakeHistory
 commit_names_for_repo	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/github_printer.rb	/^  def commit_names_for_repo(repo_name)$/;"	f	class:GithubPrinter
 create_repo	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/fake_history.rb	/^  def create_repo$/;"	f	class:FakeHistory
 date_string	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/day.rb	/^  def date_string$/;"	f	class:Day
+fake_commit	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/fake_history.rb	/^  def fake_commit(date)$/;"	f	class:FakeHistory
+find_mirror_repo	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/fake_history.rb	/^  def find_mirror_repo$/;"	f	class:FakeHistory
 forecast	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/weather_forecast.rb	/^  def forecast$/;"	f	class:WeatherForecast
+forks	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/fake_history.rb	/^  def forks$/;"	f	class:FakeHistory.select_forks
 from_json	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/day.rb	/^  def self.from_json(json)$/;"	F	class:Day
 get_commits	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/fake_history.rb	/^  def get_commits(repo)$/;"	f	class:FakeHistory
 hi_temps	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/weather_forecast.rb	/^  def hi_temps$/;"	f
@@ -21,13 +25,20 @@ initialize	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/fake_history
 initialize	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/github_printer.rb	/^  def initialize(username)$/;"	f	class:GithubPrinter
 initialize	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/weather_forecast.rb	/^  def initialize(location="New York", num_days=16)$/;"	f	class:WeatherForecast
 low_temps	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/weather_forecast.rb	/^  def low_temps$/;"	f
+mirror_history	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/fake_history.rb	/^  def mirror_history(repo)$/;"	f	class:FakeHistory.select_forks
+mirror_repo	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/fake_history.rb	/^  def mirror_repo$/;"	f	class:FakeHistory
 print_repo_commit_history	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/github_printer.rb	/^  def print_repo_commit_history$/;"	f	class:GithubPrinter
+push	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/fake_history.rb	/^  def push$/;"	f	class:FakeHistory
 rain?	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/day.rb	/^  def rain?$/;"	f	class:Day
 rainy_days	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/weather_forecast.rb	/^  def rainy_days$/;"	f
+remove_mirror_folder	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/fake_history.rb	/^  def remove_mirror_folder$/;"	f	class:FakeHistory.select_forks
 repo_names	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/github_printer.rb	/^  def repo_names$/;"	f	class:GithubPrinter
+run	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/fake_history.rb	/^  def run$/;"	f	class:FakeHistory.select_forks
+select_forks	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/fake_history.rb	/^  def select_forks$/;"	f	class:FakeHistory
 to_kelvin	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/day.rb	/^  def to_kelvin$/;"	f	class:Day
 today	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/weather_forecast.rb	/^  def today$/;"	f
 today?	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/day.rb	/^  def today?$/;"	f	class:Day
 tomorrow	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/weather_forecast.rb	/^  def tomorrow$/;"	f
 tomorrow?	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/day.rb	/^  def tomorrow?$/;"	f	class:Day
+update_readme	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/fake_history.rb	/^  def update_readme(date, repo)$/;"	f	class:FakeHistory
 windiest_day	/Users/kitlangton/Viking/Unit6/assignment_ruby_api_calls/weather_forecast.rb	/^  def windiest_day$/;"	f
