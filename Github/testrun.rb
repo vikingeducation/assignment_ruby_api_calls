@@ -1,4 +1,6 @@
 require_relative 'gitfitti'
+# require_relative 'github_api'
 
-git = GithubAPI.new
+git = Gitfitti.new
+# git = GithubAPI.new
 git.run

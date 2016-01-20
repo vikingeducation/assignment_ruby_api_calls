@@ -3,6 +3,7 @@ require 'pry-byebug'
 require 'figaro'
 require 'pp'
 require 'rainbow'
+require_relative 'readme_write'
 
 Figaro.application = Figaro::Application.new(
   environment: "development",
@@ -10,10 +11,11 @@ Figaro.application = Figaro::Application.new(
 )
 Figaro.load
 
-class GithubAPI
+class Gitfitti
   TOKEN = Figaro.env.GITHUB_API
   USERNAME = Figaro.env.USERNAME
   NAME = Figaro.env.NAME
+  URL = Figaro.env.URL
 
   attr_accessor :client, :repos, :names
 
@@ -23,7 +25,6 @@ class GithubAPI
   end
 
   def get_repos
-    #binding.pry
     @repos = @client.repos.list(sort: "updated").first(10)
   end
 
@@ -32,13 +33,8 @@ class GithubAPI
     names.each do |name|
       next if name.nil?
       commit_list = @client.repos.commits.list(USERNAME, name)
-      # commit_list.each_with_index do |commit|
-      # # binding.pry
-      #   commits << commit_list if commit['commit']['committer']['name'] == NAME
-      # end
       commits << commit_list.select {|commit| commit if commit['commit']['committer']['name'] == NAME}
     end
-    # binding.pry
     commits
   end
 
@@ -61,13 +57,9 @@ class GithubAPI
 
   def create_fork_hash
     @hash = {}
-
     get_commits(@forkname).each_with_index do |repo,index|
-
       @hash[@forkname[index]] = {:date => [], :message => []}
-
       repo.each do |commit|
-        #binding.pry
         @hash[@forkname[index]][:date] << commit['commit']['author']['date']
         @hash[@forkname[index]][:message] << commit['commit']['message']
       end
@@ -79,8 +71,14 @@ class GithubAPI
     @client.repos.create(name: NAME, description: 'Fork Commit', homepage: 'https://github.com', private: false, has_issues: false, has_wiki: false, auto_init: true)
   end
 
-  def get_repo_link
-    @repos
+  def create_dm
+    dm = []
+    @hash.each do |repo, commits|
+      commits[:date].each_with_index do |date, index|
+        dm = [date, commits[:messages][index]]
+      end
+    end
+    dm
   end
 
   def run
@@ -89,7 +87,7 @@ class GithubAPI
     # get_commit_messages
     get_fork_names
     pp create_fork_hash
+    %x(git clone #{URL})
   end
 
 end
-
