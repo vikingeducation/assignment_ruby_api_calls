@@ -51,12 +51,13 @@ class GithubRepoParser
   end
 
   def get_repos
-    sleep(0.1)
+    sleep(0.5)
     @github.repos.list( user: USER_NAME )
   end
 
   def get_commits(repo)
-    sleep(0.1)
+    sleep(0.5)
+
     @github.repos.commits.list(USER_NAME, repo["name"], '...')[0...NUM_COMMITS]
   end
 end
