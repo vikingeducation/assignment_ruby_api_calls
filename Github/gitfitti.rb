@@ -80,7 +80,7 @@ class GithubAPI
   end
 
   def get_repo_link
-
+    @repos
   end
 
   def run
@@ -89,7 +89,6 @@ class GithubAPI
     # get_commit_messages
     get_fork_names
     pp create_fork_hash
-    create_repo
   end
 
 end
