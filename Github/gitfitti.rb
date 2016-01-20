@@ -13,6 +13,7 @@ Figaro.load
 class GithubAPI
   TOKEN = Figaro.env.GITHUB_API
   USERNAME = Figaro.env.USERNAME
+  NAME = Figaro.env.NAME
 
   attr_accessor :client, :repos, :names
 
@@ -23,16 +24,21 @@ class GithubAPI
 
   def get_repos
     #binding.pry
-    @repos = @client.repos.list(sort: "updated").first(10)
+    @repos = @client.repos.list(sort: "updated").first(9)
   end
 
   def get_commits(names)
     commits = []
     names.each do |name|
       next if name.nil?
-      commits << @client.repos.commits.list(USERNAME, name)
+      commit_list = @client.repos.commits.list(USERNAME, name)
+      # commit_list.each_with_index do |commit|
+      # # binding.pry
+      #   commits << commit_list if commit['commit']['committer']['name'] == NAME
+      # end
+      commits << commit_list.select {|commit| commit if commit['commit']['committer']['name'] == NAME}
     end
-   # binding.pry
+    # binding.pry
     commits
   end
 
@@ -55,10 +61,15 @@ class GithubAPI
 
   def create_fork_hash
     @hash = {}
+
     get_commits(@forkname).each_with_index do |repo,index|
+
+      @hash[@forkname[index]] = {:date => [], :message => []}
+
       repo.each do |commit|
         #binding.pry
-        @hash[@forkname[index]] = {:date commit['commit']['author']['date'], :message => commit['commit']['message']}
+        @hash[@forkname[index]][:date] << commit['commit']['author']['date']
+        @hash[@forkname[index]][:message] << commit['commit']['message']
       end
     end
     @hash
@@ -73,3 +84,4 @@ class GithubAPI
   end
 
 end
+
