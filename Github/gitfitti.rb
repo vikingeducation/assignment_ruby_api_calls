@@ -24,7 +24,7 @@ class GithubAPI
 
   def get_repos
     #binding.pry
-    @repos = @client.repos.list(sort: "updated").first(9)
+    @repos = @client.repos.list(sort: "updated").first(10)
   end
 
   def get_commits(names)
@@ -75,12 +75,21 @@ class GithubAPI
     @hash
   end
 
+  def create_repo
+    @client.repos.create(name: NAME, description: 'Fork Commit', homepage: 'https://github.com', private: false, has_issues: false, has_wiki: false, auto_init: true)
+  end
+
+  def get_repo_link
+
+  end
+
   def run
     get_repos
     get_name
     # get_commit_messages
     get_fork_names
     pp create_fork_hash
+    create_repo
   end
 
 end
