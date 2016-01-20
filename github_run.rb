@@ -1,5 +1,4 @@
 require_relative 'github_https.rb'
-require_relative 'github_parser.rb'
 require 'pp'
 
 response = GithubHttps.new
