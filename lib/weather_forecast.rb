@@ -50,8 +50,10 @@ class WeatherForecast
   def absolute_worst_day
     if forecast.any? {|day| day.to_kelvin == 0 }
       puts "Atoms have stopped moving! Take cover! Bundle up!" 
+      true
     else 
       puts "You're safe, no days will be 0 Kelvin."
+      false
     end
   end
 

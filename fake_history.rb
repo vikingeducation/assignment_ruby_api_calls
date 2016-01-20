@@ -22,9 +22,11 @@ class FakeHistory
   end
 
   def find_mirror_repo
-      return @github.repos(user: @username, repo: 'mirror-repo').get
-    rescue
+    begin
+      @github.repos(user: @username, repo: 'mirror-repo').get
+    rescue Github::Error::NotFound
       false
+    end
   end
 
   def mirror_repo
@@ -105,8 +107,8 @@ class FakeHistory
   end
 end
 
-fake = FakeHistory.new('kitlangton')
-# pp fake.mirror_repo
+fake = FakeHistory.new('cadyherron')
+# pp fake.find_mirror_repo
 # pp fake.mirror_history('assignment_ruby_api_calls')
 # pp fake.get_commits('Private-Test')[0]
 fake.run
