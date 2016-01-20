@@ -4,12 +4,12 @@ require 'pp'
 require_relative 'github_figaro_setup'
 
 class FakeHistory
-
   def initialize(username)
     @oauth_token = ENV["viking_github_api_key"]
     @github = Github.new(oauth_token: @oauth_token)
     @username = username
   end
+
 
   def create_repo
     @github.repos.create "name": 'mirror-repo',
@@ -21,6 +21,7 @@ class FakeHistory
       "has_downloads": true
   end
 
+
   def find_mirror_repo
     begin
       @github.repos(user: @username, repo: 'mirror-repo').get
@@ -28,6 +29,7 @@ class FakeHistory
       false
     end
   end
+
 
   def mirror_repo
     find_mirror_repo || create_repo
@@ -41,9 +43,11 @@ class FakeHistory
      }
   end
 
+
   def clone_mirror
     `git clone #{mirror_repo.ssh_url}`
   end
+
 
   def update_readme(date, repo)
     File.open('README', 'a+') do |file|
@@ -51,10 +55,12 @@ class FakeHistory
     end
   end
 
+
   def fake_commit(date)
     `git add .`
     `GIT_AUTHOR_DATE='#{date}' GIT_COMMITTER_DATE='#{date}' git commit -m 'Mirrored commit'`
   end
+
 
   def push
     # set upstream version of mirror-repo
@@ -62,6 +68,7 @@ class FakeHistory
       `git push -u origin master`
     end
   end
+
 
   def select_forks
     selected_forks = forks.map do |fork|
@@ -77,19 +84,11 @@ class FakeHistory
     selected_forks
   end
 
-  def run
-    selected_forks = select_forks
-    clone_mirror
-    selected_forks.each do |fork|
-      mirror_history(fork)
-    end
-    push
-    remove_mirror_folder
-  end
 
   def remove_mirror_folder
     `rm -rf mirror-repo`
   end
+
 
   def mirror_history(repo)
     Dir.chdir('mirror-repo') do
@@ -102,13 +101,24 @@ class FakeHistory
     end
   end
 
+
   def forks
     forked_repos = @github.repos.list.select(&:fork).map(&:name)
   end
+
+
+  def run
+    selected_forks = select_forks
+    clone_mirror
+    selected_forks.each do |fork|
+      mirror_history(fork)
+    end
+    push
+    remove_mirror_folder
+  end
+
+  
 end
 
 fake = FakeHistory.new('cadyherron')
-# pp fake.find_mirror_repo
-# pp fake.mirror_history('assignment_ruby_api_calls')
-# pp fake.get_commits('Private-Test')[0]
 fake.run
