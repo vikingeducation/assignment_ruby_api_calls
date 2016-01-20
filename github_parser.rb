@@ -1,39 +1,30 @@
-require 'github_api'
-require 'json'
-require 'pp'
+module GithubParser
 
-class GithubParser
-
-  attr_reader :github
-
-  def initialize(github)
-    @github = github
-    @user = nil
+  # parses for repo owner name, and the repo name
+  # returns an array of [usernames, repos]
+  def parse_repos(repo_list)
+    list = repo_list.map { |repo| [ repo["owner"]["login"], repo["name"] ] }
   end
 
-  def list_repos(user=nil)
-    @user = user
-    repos = @github.repos.list(sort: "updated", user: @user).first(10)
-    #pp repos[0]
-    list = repos.map { |repo| [repo["owner"]["login"],repo["name"]] }
-  end
-
-  def list_commits
-    recent_commits = []
-    
-    list_repos.each do |user_repo|
-      sleep(1)
-      recent_commits << [user_repo[1], @github.repos.commits.list(user_repo[0], user_repo[1]).first(10)]
-    end
-
-    recent_commits.each do |item|
+  def parse_commits(commit_history)
+    # iterate through array of commit_history
+    # [ [repo1, commit_list1], [repo2, commit_list2], ...]
+    commit_history.each do |repo| # repo = [current_repo, current_commit_list]
       clean_commits = []
-      item[1].each do |commit|
+      # for each repo, iterate through it's commit_history
+      # and parse out the relevant info
+      # in this case, we are obtaining committer info, and commit message
+      # repo[1] represents commit history/list
+      repo[1].each do |commit| # commit = current commit
+        # parsing out relevant info into clean commits array
         clean_commits << [commit["commit"]["committer"],commit["commit"]["message"]]
-      end 
-      item[1] = clean_commits
-    end  
-    recent_commits
+      end
+      # repo[1] is raw json github output for commit history
+      # replace it with our array of clean parsed commit info
+      repo[1] = clean_commits
+    end
+    # return it
+    commit_history
   end
 
 end
