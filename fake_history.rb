@@ -5,9 +5,10 @@ require_relative 'github_figaro_setup'
 
 class FakeHistory
 
-  def initialize
+  def initialize(username)
     @oauth_token = ENV["viking_github_api_key"]
     @github = Github.new(oauth_token: @oauth_token)
+    @username = username
   end
 
   def create_repo
@@ -21,7 +22,7 @@ class FakeHistory
   end
 
   def find_mirror_repo
-      return @github.repos(user: 'kitlangton', repo: 'mirror-repo').get
+      return @github.repos(user: @username, repo: 'mirror-repo').get
     rescue
       false
   end
@@ -32,14 +33,14 @@ class FakeHistory
 
 
   def get_commits(repo)
-    @github.repos(user: 'kitlangton', repo: repo).commits.list.map { |commit|
+    @github.repos(user: @username, repo: repo).commits.list.map { |commit|
        {date: commit.commit.committer.date,
         name: commit.commit.message }
      }
   end
 
   def clone_mirror
-    `git clone #{mirror_repo.clone_url}`
+    `git clone #{mirror_repo.ssh_url}`
   end
 
   def update_readme(date)
@@ -60,6 +61,7 @@ class FakeHistory
 
 
   def mirror_history(repo)
+    clone_mirror
     Dir.chdir('mirror-repo') do 
       # loop through original commits
       get_commits(repo).reverse.each do |commit|
@@ -67,14 +69,25 @@ class FakeHistory
         update_readme(date)
         fake_commit(date)
       end
-      # push
+      push
     end
   end
 
 
+  def forks
+    forked_repos = @github.repos.list.select(&:fork).map(&:name)
+    forked_repos.each do |repo|
+  # grab a user's repos
+  # determine which ones are forks
+  # prompt user if they want to mirror that repo
+  # run mirror_history
+    end
+  end
+
 end
 
-fake = FakeHistory.new
+fake = FakeHistory.new('cadyherron')
 # pp fake.mirror_repo
-pp fake.mirror_history('assignment_ruby_api_calls')
+# pp fake.mirror_history('assignment_ruby_api_calls')
 # pp fake.get_commits('Private-Test')[0]
+pp fake.forks
