@@ -13,19 +13,19 @@
 
   Building an API Wrapper
 
-  1.
+  1. (DONE)
   - Create a class WeatherForecast in Ruby (DONE)
   - that uses the HTTParty gem to access OpenWeatherMap for the weather forecast. (DONE)
   - Remember to use ENV vars to store your API key! (DONE)
   - If you accidentally commit your key, you'll need to issue a new one. (DONE)
 
-  2.
+  2. (DONE)
   - initialize should let you input a location
   - and a number of days. (There should be defaults). (DONE)
 
   ######!! I'm gonna go the 16 day option!
 
-  3.
+  3. (DONE)
   - Poke around the response object you get back,
   - and see what you might want to make easier to access.
 
@@ -95,16 +95,29 @@ class WeatherForecast
     # Build our URL
     uri = "#{BASE_URI}#{@city},#{@country}&cnt=#{@days}&units=metric&APPID=#{API_KEY}&mode=json"
 
-
     # Build the request
     request = HTTParty.get(uri)
 
+    # We only want the stuff in the "list section"
+    request["list"]
+  end
+
+  # hi_temps should be a collection of the high temperatures you get back, organized by date
+  # I'm thinking it should return an array full of arrays e.g. [[timedate, hitemp],[timedate, hitemp]]
+  def hi_temps
+    high_temps =[]
+    @response.each_with_index do |day, index|
+      high_temps << []
+      high_temps[index][0] = get_date(day["dt"])
+      high_temps[index][1] = day["temp"]["max"]
+    end
+  end
+
+  def get_date(seconds)
+    t = Time.at(seconds)
+    string = "#{t.day}-#{t.month}-#{t.year}"
   end
 
 end
 
-# t = Time.at(WeatherForecast.new.send_request["list"][0]["dt"])
-
-# pp t.day
-# pp t.month
-# pp t.year
+WeatherForecast.new.hi_temps
