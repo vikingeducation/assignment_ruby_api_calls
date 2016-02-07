@@ -56,7 +56,7 @@
   6. (DONE)
   - today and tomorrow should be convenient breakdowns of just those single day forecasts
 
-  7.
+  7. (DONE)
   - Create 3 more convenience methods that access various pieces of the raw_response object and present them to you in an easily accessible way
 
   8. (DONE)
@@ -174,6 +174,35 @@ class WeatherForecast
     end
   end
 
+  # For those kite enthusiasts
+  def wind_speed_this_week
+    index = 0
+    loop do
+      puts ""
+      puts "Date: #{get_date(@response[index]["dt"])}"
+      puts "Wind Speed: #{@response[index]["speed"]} meters/sec"
+      puts ""
+
+    break if index == 6
+
+    index += 1
+    end
+  end
+
+  # Least cloudy day coming up
+  def return_clearest_day
+    clouds = 100
+    clearest_day = nil
+    @response.each do |day|
+      clearest_day = day if day["clouds"] < clouds
+      clouds = day["clouds"] if day["clouds"] < clouds
+    end
+    puts ""
+    puts "Date: #{get_date(clearest_day["dt"])}"
+    puts "Cloudiness: #{clouds}%"
+    puts ""
+  end
+
   private
 
   def get_date(seconds)
@@ -185,4 +214,5 @@ end
 
 # WeatherForecast.new("Brisbane", "AU", "16").today
 # WeatherForecast.new("Brisbane", "AU", "16").tomorrow
-WeatherForecast.new("Brisbane", "AU", "16").this_week
+# WeatherForecast.new("Brisbane", "AU", "16").wind_speed_this_week
+WeatherForecast.new("Brisbane", "AU", "16").return_clearest_day
