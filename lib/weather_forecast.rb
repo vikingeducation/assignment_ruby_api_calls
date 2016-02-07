@@ -47,19 +47,20 @@
 
   "max" - maximum for the day
 
-  4.
+  4. (DONE)
   - hi_temps should be a collection of the high temperatures you get back, organized by date
 
-  5.
+  5. (DONE)
   - lo_temps should be a collection of the low temperatures you get back, organized by date
 
-  6.
+  6. (DONE)
   - today and tomorrow should be convenient breakdowns of just those single day forecasts
 
   7.
   - Create 3 more convenience methods that access various pieces of the raw_response object and present them to you in an easily accessible way
 
-  8. Output these to your CLI.
+  8. (DONE)
+  - Output these to your CLI.
 
 =end
 
@@ -102,7 +103,6 @@ class WeatherForecast
     request["list"]
   end
 
-  # hi_temps should be a collection of the high temperatures you get back, organized by date
   # I'm thinking it should return an array full of arrays e.g. [[timedate, hitemp],[timedate, hitemp]]
   def hi_temps
     high_temps =[]
@@ -111,13 +111,57 @@ class WeatherForecast
       high_temps[index][0] = get_date(day["dt"])
       high_temps[index][1] = day["temp"]["max"]
     end
+    high_temps
   end
+
+  # Returning same format at #hi_temps
+  def lo_temps
+    low_temps =[]
+    @response.each_with_index do |day, index|
+      low_temps << []
+      low_temps[index][0] = get_date(day["dt"])
+      low_temps[index][1] = day["temp"]["min"]
+    end
+    low_temps
+  end
+
+  # today and tomorrow should be convenient breakdowns of just those single day forecasts
+  # on a break down of a day I think I'd like to see
+  # date
+  # minimum
+  # maximum
+  # humidity
+  # description
+  def today
+    puts ""
+    puts "Today: #{get_date(@response[0]["dt"])}"
+    output_day_details(0)
+  end
+
+  def tomorrow
+    puts ""
+    puts "Today: #{get_date(@response[1]["dt"])}"
+    output_day_details(1)
+  end
+
+  def output_day_details(index)
+    puts "Min: #{@response[index]["temp"]["min"]}"
+    puts "Max: #{@response[index]["temp"]["max"]}"
+    puts "Humidity: #{@response[index]["humidity"]}"
+    puts "Description: #{@response[index]["weather"][0]["description"]}"
+    puts ""
+  end
+
+  # Create 3 more convenience methods that access various pieces of the raw_response object and present them to you in an easily accessible way
+
+  private
 
   def get_date(seconds)
     t = Time.at(seconds)
-    string = "#{t.day}-#{t.month}-#{t.year}"
+    "#{t.day}-#{t.month}-#{t.year}"
   end
 
 end
 
-WeatherForecast.new.hi_temps
+WeatherForecast.new("Brisbane", "AU", "16").today
+WeatherForecast.new("Brisbane", "AU", "16").tomorrow
