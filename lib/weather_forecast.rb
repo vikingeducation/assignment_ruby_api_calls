@@ -140,7 +140,7 @@ class WeatherForecast
 
   def tomorrow
     puts ""
-    puts "Today: #{get_date(@response[1]["dt"])}"
+    puts "Tomorrow: #{get_date(@response[1]["dt"])}"
     output_day_details(1)
   end
 
@@ -154,6 +154,26 @@ class WeatherForecast
 
   # Create 3 more convenience methods that access various pieces of the raw_response object and present them to you in an easily accessible way
 
+  def this_week
+    index = 0
+    loop do
+
+      if index == 0
+        today
+      elsif index == 1
+        tomorrow
+      else
+        puts ""
+        puts "Date: #{get_date(@response[index]["dt"])}"
+        output_day_details(index)
+      end
+
+      break if index == 6
+
+      index += 1
+    end
+  end
+
   private
 
   def get_date(seconds)
@@ -163,5 +183,6 @@ class WeatherForecast
 
 end
 
-WeatherForecast.new("Brisbane", "AU", "16").today
-WeatherForecast.new("Brisbane", "AU", "16").tomorrow
+# WeatherForecast.new("Brisbane", "AU", "16").today
+# WeatherForecast.new("Brisbane", "AU", "16").tomorrow
+WeatherForecast.new("Brisbane", "AU", "16").this_week
