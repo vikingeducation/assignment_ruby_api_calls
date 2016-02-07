@@ -63,6 +63,7 @@ PLATFORMS
 DEPENDENCIES
   guard-rspec
   httparty
+  json
   rspec
 
 BUNDLED WITH
