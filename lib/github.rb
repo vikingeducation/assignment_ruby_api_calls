@@ -55,6 +55,7 @@
 
 require 'github_api'
 require 'pp'
+require 'httparty'
 
 class MyGit
 
@@ -67,6 +68,18 @@ class MyGit
   end
 
   def latest_ten(user_name)
+    # Designed to heal break out of the each loop once count reaches 10
+    count = 1
+    # Printing out our sorted and reversed hash but stopping once 10 items are printed.
+    puts "Latest 10 Repositories Created by #{user_name}"
+    created_date_and_name(user_name).sort.reverse.each do |key, value|
+      puts "#{count}. #{value}"
+      count += 1
+      break if count == 11
+    end
+  end
+
+  def created_date_and_name(user_name)
     # Dictionary to hold repo created at and it's corresponding name.
     created_date_and_name = {}
 
@@ -74,14 +87,24 @@ class MyGit
     @github.repos.list user: user_name do |repo|
       created_date_and_name[repo.created_at] = repo.name
     end
+    created_date_and_name
+  end
 
-    # Designed to heal break out of the each loop once count reaches 10
+  def ten_for_ten(user_name)
+    # Things I want to test
+    # can you only get a request if the name of that repo matches one of the names of values in the created_date_and_name's top ten?
+    # Could do this by separating the code for getting list of names and their created_by dates, make that bit modular
+    # Could make that method return just the top ten in a dictionary as well, make it even more modular. That way this method can call that method, get the hash and then print the commits off each one, easy peasy. I need to get ready for work.... FUCK
     count = 1
-
-    # Printing out our sorted and reversed hash but stopping once 10 items are printed.
-    puts "Latest 10 Repositories Created by #{user_name}"
-    created_date_and_name.sort.reverse.each do |key, value|
+    created_date_and_name(user_name).sort.reverse.each do |key, value|
       puts "#{count}. #{value}"
+      request = HTTParty.get("https://api.github.com/repos/#{user_name}/#{value}/commits")
+      count_two = 1
+      request.each do |commit|
+        puts "#{count_two}. #{commit["commit"]["message"]}"
+        count_two += 1
+        break if count_two == 11
+      end
       count += 1
       break if count == 11
     end
@@ -89,4 +112,6 @@ class MyGit
 
 end
 
-MyGit.new.latest_ten('Steven-Chang')
+# HOW DO U RATE LIMIT WITH THIS?
+MyGit.new.ten_for_ten('Steven-Chang')
+# MyGit.new.ten_for_ten('Steven-Chang', 'demo_ruby_tdd', )
