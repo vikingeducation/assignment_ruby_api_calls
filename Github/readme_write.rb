@@ -1,4 +1,4 @@
-require_relative 'gitfitti'
+# require_relative 'gitfitti'
 
 Figaro.application = Figaro::Application.new(
   environment: "development",
@@ -17,7 +17,16 @@ class ReadmeWriter
     file.close
   end
 
+  def include?(dm)
+    file = File.open("#{CLONE}/README.md", "r")
+    commits = file.readlines
+    commits.include?("Date: #{dm[0]}, Message: #{dm[1]} \n")
+  end
 
 
 
 end
+#
+# r = ReadmeWriter.new
+#
+# r.include?("a")

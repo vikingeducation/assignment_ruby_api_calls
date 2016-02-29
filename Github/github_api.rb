@@ -22,8 +22,7 @@ class GithubAPI
   end
 
   def get_repos
-    #binding.pry
-    @repos = @client.repos.list(sort: "updated").first(5)
+    @repos = @client.repos.list(sort: "updated")
   end
 
   def get_commits

@@ -28,7 +28,7 @@ class Gitfitti
   end
 
   def get_repos
-    @repos = @client.repos.list(sort: "updated").first(2)
+    @repos = @client.repos.list(sort: "updated")
   end
 
   def get_commits(names)
@@ -78,11 +78,12 @@ class Gitfitti
     dm = []
     @hash.each do |repo, commits|
       commits[:date].each_with_index do |date, index|
-        #binding.pry
-        dm = [date, commits[:message][index]]
-        @writer.write(dm)
-        Dir.chdir("#{CLONE}") do
-          %x(git commit --date="#{date}" -am="#{commits[:message][index]}")
+      dm = [date, commits[:message][index]]
+        unless @writer.include?(dm)
+          @writer.write(dm)
+          Dir.chdir("#{CLONE}") do
+            %x(git commit --date="#{date}" -am="#{commits[:message][index]}")
+          end
         end
       end
     end
@@ -94,7 +95,7 @@ class Gitfitti
   def run
     get_repos
     get_name
-    # get_commit_messages
+    #get_commit_messages
     get_fork_names
     create_fork_hash
     create_dm
@@ -102,3 +103,6 @@ class Gitfitti
   end
 
 end
+
+g = Gitfitti.new
+g.run
