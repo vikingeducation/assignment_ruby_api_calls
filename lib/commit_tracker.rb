@@ -8,13 +8,14 @@ class CommitTracker
   # add line to readme if ! yet commited
     # commit at --date
 
-  attr_reader :reader, :r_name, :github, :timestamp, :readme
+  attr_reader :reader, :r_name, :github, :folder_path, :readme
 
   def initialize
     @reader = GithubReader.new
     @github = @reader.github
     @r_name = "fork_commit_history"
-    @timestamp = Time.now.strftime("%Y_%m_%d_%H%M%S")
+    timestamp = Time.now.strftime("%Y_%m_%d_%H%M%S")
+    @folder_path = File.expand_path("~/fork_commit_history_#{timestamp}")
     set_up
   end
 
@@ -28,7 +29,7 @@ class CommitTracker
   end
 
   def clone_repo
-    `git clone https://github.com/#{reader.user}/#{r_name} #{timestamp}`
+    `git clone https://github.com/#{reader.user}/#{r_name} #{folder_path}`
   end
 
   def compare_commits(main, commits)
@@ -46,7 +47,7 @@ class CommitTracker
   end
 
   def create_readme
-    File.open("#{timestamp}/README.md", "w+")
+    File.open("#{folder_path}/README.md", "w+")
   end
 
   def gather_commits(repos)
@@ -64,7 +65,9 @@ class CommitTracker
   end
 
   def execute_commits(commits)
-    `cd #{timestamp}`
+    working_dir = Dir.pwd
+
+    `cd #{folder_path}`
     `git add -A`
 
     commits.each do |commit|
@@ -72,13 +75,13 @@ class CommitTracker
     end
 
     `git push origin master`
-    `cd ..`
+    `cd #{working_dir}`
   end
 
   def write_to_readme(commits)
     commits.each do |commit|
-      p "#{commit[:date]} \"Forked Repo Commit\"\n"
-      @readme << "#{commit[:date]} \"Forked Repo Commit\"\n"
+      p "#{commit[:date]} \"Forked Repo Commit\"\n\n"
+      @readme << "#{commit[:date]} \"Forked Repo Commit\"\n\n"
     end
     readme.close
   end
