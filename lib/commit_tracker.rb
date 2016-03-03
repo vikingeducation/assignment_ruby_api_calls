@@ -32,7 +32,9 @@ class CommitTracker
   end
 
   def compare_commits(main, commits)
-
+    commits.select do |commit|
+      main.none?{ |m_commit| m_commit[:date] == commit[:date] }
+    end
   end
 
   def create_repo
@@ -55,7 +57,22 @@ class CommitTracker
     repos = reader.fetch_repos
     main = repos.select{ |repo| repo[:name] == r_name }[0][:commits]
     sleep(0.5)
-    compare_commits(main, commits)
+
+    uncommitted = compare_commits(main, commits)
+
+    execute_commits(uncommitted)
+  end
+
+  def execute_commits(commits)
+    `cd #{timestamp}`
+    `git add -A`
+
+    commits.each do |commit|
+      `git commit --date="#{commit[:date]}" -m="Forked Repo Commit"`
+    end
+
+    `git push origin master`
+    `cd ..`
   end
 
   def write_to_readme(commits)
