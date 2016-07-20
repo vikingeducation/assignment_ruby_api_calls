@@ -13,6 +13,7 @@ class WeatherForecast
     puts ENV['WEATHER_KEY']
     end_point = BASE_URI + '?' + 'key=' + ENV['WEATHER_KEY'] + 'q=' + @location
     response = HTTParty.get(end_point)
+    puts end_point
     puts response
   end
 
