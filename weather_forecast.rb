@@ -4,7 +4,7 @@ require 'pry'
 
 class WeatherForecast
 
-  attr_reader :location, :days, :response
+  attr_reader :location, :days, :response, :temp_to_string
 
   BASE_URI = 'http://api.apixu.com/v1/forecast.json'
 
@@ -12,13 +12,13 @@ class WeatherForecast
     @location = location
     @days = days
     @response = get_response
+    @temp_to_string
   end
 
   def get_response
     puts ENV['WEATHER_KEY']
     end_point = BASE_URI + "?key=#{ENV['WEATHER_KEY']}&q=#{location}&days=#{days}"
     response = HTTParty.get(end_point)
-    binding.pry
 
     response.parsed_response
   end
@@ -28,8 +28,7 @@ class WeatherForecast
 
     #    day['date']['maxtemp_f']
     response['forecast']['forecastday'].each_with_object({}) do  |day, object|
-      object[day['date']] =
-      day['day']['maxtemp_c']
+      object[day['date']] = day['day']['maxtemp_f']
 
     end
 
@@ -38,15 +37,27 @@ class WeatherForecast
   end
 
   def lo_temps
-
+    response['forecast']['forecastday'].each_with_object({}) do  |day, object|
+      object[day['date']] = day['day']['mintemp_f']
+    
+    end
 
   end
 
   def today
-
+    pp response['forecast']['forecastday'][0]['day']
   end
 
   def tomorrow
+
+  end
+
+  def set_temp_string
+    temp_strings = {
+      "maxtemp_f" => "Max Temperature in Fahrenheit",
+      "mintemp_f" => "Min Temperature in Fahrenheit",
+      "avgtemp_f" => "Average Temp in Fahrenheit"
+                    }
 
   end
 
@@ -56,7 +67,7 @@ end
 # http://api.apixu.com/v1/current.json?key=<YOUR_API_KEY>&q=San Francisco&days=7
 # WeatherForecast.new.get_response
 
-puts WeatherForecast.new.hi_temps
+puts WeatherForecast.new.today
 # puts WeatherForecast.new.get_response.body.class
 
 # File.open("results.json", "w+") do |f|
