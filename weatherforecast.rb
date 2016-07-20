@@ -25,7 +25,7 @@ module WeatherReportProject
       hi_temp_arr = {}
       #array of hashes which represent a single hour of the day (size 24)
       @request["forecast"]["forecastday"][0]["hour"].each do |hash|
-        hi_temp_arr[hash["time"]] = hash["temp_f"]
+        hi_temp_arr[hash["time"]][-5..-1] = hash["temp_f"]
       end
       hi_temp_arr
 
