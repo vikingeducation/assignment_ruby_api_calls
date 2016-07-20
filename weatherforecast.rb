@@ -17,11 +17,7 @@ module WeatherReportProject
       end
       @response = self.class.get("#{VERSION}", options)
     end
-
-    def get_request(loc = @loc, days = @days)
-      self.class.get("#{BASE_URI}#{VERSION}?key=#{API_KEY}&q=#{@loc}&days=#{@days}")
-    end
-
+    
     #collection of high temperatures > 80 deg?, organize by date
     def get_hi_temps
       hi_temp_arr = {}
