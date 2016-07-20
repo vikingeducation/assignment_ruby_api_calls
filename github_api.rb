@@ -24,13 +24,26 @@ class GitHubApiProject
 
   def display_latest_10_commits
     @latest_10_commits.each do |repo|
-      puts repo
+      repo.each do |pair|
+        display_pair(pair)
+      end
     end
   end
 
-  def get_latest_10_commits
+  def display_pair(pair)
+    timestamp = pair[0]
+    msg = pair[1]
+    puts "Date: #{timestamp}"
+    puts "Message: "
+    puts "... ... #{msg}"
+    puts
+  end
+
+  def get_latest_10_commit_messages
     @latest_10_commits = @latest_10.map do |repo|
-      get_commits(repo)
+      url = get_commit_url(repo)
+      messages = get_commit_messages(url)
+      messages.first(10)
     end
   end
 
@@ -49,18 +62,23 @@ class GitHubApiProject
   end
 
   def get_commit_url(repo)
-    repo.commits_url
+    repo.commits_url[0..-7]
   end
 
-  def get_commit_messages(repo)
-    HTTParty. 
+  def get_commit_messages(url)
+    response = HTTParty.get(url)
+    response.map do |resp|
+      msg = resp['commit']['message']
+      timestamp = resp['commit']['committer']['date']
+      [timestamp,msg]
+    end
   end
 
 end
 
 gha = GitHubApiProject.new('cjvirtucio87')
 gha.get_latest_10
-p gha.latest_10[0].commits_url
-# gha.get_latest_10_commits
-# gha.display_latest_10_commits
-# gha.display_latest_10
+gha.get_latest_10_commit_messages
+gha.display_latest_10_commits
+
+# p gha.latest_10[0].commits_url
