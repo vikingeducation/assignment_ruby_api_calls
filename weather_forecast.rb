@@ -2,13 +2,16 @@ require 'httparty'
 require 'uri'
 require_relative './env'
 require 'date'
+require 'pp'
 
 class WeatherForecast
 
   END_POINT = 'http://api.apixu.com/v1/forecast.json?'
 
   def initialize(params)
-    # binding.pry
+    @days_info = {}
+    params['days'] = "1" if params['days'].downcase == "today"
+    params['days'] = "2" if params['days'].downcase == "tomorrow"
     url = build_query(params)
     get(url)
   end
@@ -27,15 +30,12 @@ class WeatherForecast
   def get(url)
     response = HTTParty.get(url)
     response = JSON.parse(response.body)
-    # puts response
     days_doc(response)
   end
 
   def days_doc(response)
     days = days(response)
     dates(days)
-    hi_temps(days)
-    lo_temps(days)
   end
 
   def days(json_responce)
@@ -43,22 +43,27 @@ class WeatherForecast
   end
 
   def dates(days)
-    dates = days.map do |day| 
+    days.each do |day|
       date = day["date"]
-      date = Date.parse(date)
-      date.strftime('%a, %b %d')
+      @days_info[date] = day_stats(day)
+      pretty_date = Date.parse(date)
+      @days_info[date][:pretty_day] =  pretty_date.strftime('%a, %b %d')
     end
-    p dates
+    # pp @days_info
   end
 
-  def hi_temps(days)
-    temps = days.map { |day| day["day"]["maxtemp_f"] }
-    p temps
+  def day_stats(day)
+    {
+      hi_temps: day["day"]["maxtemp_f"],
+      low_temps: day["day"]["mintemp_f"],
+      sunrise: day["astro"]["sunrise"],
+      sunset: day["astro"]["sunset"],
+      chance_rain: "#{rain_chance(day["hour"])}%"
+    }
   end
 
-  def lo_temps(days)
-    temps = days.map { |day| day["day"]["mintemp_f"] }
-    p temps
+  def rain_chance(hour)
+    avg = hour.inject(0.0) { |sum, chance| sum + chance["will_it_rain"].to_f }
+    (avg / (hour.length + 1) * 100).to_i
   end
-
 end
