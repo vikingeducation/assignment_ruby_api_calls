@@ -1,4 +1,4 @@
-require 'figaro'
+require 'dotenv'
 require 'env'
 require 'httparty'
 require 'weatherforecast'
