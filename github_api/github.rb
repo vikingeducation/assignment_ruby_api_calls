@@ -13,7 +13,7 @@ class GithubApi
 
 
   def send_request
-    @repos = Github.repos user: @user_name, sort: "created"
+    @repos = Github.repos user: @user_name, sort: "created", oauth_token: API_KEY
     # binding.pry
   end
 
@@ -23,20 +23,27 @@ class GithubApi
   end
 
   def commit_messages(names)
+    messages = []
+    # binding.pry
     names.map do |name|
-      # binding.pry
-      @repos.commits.all repo: name
+      messages << (@repos.commits.all repo: name).map { |c| c["commit"]["message"]  }[0..9]
     end
+    messages
   end
 
-  # def get_ids
-  #   @repos.a
-  # end
-
+  def print_details
+    repo_names = names
+    messages = commit_messages(repo_names)
+    output = ""
+    repo_names.each_with_index do |name, index|
+      output += "#{name}\n#{messages[index]}\n"
+    end
+    output
+  end
 
 end
 
 
-g = GithubApi.new("ChrisGoodson")
-p g.commit_messages(g.names)
-# p g.commit_messages
+g = GithubApi.new("leosaysger")
+# pp g.commit_messages(g.names)
+puts g.print_details
