@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
 
+gem 'dotenv'
 gem 'httparty'
 gem 'pry'
-gem 'envyable', require: 'envyable/rails-now'

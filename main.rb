@@ -1,7 +1,6 @@
 require 'figaro'
-require './config/env.yml'
 require 'httparty'
-require 'weatherforecast'
+require_relative 'weatherforecast'
 
 
 module WeatherReportProject
