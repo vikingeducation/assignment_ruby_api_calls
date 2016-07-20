@@ -30,7 +30,8 @@ class WeatherForecast
   end
 
   def render(stats)
-    puts "#{@days} Day Weather Forecast for #{@formatted_location}".center(50)
+    puts "*******************"
+    puts "#{@days} Day Weather Forecast for #{@formatted_location}".center(50) if stats[:dates].length > 1
     stats.each do |stat, values|
       row = stat.to_s.rjust(10)
       values.each do |value|
@@ -38,12 +39,13 @@ class WeatherForecast
       end
       puts row
     end
+    puts "*******************"
   end
 
   def today
     today = {}
     @stats.each do |k,v|
-      today[k] = v[0]
+      today[k] = [v[0]]
     end
     today
   end
@@ -51,7 +53,7 @@ class WeatherForecast
   def tomorrow
     tomorrow = {}
     @stats.each do |k,v|
-      tomorrow[k] = v[1]
+      tomorrow[k] = [v[1]]
     end
 
     tomorrow
@@ -133,5 +135,7 @@ end
 
 
 wf = WeatherForecast.new('boise', 5)
-
-
+today = wf.today
+tomorrow = wf.tomorrow
+wf.render(today)
+wf.render(tomorrow)
