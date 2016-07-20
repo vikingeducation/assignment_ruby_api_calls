@@ -50,5 +50,4 @@ module WeatherReportProject
       hourly_temp
     end
   end
-
 end
