@@ -5,25 +5,46 @@ require 'pp'
 
 class GH_Api
 
-  def initialize(options = {})
+  attr_reader :names, :repos, :commits
+
+  def initialize(options = {}, username)
     @key = options[:key]
+    @username = username
+    @commits = {}
+    @commit_messages = {}
   end
 
   def list_repos
-    github = Github.new oauth_token: @key
-    @repos = github.repos.list sort:"created_at"
+    @github = Github.new oauth_token: @key
+    @repos = @github.repos.list sort:"created_at"
   end
 
   def get_latest_repos(number)
+    @names = []
     number.times do |i|
-      puts @repos[i]["name"]
-    end 
+      @names << @repos[i]["name"]
+    end
+    @names 
   end
+
+  def get_latest_commits
+    @names.each do |name|
+      @commits[name] = @github.repos.commits.list "#{@username}", "#{name}"
+    end
+  end
+
+  def get_commit_messages
+    get_latest_commits
+    @commits.each do |name, commits|
+      @commit_messages[name] = []
+      commits[0..9].each do |commit|
+        @commit_messages[name] << commit["commit"]["message"]
+      end
+    end
+    @commit_messages
+  end
+    
+
 
 
 end
-
-# name = repos[2][:name]
-# time_created = repos[2][:created_at]
-#"2016-07-13T16:04:28Z"
-# sorted by date: test = github_test.repos.list sort:"created_at"
