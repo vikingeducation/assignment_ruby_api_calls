@@ -10,10 +10,10 @@ class GithubRepos
   def initialize()
     Octokit.auto_paginate = true
 
-    @client = Octokit::Client.new(login: ENV['USERNAME'], password: ENV['PASSWORD'])
+    # @client = Octokit::Client.new(login: ENV['USERNAME'], password: ENV['PASSWORD'])
 
-    @user = @client.user
-    @repos = Octokit.repos(@user.login).sort_by { |a| a[:created_at] }.reverse
+    # @user = @client.user
+    # @repos = Octokit.repos(@user.login).sort_by { |a| a[:created_at] }.reverse
   end
 
   def print_commits
@@ -54,6 +54,10 @@ class GithubRepos
     end
   end
 
+  def clone_repo(repo)
+    `git clone #{repo}`
+  end
+
   def keep_forked_repos
     forked_repos = []
     @read_repos.each do |repo|
@@ -64,7 +68,7 @@ class GithubRepos
 
 end
 
-#gh = GithubRepos.new
+gh = GithubRepos.new
 # p gh.get_commit_messages
 
 
@@ -74,3 +78,4 @@ end
 # pp gh.keep_forked_repos
 #:commits_url].gsub('{/sha}', "/#{ENV['GIT_API_KEY']}")
 system("rm -rf test")
+gh.clone_repo('git@github.com:morgancmartin/commitmirror.git')
