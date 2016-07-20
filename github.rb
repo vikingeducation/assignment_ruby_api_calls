@@ -11,9 +11,22 @@ class GithubAPI
     @github.repos.list user: name
   end
 
+
+  def ten_latest_repos(name)
+    array = []
+    response = user_repositories(name)
+    response.each_page do |page|
+      page.each do |repo|
+         array << ["#{repo.updated_at}: #{repo.name} : #{repo.base_url}"]
+      end
+    end
+    p array.sort.reverse[0..9]
+  end
+
+
 end
 
 
 
 g = GithubAPI.new
-puts g.user_repositories("")
+g.ten_latest_repos("lynchd2")
