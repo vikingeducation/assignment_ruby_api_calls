@@ -24,7 +24,7 @@ class WeatherForecast
   end
 
   def hi_temps
-    request = HTTParty.get("#{BASE_FORECAST_URI}key=#{API_KEY}&q=#{@location}&days=#{@days}")
+    request = forecast_for
     counter = 0
     while counter < @days
       p date = request["forecast"]["forecastday"][counter]["date"]
@@ -34,7 +34,7 @@ class WeatherForecast
   end
 
   def lo_temps
-    request = HTTParty.get("#{BASE_FORECAST_URI}key=#{API_KEY}&q=#{@location}&days=#{@days}")
+    request = forecast_for
     counter = 0
     while counter < @days
       p date = request["forecast"]["forecastday"][counter]["date"]
@@ -56,10 +56,11 @@ class WeatherForecast
 
   def astro
     request = forecast_for
-    puts "Sunrise: #{request["forecast"]["forecastday"][0]["astro"]["sunrise"]}"
-    puts "Sunset: #{request["forecast"]["forecastday"][0]["astro"]["sunset"]}"
-    puts "Moonrise: #{request["forecast"]["forecastday"][0]["astro"]["moonrise"]}"
-    puts "Moonset: #{request["forecast"]["forecastday"][0]["astro"]["moonset"]}"
+    spot = request["forecast"]["forecastday"][0]["astro"]
+    puts "Sunrise: #{spot["sunrise"]}"
+    puts "Sunset: #{spot["sunset"]}"
+    puts "Moonrise: #{spot["moonrise"]}"
+    puts "Moonset: #{spot["moonset"]}"
   end
 
   def precipitation
@@ -72,32 +73,25 @@ class WeatherForecast
     end
   end
 
-  def wind
-    request = HTTParty.get("#{BASE_CURRENT_URI}key=#{API_KEY}&q=#{@location}")
-  end
-
-  def conditions
-    request = HTTParty.get("#{BASE_CURRENT_URI}key=#{API_KEY}&q=#{@location}")
-  end
-
   def today
     request = current_for
-    puts "Location: #{request["location"]["name"]}"
-    puts "Last Updated: #{request["current"]["last_updated"]}"
-    puts "Temperature: #{request["current"]["temp_f"]}"
-    puts "Condition: #{request["current"]["condition"]["text"]}"
-    puts "Wind: #{request["current"]["wind_mph"]}"
-    puts "Humidity: #{request["current"]["humidity"]}"
+    spot = request["location"]
+    puts "Location: #{spot["name"]}"
+    puts "Last Updated: #{spot["last_updated"]}"
+    puts "Temperature: #{spot["temp_f"]}"
+    puts "Wind: #{spot["wind_mph"]}"
+    puts "Humidity: #{spot["humidity"]}"
   end
 
   def tomorrow(day = 1)
     request = forecast_for
-    puts "Date: " + request["forecast"]["forecastday"][day]["date"].to_s
-    puts "High: " + request["forecast"]["forecastday"][day]["day"]["maxtemp_f"].to_s
-    puts "Low: " + request["forecast"]["forecastday"][day]["day"]["mintemp_f"].to_s
-    puts "Conditions: " + request["forecast"]["forecastday"][day]["day"]["condition"]["text"]
-    puts "Wind: " + request["forecast"]["forecastday"][day]["day"]["maxwind_mph"].to_s
-    puts "Rain: " + request["forecast"]["forecastday"][day]["day"]["totalprecip_in"].to_s
+    spot = request["forecast"]["forecastday"][day]
+    puts "Date: " + spot["date"].to_s
+    puts "High: " + spot["day"]["maxtemp_f"].to_s
+    puts "Low: " + spot["day"]["mintemp_f"].to_s
+    puts "Condition: " + spot["day"]["condition"]["text"]
+    puts "Wind: " + spot["day"]["maxwind_mph"].to_s
+    puts "Rain: " + spot["day"]["totalprecip_in"].to_s
 
   end
 
@@ -108,5 +102,7 @@ w = WeatherForecast.new()
 # pp w.forecast_for
 # w.lo_temps
 # pp w.current_for
+# w.today
 # w.tomorrow
-w.astro
+# w.astro
+w.will_it_rain

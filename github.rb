@@ -19,7 +19,7 @@ class GithubAPI
     response = user_repos(name)
     response.each_page do |page|
       page.each do |repo|
-        array << [repo.created_at, repo.name, repo.html_url]
+        array << [repo.created_at, repo.name]
       end
     end
     array.sort.reverse[0..9]
@@ -31,8 +31,23 @@ class GithubAPI
     response.each do |repo|
       hash[repo[1]] = commits(name, repo[1])
     end
-    hash.each do |k,v| 
-      puts k +  ":#{v}"
+    hash
+  end
+
+  def display_latest_repos(name)
+    array = ten_latest_repos(name)
+    array.each do |repo|
+      puts "#{repo[0]}: #{repo[1]}"
+    end
+  end
+
+  def display_latest_commits(name)
+    array = ten_latest_repo_commits(name)
+    array.each do |k,v| 
+      puts k
+      v.each do |commit|
+        puts commit
+      end
       puts
     end
   end
@@ -48,13 +63,13 @@ class GithubAPI
     array.sort.reverse[0..9]
   end
 
-
 end
 
 
 
 g = GithubAPI.new
-# g.ten_latest_repos_display("asackofwheat")
+# g.display_latest_repos("asackofwheat")
 # pp g.user_repos("asackofwheat")
 # p g.commits("asackofwheat", "assignment_web_scraper")
-g.ten_latest_repo_commits("asackofwheat")
+# puts g.ten_latest_repo_commits("asackofwheat")
+g.display_latest_commits("asackofwheat")
