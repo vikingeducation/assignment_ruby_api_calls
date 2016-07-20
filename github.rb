@@ -9,16 +9,19 @@ class GithubRepos
 
   def initialize()
     Octokit.auto_paginate = true
+
     @client = Octokit::Client.new(login: ENV['USERNAME'], password: ENV['PASSWORD'])
-    p ENV['GIT_API_KEY']
+
     @user = @client.user
-    @repos = Octokit.repos(@user.login).sort_by { |a| a[:created_at] }.reverse[0..9]
+    @repos = Octokit.repos(@user.login).sort_by { |a| a[:created_at] }.reverse
   end
 
   def print_commits
     last_ten_names = get_last_ten_names
     get_commit_messages.each_with_index do |repo, index|
-      puts "Last few #{last_ten_names[index]} commits:"
+      puts "**************************************"
+      puts "Last 10 #{last_ten_names[index]} commits:"
+      puts "**************************************"
       repo.each do |message|
         puts message
       end
@@ -38,10 +41,36 @@ class GithubRepos
       commits = Octokit.commits(repo[:full_name]).map { |commit| commit.commit.message }
     end
   end
+
+  def write_repos_to_file
+    File.open("repos.json","w") do |f|
+      f.write(@repos.map {|sawyer| sawyer.to_hash}.to_json)
+    end
+  end
+
+  def read_json
+   File.open("repos.json", 'r') do |f|
+     @read_repos = JSON.parse(f.read)
+    end
+  end
+
+  def keep_forked_repos
+    forked_repos = []
+    @read_repos.each do |repo|
+      forked_repos << repo if repo["fork"]
+    end
+    forked_repos
+  end
+
 end
 
-gh = GithubRepos.new
+#gh = GithubRepos.new
 # p gh.get_commit_messages
-gh.print_commits
-#:commits_url].gsub('{/sha}', "/#{ENV['GIT_API_KEY']}")
 
+
+
+#{}`git commit --date="some date in iso8601 format" -m="Message"`
+# gh.read_json
+# pp gh.keep_forked_repos
+#:commits_url].gsub('{/sha}', "/#{ENV['GIT_API_KEY']}")
+system("rm -rf test")
