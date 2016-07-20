@@ -1,6 +1,6 @@
 require 'httparty'
 require 'uri'
-require_relative 'env'
+
 
 class WeatherForecast
   ENDPOINT = "http://api.apixu.com/v1/forecast.json?"
@@ -13,11 +13,13 @@ class WeatherForecast
   def get
     params = {"q" => @location, "days" => @days}
     url = build_url(params)
+    response = HTTParty.get(url)
   end
 
   def build_url(params)
-    query_string = "key=#{ENV["WEATHER_KEY"]}"
-    query_string = build_query_string(params)
+    query_string = "key=#{ENV["WEATHER_KEY"]}&"
+    query_string += build_query_string(params)
+    "#{ENDPOINT}#{query_string}"
 
   end
 
