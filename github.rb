@@ -11,7 +11,13 @@ class GH_Api
 
   def list_repos
     github = Github.new oauth_token: @key
-    github.repos.list
+    @repos = github.repos.list
   end
 
+  def 
+
+
 end
+
+name = repos[2][:name]
+time_created = repos[2][:created_at]
