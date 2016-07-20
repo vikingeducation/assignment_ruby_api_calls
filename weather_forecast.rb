@@ -1,23 +1,31 @@
 require 'httparty'
-require 'env'
+require 'uri'
+require_relative './env'
 
 class WeatherForecast
 
   END_POINT = 'http://api.apixu.com/v1/forecast.json?'
 
   def initialize(params)
-    @search_params = params
+    binding.pry
+    url = build_query(params)
+    get(url)
   end
 
-  def build_query
-
-    url =[END_POINT, @key, ]
+  def build_query(params)
+    "#{END_POINT}#{query_string(params)}"
   end
 
-  def query_string
-    query_string = END_POINT
-    query_string
+  def query_string(params)
+    params.map do |key, value|
+      value = URI.encode(value)
+      "#{key}=#{value}"
+    end.join('&')
   end
 
+  def get(url)
+    response = HTTParty.get(url)
+    puts response.body
+  end
 
 end
