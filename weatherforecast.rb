@@ -22,24 +22,39 @@ module WeatherReportProject
     def get_hi_temps
       hi_temp_arr = {}
       #array of hashes which represent a single hour of the day (size 24)
-      @response["forecast"]["forecastday"][0]["hour"].each do |hash|
-        hi_temp_arr[hash["time"]] = hash["temp_f"]
+      @response["forecast"]["forecastday"].each do |hash|
+        max_temp = hash["day"]["maxtemp_f"]
+        hi_temp_arr[hash["date"]] = max_temp
       end
       hi_temp_arr
     end
 
-    #single day, every hour temperature
-    def get_hourly_temperature
-
-    end
-
     def get_lo_temps
+      lo_temp_arr = {}
+      #array of hashes which represent a single hour of the day (size 24)
+      @response["forecast"]["forecastday"].each do |hash|
+        min_temp = hash["day"]["mintemp_f"]
+        lo_temp_arr[hash["date"]] = min_temp      
+      end
+      lo_temp_arr
     end
 
     def today
+      hourly_temp = {}
+      #array of hashes which represent a single hour of the day (size 24)
+      @response["forecast"]["forecastday"][0]["hour"].each do |hash|
+        hourly_temp[hash["time"]] = hash["temp_f"]
+      end
+      hourly_temp
     end
 
     def tomorrow
+      hourly_temp = {}
+      #array of hashes which represent a single hour of the day (size 24)
+      @response["forecast"]["forecastday"][1]["hour"].each do |hash|
+        hourly_temp[hash["time"]] = hash["temp_f"]
+      end
+      hourly_temp
     end
 
   end
