@@ -1,6 +1,7 @@
 require 'httparty'
 require 'uri'
 require_relative './env'
+require 'date'
 
 class WeatherForecast
 
@@ -30,9 +31,34 @@ class WeatherForecast
     days_doc(response)
   end
 
-  def days_doc(json_responce)
-    days = json_responce["forecast"]["forecastday"]
-    days.each { |day| puts day["date"] }
-    days
+  def days_doc(response)
+    days = days(response)
+    dates(days)
+    hi_temps(days)
+    lo_temps(days)
   end
+
+  def days(json_responce)
+    json_responce["forecast"]["forecastday"]
+  end
+
+  def dates(days)
+    dates = days.map do |day| 
+      date = day["date"]
+      date = Date.parse(date)
+      date.strftime('%a, %b %d')
+    end
+    p dates
+  end
+
+  def hi_temps(days)
+    temps = days.map { |day| day["day"]["maxtemp_f"] }
+    p temps
+  end
+
+  def lo_temps(days)
+    temps = days.map { |day| day["day"]["mintemp_f"] }
+    p temps
+  end
+
 end
