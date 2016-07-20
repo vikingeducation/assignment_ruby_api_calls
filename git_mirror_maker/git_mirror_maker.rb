@@ -19,8 +19,12 @@ class GitMirrorMaker
   end
 
   def clone_mirror(user)
-    url = "https://github.com/#{user}/git_mirror"
+    url = "https://github.com/#{user}/git_mirror/"
     %x( git clone "#{url}" )
+  end
+
+  def clone_push(token, user)
+    url = "https://#{token}@github.com/#{user}/git_mirror.git"
   end
 
 
@@ -41,11 +45,11 @@ class GitMirrorMaker
     end
   end
 
-  def set_env_dates(date)
-    %x( export GIT_COMMITER_DATE=#{date}'\n' )
-    %x( export GIT_AUTHOR_DATE=#{date}'\n' )
-    puts %x( echo #{date} )
-  end
+  # def set_env_dates(date)
+  #   %x( export GIT_COMMITER_DATE=#{date}'\n' )
+  #   %x( export GIT_AUTHOR_DATE=#{date}'\n' )
+  #   puts %x( echo #{date} )
+  # end
 
   def git_add
     %x( git add -A)
@@ -63,14 +67,15 @@ end
 
 
 repo_name = "assignment_ruby_api_calls"
-sha = "a55d50cc1806c797957aaac761804ac1f0445a65"
+sha = "2ee037e8630dc789876c2d28b06dc6b5770f1ae1"
 gm = GitMirrorMaker.new
-git_api = gm.send_request("leosaysger")
-# gm.create_mirror(git)
-# gm.clone_mirror('leosaysger')
-commit = gm.find_commit(git_api, repo_name, sha)
-date = gm.get_commit_date(commit)
+git_api = gm.send_request("Chrisgoodson")
+# gm.create_mirror(git_api)
+# gm.clone_mirror('Chrisgoodson')
+# commit = gm.find_commit(git_api, repo_name, sha)
+# date = gm.get_commit_date(commit)
 # gm.write_to_readme(date)
-gm.set_env_dates(date)
-# gm.git_add
-# gm.git_commit("this is a message")
+# gm.set_env_dates(date)
+gm.git_add
+gm.git_commit("this is a message")
+gm.clone_push(API_KEY, "chrisgoodson")
