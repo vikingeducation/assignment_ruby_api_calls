@@ -43,14 +43,34 @@ class WeatherForecast
     end
   end
 
-  def precipitation
-    days = 1
-    request = HTTParty.get("#{BASE_FORECAST_URI}key=#{API_KEY}&q=#{@location}&days=#{days}")
-    p date = request["forecast"]["forecastday"][1][0]
-    p max_temp = request["forecast"]["forecastday"][1]["day"]["will_it_rain"]
-    counter += 1
+  def will_it_rain
+    request = forecast_for
+    counter = 0
+    while counter < 24
+      answer = request["forecast"]["forecastday"][0]["hour"][counter]["will_it_rain"]
+      answer == 0 ? answer = "No" : answer = "Yes"
+      puts "#{counter}:00: " << answer
+      counter += 1
+    end
   end
 
+  def astro
+    request = forecast_for
+    puts "Sunrise: #{request["forecast"]["forecastday"][0]["astro"]["sunrise"]}"
+    puts "Sunset: #{request["forecast"]["forecastday"][0]["astro"]["sunset"]}"
+    puts "Moonrise: #{request["forecast"]["forecastday"][0]["astro"]["moonrise"]}"
+    puts "Moonset: #{request["forecast"]["forecastday"][0]["astro"]["moonset"]}"
+  end
+
+  def precipitation
+    request = forecast_for
+    counter = 0
+    while counter < 24
+      answer = request["forecast"]["forecastday"][0]["hour"][counter]["precip_in"]
+      puts "#{counter}:00: " << answer.to_s
+      counter += 1
+    end
+  end
 
   def wind
     request = HTTParty.get("#{BASE_CURRENT_URI}key=#{API_KEY}&q=#{@location}")
@@ -88,5 +108,5 @@ w = WeatherForecast.new()
 # pp w.forecast_for
 # w.lo_temps
 # pp w.current_for
-w.tomorrow
-w.precipitation
+# w.tomorrow
+w.astro
