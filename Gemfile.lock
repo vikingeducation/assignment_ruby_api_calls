@@ -1,6 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    github-api (0.0.1)
+      httparty
     httparty (0.13.7)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
@@ -11,6 +13,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  github-api
   httparty
 
 BUNDLED WITH
