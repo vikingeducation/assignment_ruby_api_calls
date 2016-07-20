@@ -9,7 +9,8 @@ class GithubRepos
 
   def initialize()
     Octokit.auto_paginate = true
-    @client = Octokit::Client.new(:access_token => ENV['GIT_API_KEY'])
+    @client = Octokit::Client.new(login: ENV['USERNAME'], password: ENV['PASSWORD'])
+    p ENV['GIT_API_KEY']
     @user = @client.user
     @repos = Octokit.repos(@user.login).sort_by { |a| a[:created_at] }.reverse[0..9]
   end
