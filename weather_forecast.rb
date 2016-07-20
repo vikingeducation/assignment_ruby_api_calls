@@ -12,6 +12,7 @@ class WeatherForecast
     validate_num_of_days(days)
     @loc = loc
     @days = days
+    get
   end
 
   def get
@@ -19,8 +20,31 @@ class WeatherForecast
     response = JSON.parse(response)
     hi_temps = get_hi_temps(response)
     lo_temps = get_lo_temps(response)
-    # precipitation = get_precip(response)
-    @stats = [hi, lo, prep]
+    precip   = get_precip(response)
+    conditions = get_conditions(response)
+    winds = get_max_winds(response)
+    @stats = {hi_temps: hi_temps, lo_temps: lo_temps,
+              precip: precip, conditions: conditions, winds: winds}
+  end
+
+  def render(stats)
+  end
+
+  def today
+    today = {}
+    @stats.each do |k,v|
+      today[k] = v[0]
+    end
+    today
+  end
+
+  def tomorrow
+    tomorrow = {}
+    @stats.each do |k,v|
+      tomorrow[k] = v[1]
+    end
+
+    tomorrow
   end
 
   private
@@ -29,6 +53,7 @@ class WeatherForecast
     loc = URI.encode(@loc)
     "#{BASE_URL}key=#{API_KEY}&q=#{loc}&days=#{@days}"
   end
+
   def validate_location(loc)
 
   end
@@ -51,26 +76,34 @@ class WeatherForecast
       lo_temps << response['forecast']['forecastday'][day]['day']['mintemp_f']
     end
     lo_temps
-  end
+   end
 
-  def today
-    today = []
-    @stats.each do |stat|
-      today << stat[0]
-    end
-    today
-  end
+   def get_precip(response)
+     precips = []
+     @days.times do |day|
+       precips << response['forecast']['forecastday'][day]['day']['totalprecip_in']
+     end
+     precips
+   end
 
-  def tomorrow
-    tomorrow = []
-    @stats.each do |stat|
-      tomorrow << stat[1]
-    end
-    tomorrow
-  end
+   def get_conditions(response)
+     conditions = []
+     @days.times do |day|
+       conditions << response['forecast']['forecastday'][day]['day']['condition']['text']
+     end
+     conditions
+   end
+
+   def get_max_winds(response)
+     winds = []
+     @days.times do |day|
+       winds << response['forecast']['forecastday'][day]['day']['maxwind_mph']
+     end
+     winds
+   end
 end
 
 
-wf = WeatherForecast.new('las vegas', 11)
+wf = WeatherForecast.new('las vegas', 3)
 
-pp wf.get
+pp wf.today
