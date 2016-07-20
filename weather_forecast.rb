@@ -82,20 +82,27 @@ class WeatherForecast
     str
   end
 
+  def temps_display(temperatures)
+    str = "\nLowest temperatures for each day (in Fahrenheit):\n"
+    str << "-" * str.length
+    str << "\n"
+
+    temperatures.each do |date, temperature|
+      str << "#{date}: #{temperature}"
+      str << "\n"
+    end
+    str
+  end
+
 end
 
 
-# http://api.apixu.com/v1/current.json?key=<YOUR_API_KEY>&q=San Francisco&days=7
-# WeatherForecast.new.get_response
-
+# Run program
 wf = WeatherForecast.new
 today = wf.today
 tomorrow = wf.tomorrow
 puts wf.weather_display(today)
 puts wf.weather_display(tomorrow)
+puts wf.temps_display(wf.lo_temps)
+puts wf.temps_display(wf.hi_temps)
 
-# puts WeatherForecast.new.get_response.body.class
-
-# File.open("results.json", "w+") do |f|
-#   f.write(JSON.parse(WeatherForecast.new.get_response.to_s))
-# end
