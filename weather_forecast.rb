@@ -7,7 +7,7 @@ class WeatherForecast
   END_POINT = 'http://api.apixu.com/v1/forecast.json?'
 
   def initialize(params)
-    binding.pry
+    # binding.pry
     url = build_query(params)
     get(url)
   end
@@ -25,7 +25,14 @@ class WeatherForecast
 
   def get(url)
     response = HTTParty.get(url)
-    puts response.body
+    response = JSON.parse(response.body)
+    # puts response
+    days_doc(response)
   end
 
+  def days_doc(json_responce)
+    days = json_responce["forecast"]["forecastday"]
+    days.each { |day| puts day["date"] }
+    days
+  end
 end
