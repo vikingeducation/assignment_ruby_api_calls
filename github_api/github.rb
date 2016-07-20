@@ -8,22 +8,20 @@ class GithubApi
 
   def initialize(user_name)
     @user_name = user_name
-    @repos = send_request
+    send_request
   end
 
 
   def send_request
-    Github.repos.list user: @user_name, sort: "forks", per_page: 10
+    @repos = Github.repos user: @user_name, sort: "forks", per_page: 10
   end
 
   def names
-    @repos.map { |repo| repo.name }
+    @repos.list.map { |repo| repo.name }
   end
 
   def commit_messages
-    @repos.map do |repo|
-      repo.commits.each { |commit| commit.message }
-    end
+    @repos.commits.map { |repo| commits.list}
   end
 
 
@@ -31,6 +29,5 @@ end
 
 
 g = GithubApi.new("ChrisGoodson")
-binding.pry
 p g.names
 # p g.commit_messages
