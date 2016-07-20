@@ -13,15 +13,17 @@ class GithubApi
 
 
   def send_request
-    @repos = Github.repos user: @user_name, sort: "forks", per_page: 10
+    @repos = Github.repos user: @user_name, sort: "created"
+    # binding.pry
   end
 
   def names
-    @repos.list.map { |repo| repo.name }
+    @repos.list.sort_by{ |repo| repo.created_at }.reverse![0..9]
+      .map { |repo| repo.name }
   end
 
   def commit_messages
-    @repos.commits.map { |repo| commits.list}
+    @repos.commits.list.map { |repo| commits.list}
   end
 
 
