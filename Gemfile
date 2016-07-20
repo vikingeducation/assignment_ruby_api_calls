@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
 
 gem 'httparty'
-gem 'figaro'
 gem 'pry'
+gem 'envyable', require: 'envyable/rails-now'

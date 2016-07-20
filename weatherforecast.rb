@@ -1,13 +1,20 @@
-require 'figaro'
+require 'envyable'
 
 module WeatherReportProject
 
   class WeatherForecast
 
-    CURRENT_KEY = ENV["apixu_current"]
-    FORECAST_KEY = ENV["apixu_forecast"]
+    attr_reader :key
 
-    def initialize(loc,days=1)
+    
+    
+
+    def initialize(key=nil) #loc)
+      Envyable.load('/config/env.yml')
+
+      
+
+      @key = ENV['apixu_key']
 
     end
 

@@ -1,5 +1,5 @@
 require 'figaro'
-require 'env'
+require './config/env.yml'
 require 'httparty'
 require 'weatherforecast'
 
