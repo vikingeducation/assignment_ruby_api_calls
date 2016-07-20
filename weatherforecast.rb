@@ -18,30 +18,24 @@ module WeatherReportProject
       @response = self.class.get("#{VERSION}", options)
     end
     
-    #collection of high temperatures > 80 deg?, organize by date
     def get_hi_temps
       hi_temp_arr = {}
-      #array of hashes which represent a single hour of the day (size 24)
       @response["forecast"]["forecastday"].each do |hash|
-        max_temp = hash["day"]["maxtemp_f"]
-        hi_temp_arr[hash["date"]] = max_temp
+        hi_temp_arr[hash["date"]]= hash["day"]["maxtemp_f"]
       end
       hi_temp_arr
     end
 
     def get_lo_temps
       lo_temp_arr = {}
-      #array of hashes which represent a single hour of the day (size 24)
       @response["forecast"]["forecastday"].each do |hash|
-        min_temp = hash["day"]["mintemp_f"]
-        lo_temp_arr[hash["date"]] = min_temp      
+        lo_temp_arr[hash["date"]] = hash["day"]["mintemp_f"]   
       end
       lo_temp_arr
     end
 
     def today
       hourly_temp = {}
-      #array of hashes which represent a single hour of the day (size 24)
       @response["forecast"]["forecastday"][0]["hour"].each do |hash|
         hourly_temp[hash["time"]] = hash["temp_f"]
       end
@@ -50,13 +44,11 @@ module WeatherReportProject
 
     def tomorrow
       hourly_temp = {}
-      #array of hashes which represent a single hour of the day (size 24)
       @response["forecast"]["forecastday"][1]["hour"].each do |hash|
         hourly_temp[hash["time"]] = hash["temp_f"]
       end
       hourly_temp
     end
-
   end
 
 end
