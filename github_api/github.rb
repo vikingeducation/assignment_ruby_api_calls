@@ -27,6 +27,7 @@ class GithubApi
     # binding.pry
     names.map do |name|
       messages << (@repos.commits.all repo: name).map { |c| c["commit"]["message"]  }[0..9]
+      binding.pry
     end
     messages
   end
