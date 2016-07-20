@@ -3,8 +3,6 @@ require 'pp'
 require 'pry'
 require_relative 'env.rb'
 
-
-
 class GitMirrorMaker
 
 
