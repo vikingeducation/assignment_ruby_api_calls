@@ -31,7 +31,10 @@ class GithubAPI
     response.each do |repo|
       hash[repo[1]] = commits(name, repo[1])
     end
-    hash
+    hash.each do |k,v| 
+      puts k +  ":#{v}"
+      puts
+    end
   end
 
   def commits(name, repo)
@@ -39,7 +42,7 @@ class GithubAPI
     response = @github.repos.commits.list name, repo, sha: ''
     response.each_page do |page|
       page.each do |repo|
-         array << "#{repo.commit.message}"
+         array << "#{repo.commit.committer.date} : #{repo.commit.message}"
       end
     end
     array.sort.reverse[0..9]
@@ -54,4 +57,4 @@ g = GithubAPI.new
 # g.ten_latest_repos_display("asackofwheat")
 # pp g.user_repos("asackofwheat")
 # p g.commits("asackofwheat", "assignment_web_scraper")
-p g.ten_latest_repo_commits("asackofwheat")
+g.ten_latest_repo_commits("asackofwheat")
