@@ -10,10 +10,10 @@ class GithubRepos
   def initialize()
     Octokit.auto_paginate = true
 
-    # @client = Octokit::Client.new(login: ENV['USERNAME'], password: ENV['PASSWORD'])
+    @client = Octokit::Client.new(login: ENV['USERNAME'], password: ENV['PASSWORD'])
 
-    # @user = @client.user
-    # @repos = Octokit.repos(@user.login).sort_by { |a| a[:created_at] }.reverse
+    @user = @client.user
+    @repos = Octokit.repos(@user.login).sort_by { |a| a[:created_at] }.reverse
   end
 
   def print_commits
@@ -58,12 +58,27 @@ class GithubRepos
     `git clone #{repo}`
   end
 
-  def keep_forked_repos
+  def forked_repos
     forked_repos = []
     @read_repos.each do |repo|
       forked_repos << repo if repo["fork"]
     end
     forked_repos
+  end
+
+  def get_dates
+    dates = []
+    forked_repos.each do |repo|
+     #binding.pry
+      dates << Octokit.commits(repo[:full_name]).map { |commit| commit.commit.committer.date }
+    end
+    dates
+  end
+
+  def create_commit
+    system('cd mirrorrepo')
+    system('git add -A')
+    system('git commit --date="some date in iso8601 format" -m="Message"')
   end
 
 end
@@ -74,8 +89,7 @@ gh = GithubRepos.new
 
 
 #{}`git commit --date="some date in iso8601 format" -m="Message"`
-# gh.read_json
+ gh.read_json
 # pp gh.keep_forked_repos
 #:commits_url].gsub('{/sha}', "/#{ENV['GIT_API_KEY']}")
-system("rm -rf test")
-gh.clone_repo('git@github.com:morgancmartin/commitmirror.git')
+gh.get_dates
