@@ -7,13 +7,15 @@ require 'pry'
 
 class GithubRepos
 
+  include Octokit
+
   def initialize()
     Octokit.auto_paginate = true
 
-    @client = Octokit::Client.new(login: ENV['USERNAME'], password: ENV['PASSWORD'])
+    @client = Octokit::Client.new(access_token: ENV['GIT_API_KEY'])
 
     @user = @client.user
-    @repos = Octokit.repos(@user.login).sort_by { |a| a[:created_at] }.reverse
+    @repos = @client.repos(@user.login).sort_by { |a| a[:created_at] }.reverse
   end
 
   def print_commits
@@ -38,7 +40,8 @@ class GithubRepos
 
   def get_commit_messages
     @repos.map do |repo|
-      commits = Octokit.commits(repo[:full_name]).map { |commit| commit.commit.message }
+
+      commits = @client.commits(repo[:full_name]).map { |commit| commit.commit.message }
     end
   end
 
@@ -60,7 +63,7 @@ class GithubRepos
 
   def forked_repos
     forked_repos = []
-    @read_repos.each do |repo|
+    @repos.each do |repo|
       forked_repos << repo if repo["fork"]
     end
     forked_repos
@@ -69,16 +72,19 @@ class GithubRepos
   def get_dates
     dates = []
     forked_repos.each do |repo|
-     #binding.pry
-      dates << Octokit.commits(repo[:full_name]).map { |commit| commit.commit.committer.date }
+      dates << @client.commits(repo[:full_name]).map { |commit| commit.commit.committer.date }
     end
-    dates
+    dates.flatten.map { |date| date.iso8601 }
   end
 
-  def create_commit
+  def create_commits
     system('cd mirrorrepo')
-    system('git add -A')
-    system('git commit --date="some date in iso8601 format" -m="Message"')
+    get_dates.each do |date|
+      system("echo \"#{date}\" >> README.md")
+      system('git add -A')
+      system("git commit --date #{date} -m \"Private Repo\"")
+    end
+    system('gpom')
   end
 
 end
@@ -92,4 +98,8 @@ gh = GithubRepos.new
  gh.read_json
 # pp gh.keep_forked_repos
 #:commits_url].gsub('{/sha}', "/#{ENV['GIT_API_KEY']}")
-gh.get_dates
+
+  p dates = gh.get_dates
+gh.create_commits
+
+
