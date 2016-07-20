@@ -18,3 +18,8 @@ end
 w = WeatherReportProject::Main.run
 
 params = {'key' => "#{API_KEY}", 'q' => "Paris", 'days' => '3' }
+w.get_request(params)
+p w.get_hi_temps
+#puts w.get_request(params)#get_hi_temps
+
+
