@@ -1,8 +1,6 @@
-require 'dotenv'
-require 'env'
 require 'httparty'
-require 'weatherforecast'
-
+require_relative './weatherforecast'
+require_relative './config'
 
 module WeatherReportProject
 
