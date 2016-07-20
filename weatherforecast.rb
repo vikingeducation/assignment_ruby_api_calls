@@ -18,6 +18,10 @@ module WeatherReportProject
       @response = self.class.get("#{VERSION}", options)
     end
 
+    def hi_temps
+      @request
+    end
+
     #collection of high temperatures > 80 deg?, organize by date
     def get_hi_temps
       #array of hashes which represent a single hour of the day (size 24)
