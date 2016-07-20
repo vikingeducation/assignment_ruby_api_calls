@@ -7,7 +7,7 @@ require_relative './env'
 class WeatherUI
 
   def initialize(location = "63376" , num_days = "1")
-    @params = { key: APIXU_KEY, q: location, days: num_days }
+    @params = { key: APIXU_KEY, q: location, days: num_days.downcase }
     # submit_request(params)
   end
 
@@ -17,8 +17,7 @@ class WeatherUI
 
 end
 
-# ui = WeatherUI.new.submit_request
-# ui = WeatherUI.new("63376", "3").submit_request
+ui = WeatherUI.new("63376", "3").submit_request
 
 # foo = WeatherUI.new("Fairbanks", "4").submit_request
 
