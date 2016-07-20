@@ -1,5 +1,3 @@
-#MY_KEY = b38f1a770afe6558407d5d99bc2d73ec75fba9df
-#KEY_2 = 1fefbd975bf4d10e1a3353d0f28def1ec606ef05
 require 'github_api'
 require 'pp'
 
@@ -47,5 +45,5 @@ class GH_Api
 
 end
 
-
-github.commits["assignment_ruby_api_calls"][0]["commit"]["author"]["date"]
+#date format: "2016-07-20T21:45:21Z"
+#github.commits["assignment_ruby_api_calls"][0]["commit"]["author"]["date"]
