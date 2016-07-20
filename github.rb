@@ -80,6 +80,7 @@ class GithubRepos
   def create_commits
     system('cd mirrorrepo')
     get_dates.each do |date|
+      system('cd mirrorrepo')
       system("echo \"#{date}\" >> README.md")
       system('git add -A')
       system("git commit --date #{date} -m \"Private Repo\"")
