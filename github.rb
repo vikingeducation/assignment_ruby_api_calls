@@ -9,7 +9,8 @@ class GithubRepos
 
   def initialize()
     Octokit.auto_paginate = true
-    @client = Octokit::Client.new(:access_token => ENV['GIT_API_KEY'])
+    # @client = Octokit::Client.new(:access_token => ENV['GIT_API_KEY'])
+    @client = Octokit::Client.new(login: 'morgancmartin', password: ENV['GIT_PASS'])
     @user = @client.user
     @repos = Octokit.repos(@user.login).sort_by { |a| a[:created_at] }.reverse[0..9]
   end
@@ -17,7 +18,9 @@ class GithubRepos
   def print_commits
     last_ten_names = get_last_ten_names
     get_commit_messages.each_with_index do |repo, index|
-      puts "Last few #{last_ten_names[index]} commits:"
+      puts "**************************************"
+      puts "Last 10 #{last_ten_names[index]} commits:"
+      puts "**************************************"
       repo.each do |message|
         puts message
       end
