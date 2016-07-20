@@ -3,15 +3,24 @@ require 'uri'
 require_relative './env'
 require 'date'
 require 'pp'
+require 'pry'
 
 class WeatherForecast
 
   END_POINT = 'http://api.apixu.com/v1/forecast.json?'
 
   def initialize(params)
+    #binding.pry
     @days_info = {}
-    params['days'] = "1" if params['days'].downcase == "today"
-    params['days'] = "2" if params['days'].downcase == "tomorrow"
+    params[:days] = "1" if params[:days] == "today"
+    if params[:days] == "tomorrow"
+      params[:days] = "2" 
+      @tomorrow = true
+    end
+    # to print only tomorrow's data,
+    # find tomorrow's date
+    #     
+
     url = build_query(params)
     get(url)
   end
@@ -49,7 +58,17 @@ class WeatherForecast
       pretty_date = Date.parse(date)
       @days_info[date][:pretty_day] =  pretty_date.strftime('%a, %b %d')
     end
-    # pp @days_info
+    print_data
+  end
+
+  def print_data
+    if @tomorrow
+      tomorrow = @days_info.keys.sort[1]
+      pp tomorrow
+      pp @days_info[tomorrow]
+    else
+      pp @days_info
+    end
   end
 
   def day_stats(day)
