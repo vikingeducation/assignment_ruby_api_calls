@@ -22,14 +22,21 @@ class GithubApi
       .map { |repo| repo.name }
   end
 
-  def commit_messages
-    @repos.commits.list.map { |repo| commits.list}
+  def commit_messages(names)
+    names.map do |name|
+      # binding.pry
+      @repos.commits.all repo: name
+    end
   end
+
+  # def get_ids
+  #   @repos.a
+  # end
 
 
 end
 
 
 g = GithubApi.new("ChrisGoodson")
-p g.names
+p g.commit_messages(g.names)
 # p g.commit_messages
