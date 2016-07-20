@@ -27,10 +27,11 @@ class WeatherForecast
   end
 
   def today
-
+    # current.temp_f
   end
 
   def tomorrow
+    #
   end
 
 
