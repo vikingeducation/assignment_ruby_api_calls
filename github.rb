@@ -1,5 +1,6 @@
 require 'github_api'
 require 'pp'
+require 'pry'
 
 class GithubAPI
 
@@ -7,17 +8,28 @@ class GithubAPI
     @github = Github.new
   end
 
-  def user_repositories(name)
+  def user_repos(name)
     @github.repos.list user: name
   end
 
 
   def ten_latest_repos(name)
     array = []
-    response = user_repositories(name)
+    response = user_repos(name)
     response.each_page do |page|
       page.each do |repo|
-         array << ["#{repo.updated_at}: #{repo.name} : #{repo.base_url}"]
+         array << ["#{repo.created_at}: #{repo.name} : #{repo.html_url}"]
+      end
+    end
+    p array.sort.reverse[0..9]
+  end
+
+  def commits(name, repo)
+    array = []
+    response = @github.repos.commits.list name, repo, sha: ''
+    response.each_page do |page|
+      page.each do |repo|
+         array << ["#{repo.commit.message}"]
       end
     end
     p array.sort.reverse[0..9]
@@ -29,4 +41,6 @@ end
 
 
 g = GithubAPI.new
-g.ten_latest_repos("lynchd2")
+# g.ten_latest_repos("asackofwheat")
+# pp g.user_repos("asackofwheat")
+g.commits("asackofwheat", "assignment_web_scraper")
