@@ -8,7 +8,7 @@ class GitMirror
 
   def initialize(user = "tgturner")
     @client = Octokit::Client.new(access_token: ENV['gh'])
-    puts "What email address to you use with github?"
+    puts "What email address do you use with github?"
     @user_email = gets.strip
     @user = user
   end
