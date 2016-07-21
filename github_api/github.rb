@@ -1,30 +1,50 @@
 require 'github_api'
 require 'pry'
 
-github = Github.new oauth_token: ENV['GITHUB_TOKEN'] 
+class GithubAPI
 
-# p github.repos.list.first(1).first.class
+  attr_reader :username
 
-repos = github.repos.list.sort_by {|repo| repo['created_at']}
+  def initialize(options = {})
+    @github_token = options.fetch(:oauth_token, ENV['GITHUB_TOKEN'])
+    @username = options.fetch(:username, ENV['USERNAME'])
+    @github = Github.new oauth_token: @github_token
+  end
 
-# repos_commits = github.repos.list.first(10).each_with_object({}) do |repo, object|
-   
-#    name = repo['name']
+  def repos(n = 10)
+    @github
+      .repos
+      .list
+      .sort_by { |repo| repo['created_at'] }
+      .first(n)
+  end
 
-#    sha = repo['sha']
-#    commits = github.repos.commits.list('essian', name)
-#    object[name] = commits
-#    binding.pry
-# end
+  def commits(n = 10)
+    repo_commits = {}
+    repos.each do |repo|
+      repo_name =  repo['name']
+      commit_messages = []
+      commits = @github.repos.commits.list(ENV['USERNAME'], repo_name).first(10)
+      commits.each do |commit|
+        commit_messages << commit['commit']['message']
+      end
+      repo_commits[repo_name] = commit_messages
+    end
+    repo_commits
+  end
 
-# puts github.repos.commits.list 'essian', 'project_dom_tree'
+  def display_repo_commits
+    commits.each do |repo_name, commits_arr|
+      puts repo_name
+      puts "-" * repo_name.length
+      puts commits_arr
+      puts
+    end
+  end
 
-# commits = github.repos.commits.list 'user-name', 'repo-name'
-# puts commits
+end
 
-# repos.each do |repo|
-#   puts repo.class
-#   commits = repo.commits
-#   puts commits
-# end
+# Run program
+github = GithubAPI.new({})
+github.display_repo_commits
 
