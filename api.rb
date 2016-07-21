@@ -20,28 +20,28 @@ class Forecast
     @doc = self.class.get('http://api.openweathermap.org/data/2.5/forecast/daily', @options)
   end
 
-  def display(day, i)
-      print day(day, i)
+  def display(i)
+      print day(@doc["list"][i], i)
       print "Temps: Max => #{hi_temps[i]} Min => #{lo_temps[i]}"
-      puts wind(day, i)
+      puts wind(i)
   end
 
-  def wind(day, i)
-    puts ", Wind: #{day["speed"]} mph"
+  def wind(i)
+    puts ", Wind: #{@doc["list"][i]["speed"]} mph"
   end
 
   def today
-    display(@doc["list"][0], 0)
+    display(0)
   end
 
   def tomorrow
-    display(@doc["list"][1], 1)
+    display(1)
   end
 
   def all
     puts
     @doc["list"].each_with_index do |day, i|
-      display(day, i)
+      display(i)
     end
   end
 
