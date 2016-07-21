@@ -9,9 +9,10 @@ class GithubAPI
     @github_token = options.fetch(:oauth_token, ENV['GITHUB_TOKEN'])
     @username = options.fetch(:username, ENV['USERNAME'])
     @github = Github.new oauth_token: @github_token
+
   end
 
-  def repos(n = 10)
+  def repos_list(n = 10)
     @github
       .repos
       .list
@@ -21,10 +22,10 @@ class GithubAPI
 
   def commits(n = 10)
     repo_commits = {}
-    repos.each do |repo|
-      repo_name =  repo['name']
+    repos_list.each do |repo|
+      repo_name = repo['name']
       commit_messages = []
-      commits = @github.repos.commits.list(ENV['USERNAME'], repo_name).first(10)
+      commits = @github.repos.commits.list(@username, repo_name).first(10)
       commits.each do |commit|
         commit_messages << commit['commit']['message']
       end
@@ -46,5 +47,7 @@ end
 
 # Run program
 github = GithubAPI.new({})
+# p github.repos
+ # p github.commits
 github.display_repo_commits
 
