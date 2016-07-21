@@ -21,9 +21,9 @@ class GithubScrape
   def print_commits
     (0..@repo_info.keys.length - 1).each do |index|
       puts "Repo: #{@repo_info[index][0]}"
-      (0..(@repo_info[index].length - 1)).each do |sub_array|
-        puts "#{sub_array[1]}: "
-        puts "#{sub_array[2]}"
+      (1..(@repo_info[index].length - 1)).each do |idx|
+        puts "#{@repo_info[index][idx][0]}: "
+        puts "#{@repo_info[index][idx][1]}"
       end
     end
   end
@@ -43,7 +43,6 @@ class GithubScrape
       NAP.call
       @repo_info[repo_index] << ["Commit ##{commit_obj.length - idx - 1}",  commit['commit']['message']]
     end
-    binding.pry
   end
 
 end
