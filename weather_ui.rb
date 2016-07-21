@@ -19,6 +19,4 @@ end
 
 ui = WeatherUI.new("63376", "3").submit_request
 
-# foo = WeatherUI.new("Fairbanks", "4").submit_request
-
 bar = WeatherUI.new("Fairbanks", "tomorrow").submit_request

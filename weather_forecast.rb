@@ -14,12 +14,10 @@ class WeatherForecast
     @days_info = {}
     params[:days] = "1" if params[:days] == "today"
     if params[:days] == "tomorrow"
-      params[:days] = "2" 
+      params[:days] = "2"
       @tomorrow = true
     end
-    # to print only tomorrow's data,
-    # find tomorrow's date
-    #     
+
 
     url = build_query(params)
     get(url)
@@ -83,6 +81,6 @@ class WeatherForecast
 
   def rain_chance(hour)
     avg = hour.inject(0.0) { |sum, chance| sum + chance["will_it_rain"].to_f }
-    (avg / (hour.length + 1) * 100).to_i
+    (avg / 24 * 100).to_i
   end
 end
