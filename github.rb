@@ -41,7 +41,7 @@ class GithubScrape
   def commit_grab(repo_index, commit_obj, num_commits)
     commit_obj[0..[(num_commits - 1), commit_obj.length - 1].min].each_with_index do |commit, idx|
       NAP.call
-      @repo_info[repo_index] << ["Commit ##{commit_obj.length - idx - 1}",  commit['commit']['message']]
+      @repo_info[repo_index] << ["Commit ##{commit_obj.length - idx}",  commit['commit']['message']]
     end
   end
 
