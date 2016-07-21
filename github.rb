@@ -22,9 +22,10 @@ class GithubScrape
     (0..@repo_info.keys.length - 1).each do |index|
       puts "Repo: #{@repo_info[index][0]}"
       (1..(@repo_info[index].length - 1)).each do |idx|
-        puts "#{@repo_info[index][idx][0]}: "
-        puts "#{@repo_info[index][idx][1]}"
+        puts "#{@repo_info[index][idx][0]}: #{@repo_info[index][idx][1]}"
+        # puts "#{@repo_info[index][idx][1]}"
       end
+      puts
     end
   end
 
