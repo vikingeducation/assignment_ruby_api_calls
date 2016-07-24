@@ -4,7 +4,7 @@ require 'pry'
 class MyGithub
   attr_accessor :github
   def initialize
-    @github = Github.new({oauth_token: "302ed4d1e43172bef99f0044e619ea90616ad2da", per_page: 60 })
+    @github = Github.new({oauth_token: ENV["GITHUB_OAUTH"], per_page: 60 })
   end
 
   def last_10
