@@ -10,25 +10,25 @@ class Ghub
   def show_repos
     repos = @github.repos.list user: 'branliang'
     sorted = repos.sort { |b, a| a["created_at"] <=> b["created_at"] }
+    # ten_latest_repos = sorted[0..9]
     sorted[0..9].each do |repo|
       puts repo["created_at"]
       puts repo["name"]
     end
-    ten_latest_repos = sorted[0..9]
-    return ten_latest_repos
+    # return ten_latest_repos
   end
 
   def show_commits
     repos = show_repos
-    # repos.each do |repo|
-    #   all_commits = @github.repos.commits.list "#{repo["ower"]["login"]}", "#{repo["name"]}"
-    #   sorted = all_commits.sort { |b, a| a["commit"]["committer"]["date"] <=> b["commit"]["committer"]["date"] }
-    #   ten_latest_commits = sorted[0..9]
-    #   ten_latest_commits.each do |commit|
-    #     puts commit["commit"]["committer"]["date"]
-    #     puts commit["message"]
-    #   end
-    # end
+    repos.each do |repo|
+      all_commits = @github.repos.commits.list "#{repo["owner"]["login"]}", "#{repo["name"]}"
+      sorted = all_commits.sort { |b, a| a["commit"]["committer"]["date"] <=> b["commit"]["committer"]["date"] }
+      ten_latest_commits = sorted[0..9]
+      ten_latest_commits.each do |commit|
+        puts commit["commit"]["committer"]["date"]
+        puts commit["commit"]["message"]
+      end
+    end
   end
 
 end
