@@ -14,6 +14,8 @@ class WeatherForecast
 
 	def initialize( city = 'Chicago, IL', days = 7, site = "" )
 
+			@city_render = city
+
 			@options = { query:
 
 									{ "site"  => site,
@@ -34,13 +36,24 @@ class WeatherForecast
 
 	def print_daily
 
+		 puts "Daily average for #{ @city_render }"
 		 puts @output["list"].each { |s| puts s["temp"]["day"] }
 
 	end
 
 
+	def print_highs
+
+		puts "Daily highs for #{ @city_render }"
+		puts @output["list"].each { |s| puts s["temp"]["max"] }
+
+	end
+
 end
 
 weather_forecast = WeatherForecast.new("Chicago, IL", 8 )
 weather_forecast.forecast
+puts ""
 weather_forecast.print_daily
+puts ""
+weather_forecast.print_highs
