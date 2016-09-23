@@ -50,14 +50,7 @@ class WeatherForecast
 
 	end
 
-	# read on API Structure
-	# options for location and cit
-	def five_day_forecast
 
-		# api.openweathermap.org/data/2.5/forecast?q=London,us&mode=xml
-		self.class.get( "?q=#{ location }", @options )
-
-	end
 
 	def forecast
 		#api.openweathermap.org/data/2.5/forecast/daily?q={city name},{country code}&cnt={cnt}
@@ -66,9 +59,17 @@ class WeatherForecast
 	end
 
 
+	def print_daily
+
+		 puts @output["list"].each { |s| puts s["temp"]["day"] }
+
+	end
+
+
+
+
 end
 
 weather_forecast = WeatherForecast.new("Chicago, IL", 8 )
-out = weather_forecast.forecast
-binding.pry
-puts out
+weather_forecast.forecast
+weather_forecast.print_daily
