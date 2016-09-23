@@ -38,9 +38,14 @@ class WeatherForecast
 	base_uri 'http://api.openweathermap.org/data/2.5/forecast'
 
 
-	def initialize( city = 'Chicago, IL', days = 7 )
+	def initialize( site = "", city = 'Chicago, IL', days = 7 )
 
-			@options = { query: { q => city, cnt => days, APPID => ENV["OPENWEATHER"] } }
+			@options = { query:
+
+									{ "site"  => site,
+										"q"     => city,
+										"cnt"   => days,
+										"APPID" => ENV["OPENWEATHER"] } }
 
 	end
 
