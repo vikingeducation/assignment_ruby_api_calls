@@ -27,7 +27,7 @@ class WeatherForecast
 
 	def forecast
 		#api.openweathermap.org/data/2.5/forecast/daily?q={city name},{country code}&cnt={cnt}
-		self.class.get( "/daily?", @options )
+		@output = self.class.get( "/daily?", @options )
 
 	end
 
