@@ -77,8 +77,9 @@ class Github_api
 
 		@commits.each do | k, v |
 
+			puts ""
 			puts k
-
+			puts ""
 			v.each { | commit | puts v }
 
 		end
