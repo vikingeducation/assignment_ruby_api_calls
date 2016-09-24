@@ -80,7 +80,7 @@ class Github_api
 			puts ""
 			puts k
 			puts ""
-			v.each { | commit | puts v }
+			v[1..10].each { | c | puts c }
 
 		end
 
