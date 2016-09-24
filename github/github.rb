@@ -14,7 +14,7 @@ class Github_api
 
 		@repos = nil
 
-		@commits = []
+		@commits = {}
 
 		@github = Github.new  oauth_token: ENV["GITHUB"],
 													user_agent: 'jdbernardi',
@@ -37,20 +37,28 @@ class Github_api
 
 			commit = @github.repos.commits.list 'jdbernardi', r.name
 
-			parse_commit( commit )
-binding.pry
+			parse_commit( r.name, commit )
 
 		end
-
-binding.pry
 
 	end
 
 
-	def parse_commit( repo )
+	def parse_commit( repo_name, commits )
 
-		repo.each { |s| s.each { |n| n.each { |p| @commits << p["message"] if p.is_a?(Hash)  } } }
+		com_array = []
+
+		commits.each { |s| s.each { |n| n.each { |p| com_array << p["message"] if p.is_a?(Hash)  && !p["message"].nil? } } }
+
+		@commits[ repo_name ] = com_array
 binding.pry
+	end
+
+
+	def inspect
+
+		binding.pry
+
 	end
 
 end
@@ -58,3 +66,4 @@ end
 git = Github_api.new
 git.get_repositories
 git.pull_commits
+git.inspect
