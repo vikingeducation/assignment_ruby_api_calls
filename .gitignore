@@ -4,3 +4,4 @@
 /config/initializers
 /nytimes.rb
 /hash.rb
+/github/hash.rb
