@@ -65,11 +65,11 @@ class WeatherForecast
 
 end
 
-weather_forecast = WeatherForecast.new("Chicago, IL", 8 )
-weather_forecast.get_forecast
-puts ""
-weather_forecast.print_daily
-puts ""
-weather_forecast.print_highs
-puts ""
-weather_forecast.get_description
+#weather_forecast = WeatherForecast.new("Chicago, IL", 8 )
+#weather_forecast.get_forecast
+#puts ""
+#weather_forecast.print_daily
+#puts ""
+#weather_forecast.print_highs
+#puts ""
+#weather_forecast.get_description
