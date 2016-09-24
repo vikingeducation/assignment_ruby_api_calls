@@ -14,6 +14,8 @@ class Github_api
 
 		@repos = nil
 
+		@commits = []
+
 		@github = Github.new  oauth_token: ENV["GITHUB"],
 													user_agent: 'jdbernardi',
 													auto_pagination: true
@@ -25,23 +27,34 @@ class Github_api
 
 		@repos = @github.repos.list user: 'jdbernardi'#, { |repo| repo.name } -- error
 		@repos = @repos[1..10]
-		binding.pry
+
 	end
 
 
-	def get_commits
-binding.pry
+	def pull_commits
+
 		@repos.each do | r |
 
-			@commits = @github.repos.commits.list 'jdbernardi', r.name
+			commit = @github.repos.commits.list 'jdbernardi', r.name
+
+			parse_commit( commit )
+binding.pry
 
 		end
+
 binding.pry
+
 	end
 
+
+	def parse_commit( repo )
+
+		repo.each { |s| s.each { |n| n.each { |p| @commits << p["message"] if p.is_a?(Hash)  } } }
+binding.pry
+	end
 
 end
 
 git = Github_api.new
 git.get_repositories
-git.get_commits
+git.pull_commits
