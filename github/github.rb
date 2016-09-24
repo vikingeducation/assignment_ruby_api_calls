@@ -51,15 +51,41 @@ class Github_api
 		commits.each { |s| s.each { |n| n.each { |p| com_array << p["message"] if p.is_a?(Hash)  && !p["message"].nil? } } }
 
 		@commits[ repo_name ] = com_array
-binding.pry
+
 	end
 
 
 	def inspect
 
-		binding.pry
+		print_repo_names
+
+		print_repo_and_commits
 
 	end
+
+
+
+	def print_repo_names
+
+		@commits.each { |k, v| puts k }
+
+	end
+
+
+
+	def print_repo_and_commits
+
+		@commits.each do | k, v |
+
+			puts k
+
+			v.each { | commit | puts v }
+
+		end
+
+	end
+
+
 
 end
 
