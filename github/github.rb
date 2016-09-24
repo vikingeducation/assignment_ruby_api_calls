@@ -1,9 +1,3 @@
-# base https://api.github.com
-require 'pry-byebug'
-
-# https://api.github.com/?access_token=OAUTH-TOKEN
-
-# User-Agent: jdbernardi
 require 'github_api'
 
 
@@ -19,13 +13,13 @@ class Github_api
 		@github = Github.new  oauth_token: ENV["GITHUB"],
 													user_agent: 'jdbernardi',
 													auto_pagination: true
-													binding.pry
+
 	end
 
 
 	def get_repositories
 
-		@repos = @github.repos.list user: 'jdbernardi'#, { |repo| repo.name } -- error
+		@repos = @github.repos.list user: 'jdbernardi'
 		@repos = @repos[1..10]
 
 	end
@@ -53,6 +47,7 @@ class Github_api
 		@commits[ repo_name ] = com_array
 
 	end
+
 
 
 	def inspect
@@ -90,7 +85,7 @@ class Github_api
 
 end
 
-git = Github_api.new
-git.get_repositories
-git.pull_commits
-git.inspect
+#git = Github_api.new
+#git.get_repositories
+#git.pull_commits
+#git.inspect
