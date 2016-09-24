@@ -1,0 +1,7 @@
+
+# Ignore application configuration
+/config/application.yml
+/config/initializers
+/nytimes.rb
+/hash.rb
+/github/hash.rb
