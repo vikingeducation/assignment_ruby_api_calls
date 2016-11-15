@@ -7,8 +7,6 @@ Figaro.application = Figaro::Application.new(
 )
 Figaro.load
 
-# puts ENV['weather_api']
-
 weather_api = GetWeatherForecast.new( 33603, 3, ENV['weather_api'])
 
 
@@ -21,6 +19,10 @@ forecast = weather_api.get
 # end
 
 
-ParseForecast.new('data/forecast.json')
+p = ParseForecast.new('data/forecast.json')
+p.high_temps
 
-
+File.open('data/trimmed.json', 'w') do |f|
+  json = JSON.pretty_generate(trimmed)
+  f.write(json)
+end
