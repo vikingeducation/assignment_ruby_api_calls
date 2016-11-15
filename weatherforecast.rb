@@ -1,33 +1,39 @@
 require "httparty"
 require "pp"
+require "date"
 
 class WeatherForecast 
-  def initialize(days = 5, location = "Philadelphia")
-    @days = days
-    @location = location
+  def initialize(location = "Philadelphia")
     @my_token = ENV["FORECAST_KEY"]
+    @url = "http://api.openweathermap.org/data/2.5/forecast?q=#{@location}&mode=json&units=imperial&appid=#{@my_token}"
+  end
+
+  def run
+    result = get_url
+    pp result
+    days_info = trim_results(result)
+    # render
   end
 
   def get_url
-    url = "http://api.openweathermap.org/data/2.5/forecast?q={#{@location}}&mode=json&appid=#{@my_token}"
-    result = HTTParty.get(url)
+    HTTParty.get(@url)
   end
 
-  def trim_object
-    data = get_url
+  def trim_results(result)
+    first_day = result["list"]
+    second_day = result["list"]
+    pp first_day
+    pp second_day
+    # DateTime.strptime("#{result.list.dt}",'%s')
   end  
-  
-  def data_gatherer
-    
 
-  end
 
-  def display 
-
+  def render
+    #display 2 day information
   end
 end
 
-WeatherForecast.new.get_url
+WeatherForecast.new.run
 
     # File.open('weather.json', 'w') do |f|
     #   json = JSON.pretty_generate(result)
