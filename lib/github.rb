@@ -16,8 +16,6 @@ class GithubReader
     sleep(0.5)
 
     @user = github.users.get.login
-
-    sleep(0.5)
   end
 
   def fetch_repos
@@ -32,6 +30,7 @@ class GithubReader
       puts
       puts "------------------------------------"
       puts repo[:name]
+      puts repo[:url]
       puts "------------------------------------"
       puts
       repo[:commits].each do |commit|
@@ -47,38 +46,46 @@ class GithubReader
     def get_repos
       repos = github.repos.list
 
-      sleep(0.5)
+      sleep(0.3)
 
-      repos.sort_by{ |k| k.created_at }
+      repos
+      # repos.sort_by{ |k| k.created_at }
     end
 
     def parse_repos(repo_list)
       repo_list.map do |repo|
+
         commits = get_commits(repo.name)
 
         {
           name: repo.name,
-          commits:commits
+          commits:commits,
+          url: "https://github.com/#{user}/#{repo.name}",
+          forked: repo.fork
         }
       end
     end
 
     def get_commits(repo)
-      commits = github.repos.commits.list(user, repo)
+      begin
+        commits = github.repos.commits.list(user, repo)
 
-      sleep(0.5)
+        sleep(0.3)
 
-      commits = commits.map do |commit|
-        {
-          message: commit.commit.message,
-          date: commit.commit.author.date
-        }
-      end.sort_by{ |k| k[:date] }
+        return [] if commits.empty?
 
-      commits
+        commits = commits.map do |commit|
+          {
+            message: commit.commit.message,
+            date: commit.commit.author.date
+          }
+        end.sort_by{ |k| k[:date] }
+
+        commits
+      rescue 
     end
 
 
 end
 
-
+GithubReader.new.pretty_print
