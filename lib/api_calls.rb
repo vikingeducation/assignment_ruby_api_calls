@@ -12,6 +12,6 @@ pp api_response = weather.get_forecast
 
 # parser = Parser.new(weather: sample_response)
 
-# p parser.tomorrow
+# p parser.parse
 
 # pp weather.get_forecast

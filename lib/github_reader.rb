@@ -14,9 +14,7 @@ class GithubReader
     repos = {}
     @github.list(user: "#{ user }") do |repo|
       repo_name = repo.name
-      p @github.commits.list(user, repo_name)#[-10..-1]
-      #p repos[repo_name] = @github.commits.list(user, repo_name)[-10..-1]
-      puts "------------------------------------"
+      repos[repo_name] = @github.commits.list(user, repo_name).body
       pause
     end
     repos
