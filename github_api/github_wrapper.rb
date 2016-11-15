@@ -7,21 +7,29 @@ class GitHubWrapper
 
   def initialize
     @github = Github.new(oauth_token: ENV["GIT_KEY"])
-    @latest_repos = get_latest_repos
-    @latest_repos.each do |repo|
-      pp repo
-    end
+    @latest_repos = []
+    @latest_repos_names = []
+    @latest_commits = {}
+    get_latest_repos
+    get_latest_commits
+    pp @latest_commits
   end
 
   def get_latest_repos # 10 latest repos
-    latest_repos = []
-    counter = 0
-    @github.repos.list do |repo|
-      latest_repos << repo
-      counter += 1
-      break if counter == 10
+    @github.repos.list user: "kotten1", per_page: 10, page: 1, sort: "created"  do |repo|
+      @latest_repos << repo
+      @latest_repos_names << repo["name"]
     end
-    latest_repos
+
+  end
+
+  def get_latest_commits
+    @latest_repos_names.each do |repo_name|
+      @github.repos.commits.list "kotten1", repo_name, sort: "created" do |commit|
+        @latest_commits[repo_name] = commit["commit"]["message"]        
+      end
+      sleep 0.5
+    end
   end
 
 end
