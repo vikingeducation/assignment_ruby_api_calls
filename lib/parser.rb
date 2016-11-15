@@ -58,8 +58,32 @@ class Parser
     format_daily(days[tomorrow])
   end
 
+  def description
+    description = {}
+    days.map do |day, data|
+      description[day] = data['weather'][0]['description']
+    end
+    description
+  end
+
+  def clouds
+    clouds = {}
+    days.map do |day, data|
+      clouds[day] = data['clouds']
+    end
+    clouds
+  end
+
+  def wind
+    wind = {}
+    days.map do |day, data|
+      wind[day] = data['speed']
+    end
+    wind
+  end
+
   def format_daily(day)
-    { 
+    {
       high: day['temp']['max'],
       low:  day['temp']['min'],
       desc: day['weather'][0]['description'],
