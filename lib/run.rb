@@ -1,11 +1,14 @@
 require 'figaro'
-require 'weather_forecaster'
+require_relative 'weather_forecast'
+require 'json'
 
 Figaro.application = Figaro::Application.new(
-  environment: development,
-  path: File.expand_path("../config/application.yml", __FILE__)
+  path: File.expand_path("./config/application.yml")
 )
 
 Figaro.load
 
-WeatherForecaster.new(key: ENV["API_KEY"])
+forcaster = WeatherForecast.new(key: ENV["API_KEY"])
+
+response = forcaster.get_forecast
+puts  JSON.pretty_generate response
