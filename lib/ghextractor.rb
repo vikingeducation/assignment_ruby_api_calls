@@ -16,15 +16,33 @@ class GHExtractor
   end
 
   def get_forks_repos # un pr'd forked repos
-    url = @root_url + "/user/repos?sort=created&access_token=#{@oauth_token}"
-    child_repos = HTTParty.get(url)
-    forked_array = []
-    child_repos.each do |repo|
-      pp repo
-      parent = repo["parent"]
-      pp HTTParty.get(parent["pulls_url"])
-      break
+    # url = @root_url + "/user/repos?sort=created&access_token=#{@oauth_token}"
+    # child_repos = HTTParty.get(url)
+    # forked_array = []
+    # # pp child_repos
+    #   counter = 2
+    # child_repos.each do |repo|
+    #   url = @root_url + "/repos/#{@owner}/#{repo["name"]}/events?access_token=#{@oauth_token}"
+    #   pp HTTParty.get(url)
+    #   # pp repo
+    #   parent = repo["parent"]
+    #   # pp parent
+    #   # pp HTTParty.get(parent["pulls_url"])
+    #   break if counter == 5
+    #   counter += 1
+    # end
+  end
+
+  def get_user_events
+    url = @root_url + "/users/#{@owner}/events?access_token=#{@oauth_token}"
+    res = HTTParty.get(url)
+    res.select do |event|
+      event["type"] = "ForkEvent"
+      # get repos url
+      # check the pullrequest events and throw out matching
     end
+
+    pp res
   end
 
 
