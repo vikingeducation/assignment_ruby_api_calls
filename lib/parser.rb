@@ -33,21 +33,36 @@ class Parser
   end
 
   def hi_temps
-    #days.map do |day|
-      #[]day['max']
-    #end
+    hi_temps = {}
+    days.map do |day, data|
+      hi_temps[day] = data['temp']['max']
+    end
+    hi_temps
   end
 
   def lo_temps
-
+    lo_temps = {}
+    days.map do |day, data|
+      lo_temps[day] = data['temp']['min']
+    end
+    lo_temps
   end
 
   def today
-
+    today = Time.now.to_date.to_s
+    format_daily(days[today])
   end
 
   def tomorrow
-
+    tomorrow = (Time.now + 86_400).to_date.to_s
+    format_daily(days[tomorrow])
   end
 
+  def format_daily(day)
+    { 
+      high: day['temp']['max'],
+      low:  day['temp']['min'],
+      desc: day['weather'][0]['description'],
+     }
+  end
 end

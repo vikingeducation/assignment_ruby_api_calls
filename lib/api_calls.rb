@@ -4,17 +4,14 @@ require 'httparty'
 require_relative 'weather_forecast'
 require_relative 'parser'
 
-#weather = WeatherForecast.new
+weather = WeatherForecast.new
 
-#api_response = weather.get_forecast
+pp api_response = weather.get_forecast
 
-sample_response = File.read('sample_api_return.txt')
+# sample_response = File.read('sample_api_return.txt')
 
-parser = Parser.new(weather: sample_response)
+# parser = Parser.new(weather: sample_response)
 
-parser.days.each do |key, value|
-  p key
-  p value
-end
+# p parser.tomorrow
 
 # pp weather.get_forecast
