@@ -1,7 +1,5 @@
 require "github_api"
 require 'figaro'
-require 'json'
-
 
 Figaro.application = Figaro::Application.new(
   path: File.expand_path("./config/application.yml")
@@ -23,6 +21,7 @@ class GithubReader
   end
 
   def recent_repos
+    puts "Fetching repos...\n\n"
     parse_repos(get_repos)
   end
 
