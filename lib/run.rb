@@ -8,7 +8,4 @@ Figaro.application = Figaro::Application.new(
 
 Figaro.load
 
-forcaster = WeatherForecast.new(key: ENV["API_KEY"])
-
-response = forcaster.get_forecast
-puts  JSON.pretty_generate response
+forecaster = WeatherForecast.new(key: ENV["API_KEY"])
