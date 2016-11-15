@@ -1,4 +1,5 @@
 class Render
+  
   def self.display_highs(days)
     puts "Displaying high temperatures."
     days.each do |day|

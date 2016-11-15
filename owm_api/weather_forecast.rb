@@ -23,7 +23,7 @@ class WeatherForecast # using Open Weather Map
     render
   end
 
-  def request_url
+  def request_url # could be cleaned up by using parameters in HTTParty.get
     location = @location.gsub(/\s+/, "+")
     @url = "http://api.openweathermap.org/data/2.5/forecast/daily?q="
     @url += "#{location}" # adds location
@@ -70,4 +70,4 @@ class WeatherForecast # using Open Weather Map
 
 end
 
-t = WeatherForecast.new("san francisco", 3)
+t = WeatherForecast.new("san francisco", 16)
