@@ -1,3 +1,4 @@
+
 class GithubReader
   GITHUB_TOKEN = ENV['GITHUB']
 
@@ -6,12 +7,24 @@ class GithubReader
   end
 
   def repos(user)
-    @github.list(user: "#{user}").body[-10..-1]
+    @github.list(user: "#{ user }").body[-10..-1]
   end
 
   def repos_with_commits(user)
-    @github.list(user:)
+    repos = {}
+    @github.list(user: "#{ user }") do |repo|
+      repo_name = repo.name
+      p @github.commits.list(user, repo_name)#[-10..-1]
+      #p repos[repo_name] = @github.commits.list(user, repo_name)[-10..-1]
+      puts "------------------------------------"
+      pause
+    end
+    repos
   end
 
+  private
+
+    def pause(time = 0.5)
+      sleep(time)
+    end
 end
-GithubReader.new.repos

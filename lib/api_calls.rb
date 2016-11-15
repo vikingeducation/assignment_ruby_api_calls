@@ -1,11 +1,8 @@
 require 'json'
 require 'pp'
 require 'httparty'
-require 'github_api'
 require_relative 'weather_forecast'
 require_relative 'parser'
-require_relative 'github_reader'
-require_relative 'github_parser'
 
 weather = WeatherForecast.new
 
