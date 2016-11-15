@@ -1,0 +1,31 @@
+Task 1:
+ - track commits that haven't been tracked yet (dates)
+    - private
+    - forked
+
+  sub-categories:
+    - access github (githubExtract class)
+    - access private repos
+      - get commits
+      - verify no repeats
+    - access forked repos with no pr back to parent
+      - get commits
+      - verify no repeats (verifier class: connects public and private)
+
+    - access public repo
+      - to ensure no repeats
+
+
+Task 2: (GithubCommitter)
+ - access github
+ - make separate commits to public repo for each untracked commit
+ - back commits to match private dates
+
+
+Classes:
+
+GHExtract
+GHCommit
+Verifier
+Controller
+main.rb

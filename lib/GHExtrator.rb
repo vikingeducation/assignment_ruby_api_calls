@@ -1,0 +1,45 @@
+require 'github-api'
+require 'httparty'
+require 'pp'
+
+class GHExtractor
+
+  def initialize(owner,oauth_token=ENV['GIT_KEY'])
+    @oauth_token = oauth_token
+    @root_url = "http://api.github.com"
+    @owner = owner
+  end
+
+  def get_own_repos # private repos
+    url = @root_url + "/user/repos?sort=created&access_token=#{@oauth_token}"
+    list = HTTParty.get(url)
+    list[0..10]
+  end
+
+  # def get_own_repos # un pr'd forked repos
+  #   url = @root_url + "/user/repos?sort=created&access_token=#{@oauth_token}"
+  #   list = HTTParty.get(url)
+  #   list[0..10]
+  # end
+
+
+  def output_repos # generate list of commits  #######STOPPED HERE
+    commit_dates = []
+    repo_list = get_own_repos
+    repo_list.each do |repo|
+      commits = get_commits(repo["name"])
+      commits.each do |commit|
+        commit_dates << commit["commit"]["author"]["date"]
+      end
+    end
+    commit_dates
+  end
+
+  def get_commits(name)
+    sleep(1)
+    url = @root_url + "/repos/#{@owner}/#{name}/commits?sort=updated&access_token=#{@oauth_token}"
+    HTTParty.get(url)
+  end
+
+
+end
