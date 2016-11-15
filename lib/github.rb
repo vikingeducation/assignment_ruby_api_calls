@@ -2,7 +2,7 @@ require "github_api"
 require 'figaro'
 
 Figaro.application = Figaro::Application.new(
-  path: File.expand_path("./config/application.yml")
+  path: File.expand_path("../../config/application.yml", __FILE__)
   )
 Figaro.load
 
@@ -20,7 +20,7 @@ class GithubReader
     sleep(0.5)
   end
 
-  def recent_repos
+  def fetch_repos
     puts "Fetching repos...\n\n"
     parse_repos(get_repos)
   end
@@ -28,7 +28,7 @@ class GithubReader
   def pretty_print
     puts "\n\n"
 
-    recent_repos.each do |repo|
+    fetch_repos.each do |repo|
       puts
       puts "------------------------------------"
       puts repo[:name]
@@ -49,9 +49,7 @@ class GithubReader
 
       sleep(0.5)
 
-      num = repos.length > 9 ? 10 : repos.length
-
-      repos. sort_by{ |k| k.created_at }.last(num)
+      repos.sort_by{ |k| k.created_at }
     end
 
     def parse_repos(repo_list)
@@ -77,13 +75,10 @@ class GithubReader
         }
       end.sort_by{ |k| k[:date] }
 
-      num = commits.length > 10 ? 10 : commits.length
-
-      commits.last(10)
+      commits
     end
 
 
 end
-GithubReader.new.pretty_print
 
 
