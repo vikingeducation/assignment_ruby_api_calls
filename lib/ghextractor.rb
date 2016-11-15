@@ -10,22 +10,27 @@ class GHExtractor
     @owner = owner
   end
 
-  def get_own_repos # private repos
-    url = @root_url + "/user/repos?sort=created&access_token=#{@oauth_token}"
-    list = HTTParty.get(url)
-    list[0..10]
+  def get_private_repos # private repos
+    url = @root_url + "/user/repos?visiblity=private&sort=created&access_token=#{@oauth_token}"
+    HTTParty.get(url)
   end
 
-  # def get_own_repos # un pr'd forked repos
-  #   url = @root_url + "/user/repos?sort=created&access_token=#{@oauth_token}"
-  #   list = HTTParty.get(url)
-  #   list[0..10]
-  # end
+  def get_forks_repos # un pr'd forked repos
+    url = @root_url + "/user/repos?sort=created&access_token=#{@oauth_token}"
+    child_repos = HTTParty.get(url)
+    forked_array = []
+    child_repos.each do |repo|
+      pp repo
+      parent = repo["parent"]
+      pp HTTParty.get(parent["pulls_url"])
+      break
+    end
+  end
 
 
   def output_repos # generate list of commits  #######STOPPED HERE
     commit_dates = []
-    repo_list = get_own_repos
+    repo_list = get_private_repos
     repo_list.each do |repo|
       commits = get_commits(repo["name"])
       commits.each do |commit|
