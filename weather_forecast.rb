@@ -1,6 +1,8 @@
 require "httparty"
 require "pp"
 
+#write an alias to call from command line
+
 class WeatherForecast 
   def initialize(location = "Philadelphia")
     @my_token = ENV["FORECAST_KEY"]
@@ -34,7 +36,7 @@ class WeatherForecast
   end
 
   def get_date(array)
-    array[4]["dt_txt"][0..11]
+    array[4]["dt_txt"][0..9]
   end
 
   def get_weather(array)
@@ -57,5 +59,3 @@ class WeatherForecast
     total / 8
   end
 end
-
-WeatherForecast.new.run
