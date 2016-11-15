@@ -6,3 +6,4 @@ Figaro.application = Figaro::Application.new(
 )
 Figaro.load
 
+puts ENV["OWM_KEY"]
