@@ -11,17 +11,23 @@ Figaro.load
 
 github = Github.new oauth_token: ENV['GITHUB_KEY']
 sleep(1)
+
 repos = github.repos.list.sort_by{ |k| k.created_at }.reverse
 users = github.users.get
-username = ''
-users.each do |user|
-  username = user[1]
-  break
-end
-p username
 
 repos[0..9].each do |repo|
+  puts
+  puts "------------------------------------"
   puts repo.name
-  commits = github.repos.commits.list(github.user, repo.name)
-  commits
+  puts "------------------------------------"
+  puts
+  commits = github.repos.commits.list(users.login, repo.name)
+  commits = commits.map do |commit|
+              { message: commit.commit.message,
+                date: commit.commit.created_at }
+            end.sort_by{ |k| k[:date] }.reverse
+
+  commits[0..9].each do |commit|
+    puts "\t" + commit[:message]
+  end
 end
