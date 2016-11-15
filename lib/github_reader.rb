@@ -14,10 +14,21 @@ class GithubReader
     repos = {}
     @github.list(user: "#{ user }") do |repo|
       repo_name = repo.name
-      repos[repo_name] = @github.commits.list(user, repo_name).body
+      repos[repo_name] = commit_messages(user, repo_name)
       pause
     end
     repos
+  end
+
+  def commit_messages(user, repo_name)
+    commit_messages = []
+    commits = @github.commits.list(user, repo_name).body
+    -1.downto(-10) do | index |# commits.each do | commit |
+      commit = commits[index]
+      break unless commit
+      commit_messages << commit.commit.message
+    end
+    commit_messages
   end
 
   private
