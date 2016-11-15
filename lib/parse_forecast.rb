@@ -15,6 +15,7 @@ class ParseForecast
     high_temps
     low_temps
     get_today
+    get_tomorrow
   end
 
 
@@ -43,11 +44,21 @@ class ParseForecast
     today = days[0]
     temp = today["main"]["temp"]
     humidity = today["main"]["humidity"]
-    # binding.pry
     overall = today["weather"][0]["main"]
     description = today["weather"][0]["description"]
     wind = today["wind"]["speed"]
     puts "The outlook for today is a temp of #{temp}, humidity of #{humidity}, overall it will be #{overall}, and #{description}, with wind of #{wind} miles per hour"
+  end
+
+  def get_tomorrow
+    days = get_days
+    tomorrow = days[8]
+    temp = tomorrow["main"]["temp"]
+    humidity = tomorrow["main"]["humidity"]
+    overall = tomorrow["weather"][0]["main"]
+    description = tomorrow["weather"][0]["description"]
+    wind = tomorrow["wind"]["speed"]
+    puts "The outlook for tomorrow is a temp of #{temp}, humidity of #{humidity}, overall it will be #{overall}, and #{description}, with wind of #{wind} miles per hour"    
   end
 
 
