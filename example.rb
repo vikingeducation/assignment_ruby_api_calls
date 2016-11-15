@@ -1,4 +1,5 @@
-require_relative 'lib/weather_forcast'
+require_relative 'lib/get_weather_forecast'
+require_relative 'lib/parse_forecast'
 
 Figaro.application = Figaro::Application.new(
     environment: 'development',
@@ -8,8 +9,18 @@ Figaro.load
 
 # puts ENV['weather_api']
 
-weather_api = WeatherForcast.new( 33603, 3, ENV['weather_api'])
-weather_api.get
+weather_api = GetWeatherForecast.new( 33603, 3, ENV['weather_api'])
 
 
-#api.openweathermap.org/data/2.5/weather?zip=33603,us&APPID=1fd1b847e28c0ed4b796b1ba04ece9cc
+forecast = weather_api.get
+
+
+# File.open('data/forecast.json', 'w') do |f|
+#   json = JSON.pretty_generate(forecast)
+#   f.write(json)
+# end
+
+
+ParseForecast.new('data/forecast.json')
+
+
