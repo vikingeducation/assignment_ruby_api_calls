@@ -16,6 +16,7 @@ class CommitTracker
     @r_name = "fork_commit_history"
     timestamp = Time.now.strftime("%Y_%m_%d_%H%M%S")
     @folder_path = File.expand_path("~/fork_commit_history_#{timestamp}")
+    clone_repo
     # set_up
   end
 
