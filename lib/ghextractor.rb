@@ -30,7 +30,7 @@ class GHExtractor
   def get_user_events
     url = @root_url + "/users/#{@owner}/events?access_token=#{@oauth_token}"
     forked = HTTParty.get(url)
-    sleep(.5)
+    sleep(0.5)
     pullevents = HTTParty.get(url)
     
     forked = forked.select do |event|
@@ -65,7 +65,7 @@ class GHExtractor
   def get_commits(name)
     url = @root_url + "/repos/#{@owner}/#{name}/commits?sort=updated&access_token=#{@oauth_token}"
     HTTParty.get(url)
-    sleep(.5)
+    sleep(0.5)
   end
 
 

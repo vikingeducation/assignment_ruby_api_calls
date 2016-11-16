@@ -26,9 +26,11 @@ class Github
         current_commit = commits[times]
         break unless !!current_commit
         puts "\nThis is commit number #{times + 1}"
-        puts "Comment was: #{current_commit["commit"]["message"]}"
+        puts "Comment was: #{current_commit["commit"]}"
+        break
       end
     end
+
   end
 
   def get_commits(name)
@@ -37,3 +39,4 @@ class Github
     HTTParty.get(url)
   end
 end
+
