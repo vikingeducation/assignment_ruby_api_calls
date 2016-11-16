@@ -16,7 +16,7 @@ class CommitTracker
     @r_name = "fork_commit_history"
     timestamp = Time.now.strftime("%Y_%m_%d_%H%M%S")
     @folder_path = File.expand_path("~/fork_commit_history_#{timestamp}")
-    set_up
+    # set_up
   end
 
   def set_up
@@ -68,6 +68,7 @@ class CommitTracker
     working_dir = Dir.pwd
 
     `cd #{folder_path}`
+    p Dir.pwd
     `git add -A`
 
     commits.each do |commit|
@@ -76,6 +77,7 @@ class CommitTracker
 
     `git push origin master`
     `cd #{working_dir}`
+    p Dir.pwd
   end
 
   def write_to_readme(commits)
@@ -88,4 +90,4 @@ class CommitTracker
 
 end
 
-tracker = CommitTracker.new
+tracker = CommitTracker.new.execute_commits([{date: "2016-11-16T00:05:37Z"}, {date: "2016-01-16T00:05:37Z"}])
