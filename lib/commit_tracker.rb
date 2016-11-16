@@ -72,7 +72,7 @@ class CommitTracker
 
     commits.each do |commit|
       write_to_readme(commit)
-      `git commit --date="#{commit[:date]}" -m="Forked Repo Commit"`
+      `git commit --date="#{commit[:date]}" -am="Forked Repo Commit"`
       sleep(0.5)
     end
 
