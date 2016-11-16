@@ -22,10 +22,8 @@ class CommitTracker
   def set_up
     repos = create_repo
     clone_repo
-    @readme = create_readme
     commits = gather_commits(repos)
     push_commits(commits)
-    readme.close
   end
 
   def clone_repo
@@ -34,7 +32,10 @@ class CommitTracker
 
   def compare_commits(main, commits)
     commits.select do |commit|
-      main.none?{ |m_commit| m_commit[:date] == commit[:date] }
+      main.none?{ |m_commit|
+        p m_commit[:date]
+        p commit[:date]
+        m_commit[:date] == commit[:date] }
     end
   end
 
@@ -47,7 +48,7 @@ class CommitTracker
   end
 
   def create_readme
-    File.new("#{folder_path}/README.md", "w+")
+    File.open("#{folder_path}/README.md", File::TRUNC){}
   end
 
   def gather_commits(repos)
@@ -58,7 +59,6 @@ class CommitTracker
 
     repos = reader.fetch_repos
     main = repos.select{ |repo| repo[:name] == r_name }[0][:commits]
-
     uncommitted = compare_commits(main, commits)
 
     execute_commits(uncommitted)
@@ -67,17 +67,28 @@ class CommitTracker
   def execute_commits(commits)
     working_dir = Dir.pwd
 
+    puts "Moving to temp folder: #{folder_path}"
+
     Dir.chdir(folder_path)
     `git add -A`
 
     commits.each do |commit|
       write_to_readme(commit)
-      `git commit --date="#{commit[:date]}" -m="Forked Repo Commit"`
-      sleep(0.5)
+      puts "writing commit: #{commit[:date]}"
+      `git commit --date="#{commit[:date]}" -am "Forked Repo Commit"`
     end
 
+    puts "Pushing to github"
+
     `git push origin master`
+
+    puts "returning to working dir: #{working_dir}"
+
     Dir.chdir(working_dir)
+
+    puts "removing temp folder: #{folder_path}"
+
+    `rm -rf #{folder_path}`
   end
 
   def write_to_readme(commit)
