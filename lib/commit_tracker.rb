@@ -100,4 +100,3 @@ end
 
 tracker = CommitTracker.new
 
-# .execute_commits([{date: "2016-11-16T00:05:37Z"}, {date: "2016-01-16T00:05:37Z"}])
