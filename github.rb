@@ -20,7 +20,6 @@ class Github
   def output_repos
     repo_list = get_own_repos
     repo_list.each do |repo|
-      repo
       puts "\n\nThis is the #{repo["name"]}"
       commits = get_commits(repo["name"])
       10.times do |times|

@@ -16,13 +16,21 @@ class GHExtractor
   end
 
   def get_forks_repos # un pr'd forked repos
-    events = get_user_events
+    fork_events = get_user_events
+    url = @root_url + "/user/repos?sort=created&access_token=#{@oauth_token}"
+    sleep(1)
+    all_repos = HTTParty.get(url)
+    all_repos.select do |repo|
+      fork_events.any? do |event|
+        event["repo"]["url"] == repo["url"]
+      end
+    end
   end
 
   def get_user_events
     url = @root_url + "/users/#{@owner}/events?access_token=#{@oauth_token}"
     forked = HTTParty.get(url)
-    sleep(1)
+    sleep(.5)
     pullevents = HTTParty.get(url)
     
     forked = forked.select do |event|
@@ -34,7 +42,7 @@ class GHExtractor
     #returns an array of forked but not pulled objects
     final = forked.select do |repo|
       pullevents.any? do |pull|
-        (repo["repo"]["url"] == pull["repo"]["url"])
+        !(repo["repo"]["url"] == pull["repo"]["url"])
       end
     end
     final 
@@ -55,9 +63,9 @@ class GHExtractor
   end
 
   def get_commits(name)
-    sleep(1)
     url = @root_url + "/repos/#{@owner}/#{name}/commits?sort=updated&access_token=#{@oauth_token}"
     HTTParty.get(url)
+    sleep(.5)
   end
 
 
