@@ -16,8 +16,7 @@ class CommitTracker
     @r_name = "fork_commit_history"
     timestamp = Time.now.strftime("%Y_%m_%d_%H%M%S")
     @folder_path = File.expand_path("~/fork_commit_history_#{timestamp}")
-    clone_repo
-    # set_up
+    set_up
   end
 
   def set_up
@@ -25,12 +24,12 @@ class CommitTracker
     clone_repo
     @readme = create_readme
     commits = gather_commits(repos)
-    write_to_readme(commits)
     push_commits(commits)
+    readme.close
   end
 
   def clone_repo
-    `git clone https://github.com/#{reader.user}/#{r_name} #{folder_path}`
+    `git clone git@github.com:#{reader.user}/#{r_name}.git #{folder_path}`
   end
 
   def compare_commits(main, commits)
@@ -48,7 +47,7 @@ class CommitTracker
   end
 
   def create_readme
-    File.open("#{folder_path}/README.md", "w+")
+    File.new("#{folder_path}/README.md", "w+")
   end
 
   def gather_commits(repos)
@@ -56,9 +55,9 @@ class CommitTracker
   end
 
   def push_commits(commits)
+
     repos = reader.fetch_repos
     main = repos.select{ |repo| repo[:name] == r_name }[0][:commits]
-    sleep(0.5)
 
     uncommitted = compare_commits(main, commits)
 
@@ -68,27 +67,27 @@ class CommitTracker
   def execute_commits(commits)
     working_dir = Dir.pwd
 
-    `cd #{folder_path}`
-    p `pwd`
+    Dir.chdir(folder_path)
     `git add -A`
 
     commits.each do |commit|
+      write_to_readme(commit)
       `git commit --date="#{commit[:date]}" -m="Forked Repo Commit"`
+      sleep(0.5)
     end
 
     `git push origin master`
-    `cd #{working_dir}`
-    p Dir.pwd
+    Dir.chdir(working_dir)
   end
 
-  def write_to_readme(commits)
-    commits.each do |commit|
-      p "#{commit[:date]} \"Forked Repo Commit\"\n\n"
-      @readme << "#{commit[:date]} \"Forked Repo Commit\"\n\n"
+  def write_to_readme(commit)
+    File.open("#{folder_path}/README.md", "a+") do |file|
+      file << "#{commit[:date]} \"Forked Repo Commit\"\n\n"
     end
-    readme.close
   end
 
 end
 
-tracker = CommitTracker.new.execute_commits([{date: "2016-11-16T00:05:37Z"}, {date: "2016-01-16T00:05:37Z"}])
+tracker = CommitTracker.new
+
+# .execute_commits([{date: "2016-11-16T00:05:37Z"}, {date: "2016-01-16T00:05:37Z"}])
