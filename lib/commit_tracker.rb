@@ -32,10 +32,7 @@ class CommitTracker
 
   def compare_commits(main, commits)
     commits.select do |commit|
-      main.none?{ |m_commit|
-        p m_commit[:date]
-        p commit[:date]
-        m_commit[:date] == commit[:date] }
+      main.none?{ |m_commit| m_commit[:date] == commit[:date] }
     end
   end
 
@@ -61,21 +58,23 @@ class CommitTracker
     main = repos.select{ |repo| repo[:name] == r_name }[0][:commits]
     uncommitted = compare_commits(main, commits)
 
-    execute_commits(uncommitted)
+    execute_commits(uncommitted, main)
   end
 
-  def execute_commits(commits)
+  def execute_commits(commits, main)
     working_dir = Dir.pwd
-
+    p main
     puts "Moving to temp folder: #{folder_path}"
 
     Dir.chdir(folder_path)
-    `git add -A`
 
     commits.each do |commit|
       write_to_readme(commit)
+      `git add -A`
+      `export GIT_AUTHOR_DATE="#{commit[:date]}"`
+      `export GIT_COMMITTER_DATE="#{commit[:date]}"`
       puts "writing commit: #{commit[:date]}"
-      `git commit --date="#{commit[:date]}" -am "Forked Repo Commit"`
+      `git commit --date="#{commit[:date]}" -am="Forked Repo Commit"` unless main.any?{ |m_commit| m_commit[:date] == commit[:date] }
     end
 
     puts "Pushing to github"

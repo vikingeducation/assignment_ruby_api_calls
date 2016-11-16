@@ -13,7 +13,6 @@ class GithubReader
   def initialize
     @github = Github.new(oauth_token: ENV['GITHUB_KEY'])
 
-    sleep(0.5)
 
     @user = github.users.get.login
   end
@@ -68,7 +67,7 @@ class GithubReader
       begin
         commits = github.repos.commits.list(user, repo)
 
-        sleep(0.3)
+        sleep(0.1)
 
         commits = commits.map do |commit|
           {
