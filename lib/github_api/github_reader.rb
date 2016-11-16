@@ -7,7 +7,7 @@ class GithubReader
   end
 
   def repos(user)
-    @github.list(user: "#{ user }").body
+    @github.list(user: "#{ user }", per_page: 100).body
   end
 
   def repos_with_commits(user)
@@ -31,10 +31,10 @@ class GithubReader
     commit_messages
   end
 
-  def forks(user, with_pulls = false)
-    repos(user).select do |repo| 
-      repo['fork']
+  def forks(user)
+    repos(user).select do |repo|
       pause
+      repo['fork']
     end
   end
 
