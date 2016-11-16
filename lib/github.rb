@@ -48,20 +48,18 @@ class GithubReader
 
       sleep(0.3)
 
-      repos
-      # repos.sort_by{ |k| k.created_at }
+      repos.sort_by{ |k| k.created_at }
     end
 
     def parse_repos(repo_list)
       repo_list.map do |repo|
-
         commits = get_commits(repo.name)
 
         {
           name: repo.name,
           commits:commits,
           url: "https://github.com/#{user}/#{repo.name}",
-          forked: repo.fork
+          fork: repo.fork
         }
       end
     end
@@ -72,8 +70,6 @@ class GithubReader
 
         sleep(0.3)
 
-        return [] if commits.empty?
-
         commits = commits.map do |commit|
           {
             message: commit.commit.message,
@@ -82,10 +78,11 @@ class GithubReader
         end.sort_by{ |k| k[:date] }
 
         commits
-      rescue 
+      rescue Github::Error::Conflict
+        return []
+      end
     end
 
 
 end
 
-GithubReader.new.pretty_print
