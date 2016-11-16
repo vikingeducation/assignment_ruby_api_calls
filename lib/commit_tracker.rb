@@ -69,7 +69,7 @@ class CommitTracker
     working_dir = Dir.pwd
 
     `cd #{folder_path}`
-    `pwd`
+    p `pwd`
     `git add -A`
 
     commits.each do |commit|
