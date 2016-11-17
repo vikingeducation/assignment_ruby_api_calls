@@ -1,0 +1,2 @@
+require_relative "weather_forecast"
+WeatherForecast.new.run
