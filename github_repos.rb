@@ -2,15 +2,13 @@
 require 'httparty'
 require 'github_api'
 require 'pp'
-
-# OAuth=885ca77261fdefe88780fabf24e651a41ba53c98
+require 'pry'
 
 class GitHubRepo
 
   include HTTParty
 
   BASE_URI = "https://api.github.com/users/whatever"
-  # https://api.github.com/users/whatever?client_id=xxxx&client_secret=yyyy
   API_KEY = ENV["OAuth"]
 
 
@@ -19,7 +17,6 @@ class GitHubRepo
   end
 
   def get_raw_response
-    puts "DBG: HTTParty.get(BASE_URI, @options) = #{HTTParty.get(BASE_URI, @options).inspect}"
     HTTParty.get(BASE_URI, @options)
   end
 
@@ -44,15 +41,20 @@ class GitHubRepo
   end
 
   def get_commits
-    github = Github.new
-    # github = Proc.new { sleep 0.5 }
+    github = Github.new 
     sorted_repos = sort_repos
     (sorted_repos.length-1).downto(sorted_repos.length - 11) do |idx|
-      z = sorted_repos[idx]['commits_url']
-      puts "DBG: sorted_repos[idx]['name'] = #{sorted_repos[idx]['name'].inspect}"
-      puts "DBG: z = #{z}.inspect}"
-      github.repos.commits.list( "Visiona", sorted_repos[idx]['name'], sha: sorted_repos[idx]["commits_url"].match(/sha/)[0]) { |commit|  puts "DBG: commit = #{commit.inspect}" }
-    end
+      puts "******#{date_format(sorted_repos[idx]['created_at'])} - #{sorted_repos[idx]['name']}"
+      github.repos.commits.list( "Visiona", sorted_repos[idx]['name'], get_sha(sorted_repos[idx]['name'])) { |commit|  puts commit["commit"]["message"] } 
+    end 
+  end
+
+  # binding.pry 
+
+  def get_sha(repo_name)
+    github = Github.new
+    s = github.git_data.references.list 'Visiona', repo_name
+    s.body[0]["object"]["sha"]
   end
 
 end
