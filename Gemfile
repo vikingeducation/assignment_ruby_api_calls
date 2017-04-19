@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+gem 'typhoeus'
+gem 'json'
+gem 'envyable'
+gem 'pry-byebug'
+gem 'github_api'
