@@ -1,4 +1,5 @@
 require 'httparty'
+require 'pp'
 
 class WeatherForecast
   BASE_URI = "http://api.openweathermap.org/data/2.5/forecast"
@@ -56,4 +57,23 @@ class WeatherForecast
 
     raise "Invalid units." unless VALID_UNITS.include?(units)
   end
+
+  def send_request(location, units = nil)
+    return unless location
+
+    # set URL parameters
+    params = { "APPID" => API_KEY, "q" => location }
+    params["units"] = units unless units.nil?
+
+    pp params
+
+    @raw_response = HTTParty.get(BASE_URI, :query => params)
+    # @raw_response = HTTParty.get("#{BASE_URI}?q=Singapore&units=metric&APPID=#{API_KEY}")
+
+    pp @raw_response
+  end
+end
+
+if $0 == __FILE__
+  forecast = WeatherForecast.new("Singapore", 5, "metric")
 end
