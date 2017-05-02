@@ -14,6 +14,34 @@ class WeatherForecast
     @days = days
   end
 
+  # collection of highest temperatures we get, organized by date
+  def hi_temps
+  end
+
+  # collection of lowest temperatures we get, organized by date
+  def lo_temps
+  end
+
+  # forecast for today
+  def today
+  end
+
+  # forecast for tomorrow
+  def tomorrow
+  end
+
+  # rainfall
+  def rainfall
+  end
+
+  # wind speed (in m/s), and direction (in degrees)
+  def wind
+  end
+
+  # cloudiness in %
+  def cloudiness
+  end
+
   private
 
   def validate_time_period!(days)
