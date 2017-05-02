@@ -4,14 +4,16 @@ class WeatherForecast
   BASE_URI = "http://api.openweathermap.org/data/2.5/forecast"
 
   API_KEY = ENV["API_KEY"]
-
   VALID_DAYS = (1..5)
+  VALID_UNITS = ["imperial", "metric"]
 
-  def initialize(location = "Singapore", days = 1)
+  def initialize(location = "Singapore", days = 1, unit = nil)
     validate_time_period!(days)
+    validate_units!(units)
 
     @location = location
     @days = days
+    @unit = unit
   end
 
   # collection of highest temperatures we get, organized by date
@@ -46,5 +48,11 @@ class WeatherForecast
 
   def validate_time_period!(days)
     raise "Invalid number of days." unless VALID_DAYS.include?(days)
+  end
+
+  def validate_unit!(unit)
+    return if unit.nil?
+
+    raise "Invalid unit." unless VALID_UNITS.include?(unit)
   end
 end
