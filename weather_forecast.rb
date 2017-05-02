@@ -7,13 +7,14 @@ class WeatherForecast
   VALID_DAYS = (1..5)
   VALID_UNITS = ["imperial", "metric"]
 
-  def initialize(location = "Singapore", days = 1, unit = nil)
+  def initialize(location = "Singapore", days = 1, units = nil)
     validate_time_period!(days)
     validate_units!(units)
 
     @location = location
     @days = days
-    @unit = unit
+    @units = units
+    @raw_response = send_request(location, units)
   end
 
   # collection of highest temperatures we get, organized by date
@@ -50,9 +51,9 @@ class WeatherForecast
     raise "Invalid number of days." unless VALID_DAYS.include?(days)
   end
 
-  def validate_unit!(unit)
-    return if unit.nil?
+  def validate_units!(units)
+    return if units.nil?
 
-    raise "Invalid unit." unless VALID_UNITS.include?(unit)
+    raise "Invalid units." unless VALID_UNITS.include?(units)
   end
 end
