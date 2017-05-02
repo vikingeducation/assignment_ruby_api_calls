@@ -8,6 +8,11 @@ class WeatherForecast
   VALID_DAYS = (1..5)
   VALID_UNITS = ["imperial", "metric"]
 
+  attr_reader :location,
+              :days,
+              :units,
+              :raw_response
+
   def initialize(location = "Singapore", days = 1, units = nil)
     validate_time_period!(days)
     validate_units!(units)
@@ -71,4 +76,5 @@ end
 
 if $0 == __FILE__
   forecast = WeatherForecast.new("Singapore", 5, "metric")
+  pp forecast.raw_response
 end
