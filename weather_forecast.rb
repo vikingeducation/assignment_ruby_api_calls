@@ -65,12 +65,7 @@ class WeatherForecast
     params = { "APPID" => API_KEY, "q" => location }
     params["units"] = units unless units.nil?
 
-    pp params
-
     @raw_response = HTTParty.get(BASE_URI, :query => params)
-    # @raw_response = HTTParty.get("#{BASE_URI}?q=Singapore&units=metric&APPID=#{API_KEY}")
-
-    pp @raw_response
   end
 end
 
