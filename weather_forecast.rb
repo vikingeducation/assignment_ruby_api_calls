@@ -1,5 +1,7 @@
+require 'date'
 require 'httparty'
 require 'pp'
+require 'json'
 
 class WeatherForecast
   BASE_URI = "http://api.openweathermap.org/data/2.5/forecast"
@@ -11,7 +13,8 @@ class WeatherForecast
   attr_reader :location,
               :days,
               :units,
-              :raw_response
+              :raw_response,
+              :weather_data
 
   def initialize(location = "Singapore", days = 1, units = nil)
     validate_time_period!(days)
@@ -21,6 +24,20 @@ class WeatherForecast
     @days = days
     @units = units
     @raw_response = send_request(location, units)
+    # @weather_data = trim_response(@raw_response, @days)
+
+    # test code to avoid hitting the API all the time
+    # while working on the public methods
+    @weather_data = trim_response(JSON.parse(File.read('./sample.json')), @days)
+  end
+
+  # trim the response to only include weather data for the
+  # specified number of days from today
+  # TODO: make this method private
+  def trim_response(response, days)
+    weather_data = response['list']
+
+    weather_data.select { |item| (Time.at(item['dt']).to_date - Time.now.to_date).round <= days }
   end
 
   # collection of highest temperatures we get, organized by date
@@ -75,6 +92,7 @@ class WeatherForecast
 end
 
 if $0 == __FILE__
-  forecast = WeatherForecast.new("Singapore", 5, "metric")
-  pp forecast.raw_response
+  forecast = WeatherForecast.new("Singapore", 3, "metric")
+  pp forecast.weather_data
+  pp forecast.weather_data.length
 end
