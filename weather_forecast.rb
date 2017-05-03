@@ -51,6 +51,11 @@ class WeatherForecast
 
   # collection of lowest temperatures we get, organized by date
   def lo_temps
+    results = {}
+
+    self.weather_data.each { |item| results[item['dt_txt']] = item['main']['temp_min'] }
+
+    results
   end
 
   # forecast for today
@@ -98,6 +103,7 @@ end
 
 if $0 == __FILE__
   forecast = WeatherForecast.new("Singapore", 3, "metric")
-  
+
   pp forecast.hi_temps
+  pp forecast.lo_temps
 end
