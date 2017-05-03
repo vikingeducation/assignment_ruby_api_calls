@@ -106,6 +106,11 @@ class WeatherForecast
 
   # cloudiness in %
   def cloudiness
+    results = {}
+
+    self.weather_data.each { |item| results[item['dt_txt']] = item['clouds']['all'] }
+
+    results
   end
 
   private
@@ -145,4 +150,6 @@ if $0 == __FILE__
   pp forecast.rainfall
   puts
   pp forecast.wind
+  puts
+  pp forecast.cloudiness
 end
