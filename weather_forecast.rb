@@ -58,7 +58,7 @@ class WeatherForecast
     results
   end
 
-  # forecast for today
+  # temperature forecast for today
   def today
     results = {}
     today_data = self.weather_data.select { |item| Time.parse(item['dt_txt']).day == Time.now.day }
@@ -68,7 +68,7 @@ class WeatherForecast
     results
   end
 
-  # forecast for tomorrow
+  # temperature forecast for tomorrow
   def tomorrow
     results = {}
     tomorrow = Time.at(Time.now + 86400).day
