@@ -8,7 +8,7 @@ class WeatherForecast
 
   API_KEY = ENV["API_KEY"]
   VALID_DAYS = (1..5)
-  VALID_UNITS = ["imperial", "metric"]
+  VALID_UNITS = ["imperial", "metric", nil]
 
   attr_reader :location,
               :days,
@@ -16,19 +16,15 @@ class WeatherForecast
               :raw_response,
               :weather_data
 
-  def initialize(location = "Singapore", days = 1, units = nil)
+  def initialize(location = "Singapore", days = 3, units = "metric")
     validate_time_period!(days)
     validate_units!(units)
 
     @location = location
     @days = days
     @units = units
-    @raw_response = send_request(location, units)
-    # @weather_data = trim_response(@raw_response, @days)
-
-    # test code to avoid hitting the API all the time
-    # while working on the public methods
-    @weather_data = trim_response(JSON.parse(File.read('./sample.json')), @days)
+    @raw_response = send_request(@location, @units)
+    @weather_data = trim_response(@raw_response, @days)
   end
 
   # trim the response to only include weather data for the
@@ -137,19 +133,26 @@ class WeatherForecast
 end
 
 if $0 == __FILE__
-  forecast = WeatherForecast.new("Singapore", 3, "metric")
+  forecast = WeatherForecast.new
 
+  puts "hi_temps"
   pp forecast.hi_temps
   puts
+  puts "lo_temps"
   pp forecast.lo_temps
   puts
+  puts "today"
   pp forecast.today
   puts
+  puts "tomorrow"
   pp forecast.tomorrow
   puts
+  puts "rainfall"
   pp forecast.rainfall
   puts
+  puts "wind"
   pp forecast.wind
   puts
+  puts "cloudiness"
   pp forecast.cloudiness
 end
