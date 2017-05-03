@@ -27,15 +27,6 @@ class WeatherForecast
     @weather_data = trim_response(@raw_response, @days)
   end
 
-  # trim the response to only include weather data for the
-  # specified number of days from today
-  # TODO: make this method private
-  def trim_response(response, days)
-    weather_data = response['list']
-
-    weather_data.select { |item| (Time.at(item['dt']).to_date - Time.now.to_date).round < days }
-  end
-
   # collection of highest temperatures we get, organized by date
   def hi_temps
     results = {}
@@ -129,6 +120,14 @@ class WeatherForecast
     params["units"] = units unless units.nil?
 
     @raw_response = HTTParty.get(BASE_URI, :query => params)
+  end
+
+  # trim the response to only include weather data for the
+  # specified number of days from today
+  def trim_response(response, days)
+    weather_data = response['list']
+
+    weather_data.select { |item| (Time.at(item['dt']).to_date - Time.now.to_date).round < days }
   end
 end
 
