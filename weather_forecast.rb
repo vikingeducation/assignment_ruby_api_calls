@@ -1,7 +1,6 @@
 require 'date'
 require 'httparty'
 require 'pp'
-require 'json'
 
 class WeatherForecast
   BASE_URI = "http://api.openweathermap.org/data/2.5/forecast"
@@ -134,24 +133,5 @@ end
 if $0 == __FILE__
   forecast = WeatherForecast.new
 
-  puts "hi_temps"
-  pp forecast.hi_temps
-  puts
-  puts "lo_temps"
-  pp forecast.lo_temps
-  puts
-  puts "today"
   pp forecast.today
-  puts
-  puts "tomorrow"
-  pp forecast.tomorrow
-  puts
-  puts "rainfall"
-  pp forecast.rainfall
-  puts
-  puts "wind"
-  pp forecast.wind
-  puts
-  puts "cloudiness"
-  pp forecast.cloudiness
 end
