@@ -60,6 +60,12 @@ class WeatherForecast
 
   # forecast for today
   def today
+    results = {}
+    today_data = self.weather_data.select { |item| Time.parse(item['dt_txt']).day == Time.now.day }
+
+    today_data.each { |item| results[item['dt_txt']] = item['main']['temp'] }
+
+    results
   end
 
   # forecast for tomorrow
@@ -104,6 +110,7 @@ end
 if $0 == __FILE__
   forecast = WeatherForecast.new("Singapore", 3, "metric")
 
-  pp forecast.hi_temps
-  pp forecast.lo_temps
+  # pp forecast.hi_temps
+  # pp forecast.lo_temps
+  pp forecast.today
 end
