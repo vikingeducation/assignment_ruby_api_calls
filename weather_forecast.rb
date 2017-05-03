@@ -97,6 +97,11 @@ class WeatherForecast
 
   # wind speed (in m/s), and direction (in degrees)
   def wind
+    results = {}
+
+    self.weather_data.each { |item| results[item['dt_txt']] = [item['wind']['speed'], item['wind']['deg']] }
+
+    results
   end
 
   # cloudiness in %
@@ -138,4 +143,6 @@ if $0 == __FILE__
   pp forecast.tomorrow
   puts
   pp forecast.rainfall
+  puts
+  pp forecast.wind
 end
