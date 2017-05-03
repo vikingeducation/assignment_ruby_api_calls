@@ -37,7 +37,7 @@ class WeatherForecast
   def trim_response(response, days)
     weather_data = response['list']
 
-    weather_data.select { |item| (Time.at(item['dt']).to_date - Time.now.to_date).round <= days }
+    weather_data.select { |item| (Time.at(item['dt']).to_date - Time.now.to_date).round < days }
   end
 
   # collection of highest temperatures we get, organized by date
@@ -110,7 +110,9 @@ end
 if $0 == __FILE__
   forecast = WeatherForecast.new("Singapore", 3, "metric")
 
-  # pp forecast.hi_temps
-  # pp forecast.lo_temps
+  pp forecast.hi_temps
+  puts
+  pp forecast.lo_temps
+  puts
   pp forecast.today
 end
