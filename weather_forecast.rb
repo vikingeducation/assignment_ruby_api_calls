@@ -70,6 +70,14 @@ class WeatherForecast
 
   # forecast for tomorrow
   def tomorrow
+    results = {}
+    tomorrow = Time.at(Time.now + 86400).day
+
+    tomorrow_data = self.weather_data.select { |item| Time.parse(item['dt_txt']).day == tomorrow }
+
+    tomorrow_data.each { |item| results[item['dt_txt']] = item['main']['temp'] }
+
+    results
   end
 
   # rainfall
@@ -115,4 +123,6 @@ if $0 == __FILE__
   pp forecast.lo_temps
   puts
   pp forecast.today
+  puts
+  pp forecast.tomorrow
 end
