@@ -80,8 +80,19 @@ class WeatherForecast
     results
   end
 
-  # rainfall
+  # rainfall for last 3 hours in mm, rounded to two decimal places
   def rainfall
+    results = {}
+
+    self.weather_data.each do |item|
+      if item['rain']['3h'].nil?
+        results[item['dt_txt']] = 0.00
+      else
+        results[item['dt_txt']] = item['rain']['3h'].round(2)
+      end
+    end
+
+    results
   end
 
   # wind speed (in m/s), and direction (in degrees)
@@ -125,4 +136,6 @@ if $0 == __FILE__
   pp forecast.today
   puts
   pp forecast.tomorrow
+  puts
+  pp forecast.rainfall
 end
