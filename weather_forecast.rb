@@ -42,6 +42,11 @@ class WeatherForecast
 
   # collection of highest temperatures we get, organized by date
   def hi_temps
+    results = {}
+
+    self.weather_data.each { |item| results[item['dt_txt']] = item['main']['temp_max'] }
+
+    results
   end
 
   # collection of lowest temperatures we get, organized by date
@@ -93,6 +98,6 @@ end
 
 if $0 == __FILE__
   forecast = WeatherForecast.new("Singapore", 3, "metric")
-  pp forecast.weather_data
-  pp forecast.weather_data.length
+  
+  pp forecast.hi_temps
 end
