@@ -21,7 +21,9 @@ GEM
       mime-types (>= 1.16, < 3.0)
       oauth2 (~> 1.0)
     hashie (3.5.5)
-    json (2.0.4)
+    httparty (0.14.0)
+      multi_xml (>= 0.5.2)
+    json (2.1.0)
     jwt (1.5.6)
     method_source (0.8.2)
     mime-types (2.99.3)
@@ -54,9 +56,10 @@ PLATFORMS
 DEPENDENCIES
   envyable
   github_api
+  httparty
   json
   pry-byebug
   typhoeus
 
 BUNDLED WITH
-   1.11.2
+   1.14.6

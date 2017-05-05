@@ -11,53 +11,65 @@ class WeatherForecast
   VALID_FORMATS = [:json]
   VALID_PERIODS = (1..16).to_a
 
-  def initialize(location=4350359, days=1, mode=JSON )
+  def initialize(location=4350359, days=4, mode=JSON )
     validate_format!(mode)
     validate_time_period!(days)
     @days = days
     @mode = mode
     @options = {:query => {:id => location, :appid => API_KEY, :cnt => days}}
-    @response = HTTParty.get(BASE_URI, @options)
+    @res = HTTParty.get(BASE_URI, @options)
+    @response = JSON.parse(@res.body)
   end
 
-  # def hi_temps
-  #   puts @response
-  # end
-  #
-  # def low
-  #
-  # end
-  #
-  # def today
-  #
-  # end
-  #
-  # def tomorrow
-  #
-  # end
-  #
-  # def weather
-  #
-  # end
-  #
-  def humidity(days=@days)
-     response = @response  #send_request("humidity", days)
-    trim_response(response)
+  def hi_temps
+    puts "HIGH TEMPS"
+    @days.times do |day|
+      puts "High temperature on day #{day + 1} is #{@response["list"][day]["temp"]["max"]} degrees"
+    end
   end
-  #
-  # def pressure
-  #
-  # end
+
+  def lo_temps
+    puts "LOW TEMPS"
+    @days.times do |day|
+      puts "Low temperature on day #{day + 1} is #{@response["list"][day]["temp"]["min"]} degrees"
+    end
+  end
+
+  def today
+    puts "TODAY"
+    puts "High temperature today is #{@response["list"][0]["temp"]["max"]} degrees"
+    puts "Low temperature today is #{@response["list"][0]["temp"]["min"]} degrees"
+    puts "The general condition for today is #{@response["list"][0]["weather"][0]["description"]}."
+  end
+
+  def tomorrow
+    puts "High temperature tomorrow is #{@response["list"][1]["temp"]["max"]} degrees."
+    puts "Low temperature tomorrow is #{@response["list"][1]["temp"]["min"]} degrees."
+    puts "The general condition for tomorrow is #{@response["list"][1]["weather"][0]["description"]}."
+  end
+
+  def weather_description
+    puts "GENERAL CONDITIONS"
+    @days.times do |day|
+      puts "The general condition on day #{day + 1} is #{@response["list"][day]["weather"][0]["description"]}."
+    end
+  end
+
+  def humidity
+    puts "HUMIDITY"
+    @days.times do |day|
+      puts "Humidity on day #{day + 1} is #{@response["list"][day]["humidity"]} %"
+    end
+  end
+
+  def pressure
+    puts "PRESSURE"
+    @days.times do |day|
+      puts "Pressure on day #{day + 1} is #{@response["list"][day]["pressure"]}."
+    end
+  end
 
   private
-
-   def send_request(category, days)
-     return unless category && days
-     uri = [ BASE_URI, "cnt=#{days}", cat=category].join("&")
-     params = { "api-key" => API_KEY }
-     request = Typhoeus::Request.new( uri, :method => :get, :params => params )
-     request.run
-   end
 
    def validate_time_period!(days)
      unless VALID_PERIODS.include?(days)
@@ -71,18 +83,13 @@ class WeatherForecast
      end
    end
 
-   def trim_response(response)
-     response_body = JSON.parse(response.body)
-     results = response_body["list"] #[ 0..(@days - 1)
-    results.each {|key, value| puts "#{key} is #{value}"}
-        #  "high"           =>  date[list.temp.max],
-        #  "low"          =>  date[list.temp.min],
-        #  "pressure"       =>  date[list.pressure],
-        #  "humidity" =>  date[list.humidity],
-        #  "weather"      =>  date[list.weather.main],
-
-   end
 end
 
-wf = WeatherForecast.new
+wf = WeatherForecast.new(2643743, 7)
+wf.today
+wf.tomorrow
+wf.hi_temps
+wf.lo_temps
+wf.pressure
 wf.humidity
+wf.weather_description
