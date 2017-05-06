@@ -34,6 +34,7 @@ class GithubAPIWrapper
     repo_names
   end
 
+  # returns the most recent commit messages for a specific repo
   def last_commit_messages(num = 10, username = 'roychen25', repo_name)
     commit_messages = []
 
