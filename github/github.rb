@@ -51,8 +51,16 @@ end
 if $0 == __FILE__
   wrapper = GithubAPIWrapper.new
 
-  # pp wrapper.most_recently_created_repos
-  pp wrapper.most_recently_updated_repos
+  # print out the 10 most recently updated repos
+  puts "10 most recently updated repos:"
+  repos = wrapper.most_recently_updated_repos
+  pp repos
 
-  pp wrapper.last_commit_messages(10, 'roychen25', 'assignment_bootstrap_sprint')
+  # print out the 10 most recent commit messages for each repo
+  puts "10 most recent commit messages for each repo:"
+  repos.each do |repo|
+    puts "Repo name: #{repo}"
+    puts "Commit messages:"
+    pp wrapper.last_commit_messages(10, 'roychen25', repo)
+  end
 end
