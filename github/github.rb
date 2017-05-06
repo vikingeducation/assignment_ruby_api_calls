@@ -40,6 +40,8 @@ class GithubAPIWrapper
 
     commits = github.repos.commits.list(username, repo_name).sort_by { |commit| commit['date'] }.reverse[0..num - 1]
 
+    sleep 0.5
+
     commits.each { |commit| commit_messages << commit['commit']['message'] }
 
     commit_messages
