@@ -33,6 +33,16 @@ class GithubAPIWrapper
 
     repo_names
   end
+
+  def last_commit_messages(num = 10, username = 'roychen25', repo_name)
+    commit_messages = []
+
+    commits = github.repos.commits.list(username, repo_name).sort_by { |commit| commit['date'] }.reverse[0..num - 1]
+
+    commits.each { |commit| commit_messages << commit['commit']['message'] }
+
+    commit_messages
+  end
 end
 
 if $0 == __FILE__
@@ -40,4 +50,6 @@ if $0 == __FILE__
 
   # pp wrapper.most_recently_created_repos
   pp wrapper.most_recently_updated_repos
+
+  pp wrapper.last_commit_messages(10, 'roychen25', 'assignment_bootstrap_sprint')
 end
