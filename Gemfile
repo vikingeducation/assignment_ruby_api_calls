@@ -1,0 +1,6 @@
+source 'http://www.rubygems.org'
+gem 'pry'
+gem 'github_api'
+gem 'envyable'
+gem 'httparty'
+gem 'json'
