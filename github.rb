@@ -9,7 +9,8 @@ repos = git.repos.list user: "chadl76"
 
 
 1.upto(10) do |x|
-	puts repos[x]
+	puts "#{repos[x]["name"]}: #{repos[x]["created_at"]}"
+	
 	end
 
 
