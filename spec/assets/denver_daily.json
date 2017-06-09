@@ -1,0 +1,188 @@
+{
+  "city": {
+    "id": 5419384,
+    "name": "Denver",
+    "coord": {
+      "lon": -104.9848,
+      "lat": 39.7392
+    },
+    "country": "US",
+    "population": 0
+  },
+  "cod": "200",
+  "message": 0.1564933,
+  "cnt": 7,
+  "list": [
+    {
+      "dt": 1497031200,
+      "temp": {
+        "day": 89.55,
+        "min": 66.92,
+        "max": 91.47,
+        "night": 66.92,
+        "eve": 89.33,
+        "morn": 89.55
+      },
+      "pressure": 813.54,
+      "humidity": 35,
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "sky is clear",
+          "icon": "01d"
+        }
+      ],
+      "speed": 1.48,
+      "deg": 216,
+      "clouds": 0
+    },
+    {
+      "dt": 1497117600,
+      "temp": {
+        "day": 83.44,
+        "min": 58.06,
+        "max": 86.97,
+        "night": 63.55,
+        "eve": 83.59,
+        "morn": 58.06
+      },
+      "pressure": 810.38,
+      "humidity": 27,
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "sky is clear",
+          "icon": "01d"
+        }
+      ],
+      "speed": 1.34,
+      "deg": 223,
+      "clouds": 0
+    },
+    {
+      "dt": 1497204000,
+      "temp": {
+        "day": 81.66,
+        "min": 58.44,
+        "max": 85.14,
+        "night": 59.27,
+        "eve": 81.16,
+        "morn": 58.44
+      },
+      "pressure": 812.39,
+      "humidity": 27,
+      "weather": [
+        {
+          "id": 801,
+          "main": "Clouds",
+          "description": "few clouds",
+          "icon": "02d"
+        }
+      ],
+      "speed": 5.73,
+      "deg": 126,
+      "clouds": 20
+    },
+    {
+      "dt": 1497294000,
+      "temp": {
+        "day": 82.53,
+        "min": 52.97,
+        "max": 83.98,
+        "night": 64.11,
+        "eve": 83.98,
+        "morn": 52.97
+      },
+      "pressure": 810.37,
+      "humidity": 0,
+      "weather": [
+        {
+          "id": 500,
+          "main": "Rain",
+          "description": "light rain",
+          "icon": "10d"
+        }
+      ],
+      "speed": 1.92,
+      "deg": 140,
+      "clouds": 0,
+      "rain": 0.28
+    },
+    {
+      "dt": 1497380400,
+      "temp": {
+        "day": 83.37,
+        "min": 56.95,
+        "max": 83.37,
+        "night": 64.11,
+        "eve": 81.97,
+        "morn": 56.95
+      },
+      "pressure": 807.23,
+      "humidity": 0,
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "sky is clear",
+          "icon": "01d"
+        }
+      ],
+      "speed": 9.51,
+      "deg": 177,
+      "clouds": 0
+    },
+    {
+      "dt": 1497466800,
+      "temp": {
+        "day": 72.57,
+        "min": 52.68,
+        "max": 73.9,
+        "night": 59.54,
+        "eve": 73.9,
+        "morn": 52.68
+      },
+      "pressure": 808.97,
+      "humidity": 0,
+      "weather": [
+        {
+          "id": 500,
+          "main": "Rain",
+          "description": "light rain",
+          "icon": "10d"
+        }
+      ],
+      "speed": 7.87,
+      "deg": 324,
+      "clouds": 0,
+      "rain": 0.24
+    },
+    {
+      "dt": 1497553200,
+      "temp": {
+        "day": 74.79,
+        "min": 50.14,
+        "max": 74.88,
+        "night": 58.62,
+        "eve": 74.88,
+        "morn": 50.14
+      },
+      "pressure": 812.53,
+      "humidity": 0,
+      "weather": [
+        {
+          "id": 500,
+          "main": "Rain",
+          "description": "light rain",
+          "icon": "10d"
+        }
+      ],
+      "speed": 4,
+      "deg": 219,
+      "clouds": 0,
+      "rain": 1.75
+    }
+  ]
+}
