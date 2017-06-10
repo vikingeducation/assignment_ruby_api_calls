@@ -14,6 +14,16 @@ class WeatherForecast
     @json = forecast
   end
 
+  def city_info
+    city_obj = @json['city']
+
+    {
+      id: city_obj['id'],
+      name: city_obj['name'],
+      country: city_obj['country']
+    }
+  end
+
   def hi_temps
     map_temps 'max'
   end
@@ -124,6 +134,20 @@ RSpec.describe WeatherForecast do
         caster = WeatherForecast.new(day_count: 5)
         expect(caster.lo_temps).to match [67, 58, 58, 53, 57]
       end
+    end
+  end
+
+  describe '#city_info' do
+    it 'lists the city name' do
+      expect(caster.city_info).to include name: 'Denver'
+    end
+
+    it 'lists the country' do
+      expect(caster.city_info).to include country: 'US'
+    end
+
+    it 'lists the city id' do
+      expect(caster.city_info).to include id: 5419384
     end
   end
 end
