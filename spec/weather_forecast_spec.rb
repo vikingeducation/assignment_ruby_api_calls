@@ -48,6 +48,7 @@ class WeatherForecast
     weather = day['weather'].first
 
     {
+      date: Time.at(day['dt']),
       day: day['temp']['day'].round,
       low: day['temp']['min'].round,
       high: day['temp']['max'].round,
@@ -72,15 +73,16 @@ RSpec.describe WeatherForecast do
   describe 'forecast' do
    describe '#today and #tomorrow' do
       it 'gives forecast for the day' do
-        expect(caster.today).to eq daily_forecast_json(90, 67, 91)
+        expect(caster.today).to eq daily_forecast_json(90, 67, 91, Time.at(1497031200))
       end
 
       it 'gives forecast for the next day' do
-        expect(caster.tomorrow).to eq daily_forecast_json(83, 58, 87)
+        expect(caster.tomorrow).to eq daily_forecast_json(83, 58, 87, Time.at(1497117600))
       end
 
-      def daily_forecast_json(day, low, high)
+      def daily_forecast_json(day, low, high, date)
         {
+          date: date,
           day: day,
           low: low,
           high: high,
@@ -110,7 +112,7 @@ RSpec.describe WeatherForecast do
     end
   end
 
-  describe '#low_temps' do
+  describe '#lo_temps' do
     context 'default' do
       it 'returns first 3 low temperatures' do
         expect(caster.lo_temps).to match [67, 58, 58]
