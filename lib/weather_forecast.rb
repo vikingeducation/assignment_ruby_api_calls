@@ -1,4 +1,7 @@
 require 'httparty'
+require 'envyable'
+
+Envyable.load('config/env.yml')
 
 class WeatherForecast
   include HTTParty
