@@ -1,6 +1,9 @@
 # weatherforecast
+require_relative 'environment'
+require 'HTTParty'
+
 class WeatherForecast
-  API_KEY = ENV["WEATHER_KEY"]
+  API_KEY = WEATHER_KEY
 
   def initialize(location = "france", num_days = 5)
     @location = location
@@ -11,7 +14,7 @@ class WeatherForecast
   def hi_temps
     puts @location
     puts @num_days
-    puts ENV['WEATHER_KEY']
+    send_request
   end
 
   # low temperatures organized by date
@@ -33,8 +36,8 @@ class WeatherForecast
 
   private
   def send_request
-
-
+    response = HTTParty.get('api.openweathermap.org/data/2.5/forecast?id=524901&APPID=' + API_KEY)
+    puts response
   end
 
 
