@@ -1,5 +1,7 @@
 # weatherforecast
 class WeatherForecast
+  API_KEY = ENV["WEATHER_KEY"]
+
   def initialize(location = "france", num_days = 5)
     @location = location
     @num_days = num_days
@@ -9,6 +11,7 @@ class WeatherForecast
   def hi_temps
     puts @location
     puts @num_days
+    puts ENV['WEATHER_KEY']
   end
 
   # low temperatures organized by date
@@ -30,6 +33,7 @@ class WeatherForecast
 
   private
   def send_request
+
 
   end
 
