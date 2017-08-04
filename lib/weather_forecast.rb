@@ -11,7 +11,7 @@ class WeatherForecast
   attr_reader :location, :num_days, :response_hash, :raw_response
 
 # comment
-  def initialize(location = 'france', num_days = 5)
+  def initialize(location = 'moscow', num_days = 5)
     @location = location
     @num_days = num_days
     # @raw_response
@@ -76,8 +76,16 @@ class WeatherForecast
 
   private
   def send_request
-    @raw_response = HTTParty.get('http://api.openweathermap.org/data/2.5/forecast?id=524901&APPID=' + API_KEY)
+    # @raw_response = HTTParty.get('http://api.openweathermap.org/data/2.5/forecast?id=524901&APPID=' + API_KEY)
+    create_url
+    @raw_response = HTTParty.get(@api_url)
     parse_response
+  end
+
+  def create_url
+    binding.pry
+    base_url = "http://api.openweathermap.org/data/2.5/forecast?"
+    @api_url = base_url + "q=#{@location}&cnt=#{@num_days}&APPID=" + API_KEY
   end
 
   def parse_response
@@ -156,6 +164,7 @@ class WeatherForecast
   # get_temp
   def get_temp(day, temp_type)
     # gets the temperatures of a day, requires a temp_type (hi/lo)
+    binding.pry
     temps = day["main"]
     req_temp = temps[temp_type]
     convert_temp(req_temp)
