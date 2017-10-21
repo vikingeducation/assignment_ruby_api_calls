@@ -2,7 +2,8 @@
 require 'httparty'
 require 'pp'
 
-# WEATHER_KEY=c7d03f3100e9ddf717202ea0da08181f
+# Specify your API key below assainign it to WEATHER_KEY that you can obtain on http://openweathermap.org. Uncomment below line after.
+# WEATHER_KEY =
 
 class WeatherForcast
 
