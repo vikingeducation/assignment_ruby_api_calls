@@ -2,7 +2,7 @@ require 'dotenv/load'
 
 require 'httparty'
 require 'pp'
-require "awesome_print"
+require 'awesome_print'
 require 'json'
 require 'date'
 
