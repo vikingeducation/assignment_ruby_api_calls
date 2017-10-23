@@ -39,16 +39,14 @@ class WeatherForecast
     # should be a collection of the high temperatures you get back, organized by date
     retrieve_saved_response
 
-    puts "Weather for #{@raw_response['city']['name']}"
+    puts "High Temperatures for #{@raw_response['city']['name']}"
+    dates = {}
     @raw_response['list'].each do |date|
-
+      dates[parse_date(date['dt_txt'])] ||= []
       max = date['main']['temp_max']
-      # p convert_to_fahrenheit(max)
-
-      p "#{parse_date(date['dt_txt'])}: #{convert_to_fahrenheit(max)}"
-      #>"2017-10-26 18:00:00: 63.9"
-
+      dates[parse_date(date['dt_txt'])] << convert_to_fahrenheit(max)
     end
+    render_temps_data(dates)
   end
 
   def low_temps
@@ -59,7 +57,7 @@ class WeatherForecast
     # should be convenient breakdowns of just this single day forecast
     retrieve_saved_response
     today = Date.today.strftime('%m-%d-%Y')
-    output_day(today)
+    render_day_data(today)
   end
 
   def tomorrow
@@ -67,7 +65,7 @@ class WeatherForecast
     retrieve_saved_response
     tomorrow = Date.today + 1
     tomorrow = tomorrow.strftime('%m-%d-%Y')
-    output_day(tomorrow)
+    render_day_data(tomorrow)
   end
 
   def parse_date(date)
@@ -85,7 +83,7 @@ class WeatherForecast
     f.round(1)
   end
 
-  def output_day(day)
+  def render_day_data(day)
     temps = @raw_response['list'].select do |date|
       parse_date(date['dt_txt']) == day
     end
@@ -115,10 +113,18 @@ class WeatherForecast
     puts "Average Humidity: #{avg_humidity}%"
     puts "Description: #{description}"
   end
+
+  def render_temps_data(dates)
+    dates.each do |date, temps|
+      puts "","High Temperatures for #{date}"
+      temps.each do |temp|
+        puts "#{temp}F"
+      end
+    end
+  end
 end
 
 forecast = WeatherForecast.new(location: 15601, days: 5)
 # forecast.retrieve_saved_response
-# pp forecast.raw_response
-# forecast.high_temps
-forecast.tomorrow
+# ap forecast.raw_response
+forecast.high_temps
