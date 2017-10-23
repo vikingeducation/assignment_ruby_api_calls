@@ -72,34 +72,37 @@ class WeatherForecast
   end
 
   def render_day_data(day)
-    temps = @raw_response['list'].select do |date|
-      parse_date(date['dt_txt']) == day
-    end
-
-    stats = {
-      high_temps: [],
-      low_temps: [],
-      humidities: [],
-      description: []
-    }
-
-    temps.each do |temp|
-      stats[:high_temps] << temp['main']['temp_max']
-      stats[:low_temps] << temp['main']['temp_min']
-      stats[:humidities] << temp['main']['humidity']
-      stats[:description] << temp['weather'][0]['description']
-    end
-
-    high_temp = convert_to_fahrenheit(stats[:high_temps].max)
-    low_temp = convert_to_fahrenheit(stats[:low_temps].min)
-    avg_humidity = (stats[:humidities].reduce(&:+))/temps.length
-    description = stats[:description].uniq.join(', ')
+    temps = get_temps_from_response(day)
 
     puts "Weather for #{@raw_response['city']['name']} #{day}:"
-    puts "High: #{high_temp}F"
-    puts "Low: #{low_temp}F"
-    puts "Average Humidity: #{avg_humidity}%"
-    puts "Description: #{description}"
+    puts "High: #{high_temp(temps)}F"
+    puts "Low: #{low_temp(temps)}F"
+    puts "Average Humidity: #{avg_humidity(temps)}%"
+    puts "Description: #{description(temps)}"
+  end
+
+  def get_temps_from_response(day)
+    @raw_response['list'].select do |date|
+      parse_date(date['dt_txt']) == day
+    end
+  end
+
+  def high_temp(temps)
+    max_temp = temps.map {|temp| temp['main']['temp_max'] }.max
+    convert_to_fahrenheit(max_temp)
+  end
+
+  def low_temp(temps)
+    min_temp = temps.map {|temp| temp['main']['temp_min'] }.min
+    convert_to_fahrenheit(min_temp)
+  end
+
+  def avg_humidity(temps)
+    temps.map {|temp| temp['main']['humidity'] }.reduce(&:+)/temps.length
+  end
+
+  def description(temps)
+    temps.map {|temp| temp['weather'][0]['description'] }.uniq.join(', ')
   end
 
   def render_temps_data(type:, key:)
