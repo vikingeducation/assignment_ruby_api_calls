@@ -23,12 +23,14 @@ class WeatherForecast
   def send_request
     url = "#{BASE_URI}/data/2.5/forecast?zip=#{@location}&APPID=#{API_KEY}"
     response = HTTParty.get(url)
+    save_response(response)
   end
 
-
-
-
-
+  def save_response(response)
+    File.open("data/temp.json","w") do |f|
+      f.write(response)
+    end
+  end
 
 
 end
