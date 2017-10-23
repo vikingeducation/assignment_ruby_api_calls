@@ -5,7 +5,7 @@ by Anne Richardson
 
 ## Part 1: OpenWeatherMap API
 
-This is a practice app that makes calls to a weather api. Usage instructions TBD.
+This is a practice app that makes calls to a weather api.
 
 ### How to use it
 
@@ -19,7 +19,40 @@ This is a practice app that makes calls to a weather api. Usage instructions TBD
 
 #### Example convenience methods
 
-`forecast.today` gives you
+`forecast.high_temps` gives you a list of high temps for the given zip code, sorted by day.
+
+```
+High Temperatures in New Orleans
+
+Highs for 10-23-2017
+64.7F
+68.4F
+70.8F
+
+Highs for 10-24-2017
+65.9F
+68.9F
+69.7F
+
+Highs for 10-25-2017
+66.2F
+63.0F
+64.3F
+```
+
+`forecast.low_temps` does the same thing, but for low temps
+
+`forecast.today` gives you a snapshot of the weather for today for the given city
+
+```
+Weather for Denver 10-23-2017:
+High: 57.3F
+Low: 52.7F
+Average Humidity: 32%
+Description: clear sky
+```
+
+`forecast.tomorrow` does the same thing, but for tomorrow
 
 ### Weather API Info:
 
