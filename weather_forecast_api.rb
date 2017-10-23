@@ -52,6 +52,12 @@ attr_accessor :raw_response
 
   private
 
+  def save_response(response)
+    File.open("data/temp.json","w") do |f|
+      f.write(response)
+    end
+  end
+
   def set_raw_response
     @raw_response = JSON.parse(File.read("data/temp.json"))
   end
