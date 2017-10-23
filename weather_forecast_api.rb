@@ -46,11 +46,13 @@ class WeatherForecast
       max = date['main']['temp_max']
       dates[parse_date(date['dt_txt'])] << convert_to_fahrenheit(max)
     end
-    render_temps_data(dates)
+    # render_temps_data(dates)
   end
 
   def low_temps
     # should be a collection of the low temperatures you get back, organized by date
+    retrieve_saved_response
+    render_temps_data(type: 'Low', key: 'temp_min')
   end
 
   def today
@@ -114,9 +116,17 @@ class WeatherForecast
     puts "Description: #{description}"
   end
 
-  def render_temps_data(dates)
+  def render_temps_data(type:, key:)
+    puts "#{type} Temperatures for #{@raw_response['city']['name']}"
+    dates = {}
+    @raw_response['list'].each do |date|
+      dates[parse_date(date['dt_txt'])] ||= []
+      temp = date['main'][key]
+      dates[parse_date(date['dt_txt'])] << convert_to_fahrenheit(temp)
+    end
+
     dates.each do |date, temps|
-      puts "","High Temperatures for #{date}"
+      puts "","#{type} Temperatures for #{date}"
       temps.each do |temp|
         puts "#{temp}F"
       end
@@ -127,4 +137,4 @@ end
 forecast = WeatherForecast.new(location: 15601, days: 5)
 # forecast.retrieve_saved_response
 # ap forecast.raw_response
-forecast.high_temps
+forecast.low_temps
