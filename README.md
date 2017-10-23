@@ -15,3 +15,10 @@ Access personal api info: https://home.openweathermap.org/api_keys
 
 Note: only hit the api once every 10 min per API key, max 60 per minute per user
 
+## Part 2: GitHub API
+
+TBD
+
+### GitHub API Info
+
+TBD
