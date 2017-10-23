@@ -9,7 +9,7 @@ require 'date'
 require 'pry'
 
 class WeatherForecast
-attr_accessor :raw_response
+
   def initialize(zip: 70115, days: 1)
     @zip = zip
     @days = days
