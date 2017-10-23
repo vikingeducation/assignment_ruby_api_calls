@@ -33,47 +33,39 @@ class WeatherForecast
 
   def high_temps
     # should be a collection of the high temperatures you get back, organized by date
-    retrieve_saved_response
-
-    puts "High Temperatures for #{@raw_response['city']['name']}"
-    dates = {}
-    @raw_response['list'].each do |date|
-      dates[parse_date(date['dt_txt'])] ||= []
-      max = date['main']['temp_max']
-      dates[parse_date(date['dt_txt'])] << convert_to_fahrenheit(max)
-    end
-    # render_temps_data(dates)
+    set_raw_response
+    render_temps_data(type: 'High', key: 'temp_max')
   end
 
   def low_temps
     # should be a collection of the low temperatures you get back, organized by date
-    retrieve_saved_response
+    set_raw_response
     render_temps_data(type: 'Low', key: 'temp_min')
   end
 
   def today
     # should be convenient breakdowns of just this single day forecast
-    retrieve_saved_response
+    set_raw_response
     today = Date.today.strftime('%m-%d-%Y')
     render_day_data(today)
   end
 
   def tomorrow
     # should be convenient breakdowns of just this single day forecast
-    retrieve_saved_response
+    set_raw_response
     tomorrow = Date.today + 1
     tomorrow = tomorrow.strftime('%m-%d-%Y')
     render_day_data(tomorrow)
   end
 
-  def parse_date(date)
-    Date.parse(date).strftime('%m-%d-%Y')
-  end
-
   private
 
-  def retrieve_saved_response
+  def set_raw_response
     @raw_response = JSON.parse(File.read("data/temp.json"))
+  end
+
+  def parse_date(date)
+    Date.parse(date).strftime('%m-%d-%Y')
   end
 
   def convert_to_fahrenheit(k)
@@ -113,7 +105,7 @@ class WeatherForecast
   end
 
   def render_temps_data(type:, key:)
-    puts "#{type} Temperatures for #{@raw_response['city']['name']}"
+    puts "#{type} Temperatures in #{@raw_response['city']['name']}"
     dates = {}
     @raw_response['list'].each do |date|
       dates[parse_date(date['dt_txt'])] ||= []
@@ -122,7 +114,7 @@ class WeatherForecast
     end
 
     dates.each do |date, temps|
-      puts "","#{type} Temperatures for #{date}"
+      puts "","#{type}s for #{date}"
       temps.each do |temp|
         puts "#{temp}F"
       end
@@ -130,7 +122,4 @@ class WeatherForecast
   end
 end
 
-forecast = WeatherForecast.new(location: 15601, days: 5)
-# forecast.retrieve_saved_response
-# ap forecast.raw_response
-forecast.low_temps
+
