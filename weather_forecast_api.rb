@@ -9,50 +9,42 @@ require 'date'
 require 'pry'
 
 class WeatherForecast
-
+attr_accessor :raw_response
   def initialize(zip: 70115, days: 1)
     @zip = zip
     @days = days
     @raw_response = {}
+    # set_raw_response
   end
 
   API_KEY = ENV['API_KEY']
   BASE_URI = "http://api.openweathermap.org"
 
   def send_request
-    url = "#{BASE_URI}/data/2.5/forecast?zip=#{@zip}&cnt=#{@days}&APPID=#{API_KEY}"
+    # return unless @raw_response.empty?
+    # url = "#{BASE_URI}/data/2.5/forecast?zip=#{@zip}&cnt=#{@days}&APPID=#{API_KEY}"
+    # url = "#{BASE_URI}/data/2.5/forecast/daily?zip=#{@zip}&cnt=#{@days}&APPID=#{API_KEY}"
+    url = "#{BASE_URI}/data/2.5/forecast?zip=#{@zip}&APPID=#{API_KEY}"
+
     response = HTTParty.get(url)
     save_response(response)
-  end
-
-  def save_response(response)
-    File.open("data/temp.json","w") do |f|
-      f.write(response)
-    end
+    set_raw_response
   end
 
   def high_temps
-    # should be a collection of the high temperatures you get back, organized by date
-    set_raw_response
     render_temps_data(type: 'High', key: 'temp_max')
   end
 
   def low_temps
-    # should be a collection of the low temperatures you get back, organized by date
-    set_raw_response
     render_temps_data(type: 'Low', key: 'temp_min')
   end
 
   def today
-    # should be convenient breakdowns of just this single day forecast
-    set_raw_response
     today = Date.today.strftime('%m-%d-%Y')
     render_day_data(today)
   end
 
   def tomorrow
-    # should be convenient breakdowns of just this single day forecast
-    set_raw_response
     tomorrow = Date.today + 1
     tomorrow = tomorrow.strftime('%m-%d-%Y')
     render_day_data(tomorrow)
