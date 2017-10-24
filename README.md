@@ -7,17 +7,35 @@ by Anne Richardson
 
 This is a practice app that makes calls to a weather api.
 
-### How to use it
+### How to Use It
 
-1. fork and clone the repo
-2. run `bundle`
-3. open up the `weather_forecast_main.rb` file
-4. modify the `WeatherForecast.new(...` line to include the zip code and number of days you want to see
-5. save, then run `ruby weather_forecast_api.rb`
-6. comment out the line `forecast.send_request`
-7. tinker around with running any of the convenience methods listed in that file
+#### Clone the App
+Fork and clone the repo
+Run `bundle`
 
-#### Example convenience methods
+#### Set up the API key
+In your main project folder, create a file called `.env`
+```
+touch .env
+```
+
+Get yourself an api key here: https://home.openweathermap.org/api_keys
+Copy that key then set up an environment variable in your `.env` file.
+```
+# .env
+
+OWM_API_KEY = 'your-api-key-goes-here'
+
+```
+
+#### Running the App
+Open up the `weather_forecast_main.rb` file
+Modify the `WeatherForecast.new(...` line to include the zip code and number of days you want to see
+Save, then run `ruby weather_forecast_api.rb`
+Comment out the line `forecast.send_request`
+Tinker around with running any of the convenience methods listed in that file
+
+#### Example Convenience Methods
 
 `forecast.high_temps` gives you a list of high temps for the given zip code, sorted by day.
 
