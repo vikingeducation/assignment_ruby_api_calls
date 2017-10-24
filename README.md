@@ -11,15 +11,17 @@ This is a practice app that makes calls to a weather api.
 
 #### Clone the App
 Fork and clone the repo
+
 Run `bundle`
 
 #### Set up the API key
-In your main project folder, create a file called `.env`
+In your main project folder, create a file called `.env`. This app uses the `dotenv` gem to manage environemtn variables.
 ```
 touch .env
 ```
 
 Get yourself an api key here: https://home.openweathermap.org/api_keys
+
 Copy that key then set up an environment variable in your `.env` file.
 ```
 # .env
@@ -29,11 +31,16 @@ OWM_API_KEY = 'your-api-key-goes-here'
 ```
 
 #### Running the App
+
 Open up the `weather_forecast_main.rb` file
+
 Modify the `WeatherForecast.new(...` line to include the zip code and number of days you want to see
+
 Save, then run `ruby weather_forecast_api.rb`
+
 Comment out the line `forecast.send_request`
-Tinker around with running any of the convenience methods listed in that file
+
+Play around with running any of the convenience methods listed in that file
 
 #### Example Convenience Methods
 
