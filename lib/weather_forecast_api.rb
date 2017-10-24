@@ -12,7 +12,7 @@ class WeatherForecast
   DEFAULT_ZIP = 70115
   DEFAULT_DAYS = 1
   DATA_FILE = "data/weather_data.json"
-  API_KEY = ENV['API_KEY']
+  API_KEY = ENV['OWM_API_KEY']
   BASE_URI = "http://api.openweathermap.org"
 
   def initialize(zip: DEFAULT_ZIP, days: DEFAULT_DAYS)
