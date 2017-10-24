@@ -13,8 +13,7 @@ class WeatherForecast
   def initialize(zip: 70115, days: 1)
     @zip = zip
     @days = days
-    @raw_response = {}
-    # set_raw_response
+    @raw_response = set_raw_response
   end
 
   API_KEY = ENV['API_KEY']
@@ -28,7 +27,6 @@ class WeatherForecast
 
     response = HTTParty.get(url)
     save_response(response)
-    set_raw_response
   end
 
   def high_temps
@@ -56,10 +54,16 @@ class WeatherForecast
     File.open("data/temp.json","w") do |f|
       f.write(response)
     end
+    @raw_response = set_raw_response
   end
 
   def set_raw_response
-    @raw_response = JSON.parse(File.read("data/temp.json"))
+    if File.zero?("data/temp.json")
+      puts "Whoops! Run 'forecast.send_request' once before running this method."
+      exit
+    else
+      JSON.parse(File.read("data/temp.json"))
+    end
   end
 
   def parse_date(date)
