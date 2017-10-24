@@ -9,15 +9,15 @@ require 'date'
 require 'pry'
 
 class WeatherForecast
-
-  def initialize(zip: 70115, days: 1)
+  DEFAULT_ZIP = 70115
+  DEFAULT_DAYS = 1
+  API_KEY = ENV['API_KEY']
+  BASE_URI = "http://api.openweathermap.org"
+  def initialize(zip: DEFAULT_ZIP, days: DEFAULT_DAYS)
     @zip = zip
     @days = days
     @raw_response = {}
   end
-
-  API_KEY = ENV['API_KEY']
-  BASE_URI = "http://api.openweathermap.org"
 
   def send_request
     puts "Requesting weather data..."
