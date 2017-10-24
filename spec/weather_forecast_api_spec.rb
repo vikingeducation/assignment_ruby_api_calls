@@ -13,8 +13,10 @@ describe WeatherForecast do
     end
   end
 
-  # describe '#send_request' do
-  # end
+  describe '#send_request' do
+    xit 'mocks out a call to the API' do
+    end
+  end
 
   # describe '#high_temps' do
   # end
