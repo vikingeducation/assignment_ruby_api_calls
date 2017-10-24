@@ -6,3 +6,6 @@ gem 'dotenv'
 gem 'httparty'
 gem 'pry'
 gem 'awesome_print'
+
+gem 'rspec'
+gem 'guard-rspec', require: false
