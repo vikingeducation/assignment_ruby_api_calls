@@ -11,7 +11,7 @@ require 'pry'
 class WeatherForecast
   DEFAULT_ZIP = 70115
   DEFAULT_DAYS = 1
-  DATA_FILE = "data/temp.json"
+  DATA_FILE = "data/weather_data.json"
   API_KEY = ENV['API_KEY']
   BASE_URI = "http://api.openweathermap.org"
 
