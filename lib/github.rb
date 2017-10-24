@@ -9,7 +9,7 @@ class GithubAPIWrapper
     @github = Github.new(oauth_token: TOKEN)
   end
 
-  def render_recent_repo_names(user:, qty:)
+  def render_recent_repo_names(user:, qty: 10)
     repos = get_repos(user)
     repos = limit_by_qty(repos, qty)
 
@@ -19,7 +19,7 @@ class GithubAPIWrapper
     end
   end
 
-  def render_recent_repo_commits(user:, qty:)
+  def render_recent_repo_commits(user:, qty: 10)
     repos = get_repos(user)
     repos = limit_by_qty(repos, qty)
 
@@ -56,9 +56,3 @@ class GithubAPIWrapper
     Date.parse(date).strftime('%m-%d-%Y')
   end
 end
-
-
-github = GithubAPIWrapper.new
-
-github.render_recent_repo_names(user: 'lortza', qty: 10)
-github.render_recent_repo_commits(user: 'lortza', qty: 3)
