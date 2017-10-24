@@ -8,17 +8,29 @@ class GithubAPIWrapper
     @github = Github.new(oauth_token: TOKEN)
   end
 
-  def get_recent_repos(qty)
-    repos = @github.repos.list(user: 'lortza')
-    p repos.body.first
+  def render_recent_repo_names(user:, qty:)
+    repos = get_recent_repos(user)
+    repos = limit_repos(repos, qty)
+
+    puts "The #{qty} Most Recent Repos for #{user}:"
+    repos.each do |repo|
+      puts "#{repo.name}: #{parse_date(repo.updated_at)}"
+    end
   end
 
-  def render_recent_repo_names(qty)
-    get_recent_repos(qty)
+  private
+
+  def get_recent_repos(user)
+    response = @github.repos.list(user: user)
+    response.body.sort_by { |repo| repo.updated_at }.reverse!
   end
 
-  def render_recent_repo_commits(qty)
-    get_recent_repos(qty)
+  def limit_repos(repos, qty)
+    repos.shift(qty)
+  end
+
+  def parse_date(date)
+    Date.parse(date).strftime('%m-%d-%Y')
   end
 end
 
@@ -27,4 +39,5 @@ end
 
 github = GithubAPIWrapper.new
 
-github.get_recent_repos(10)
+github.render_recent_repo_names(user: 'lortza', qty: 10)
+# github.render_recent_repo_commits(user: 'lortza', qty: 10)
