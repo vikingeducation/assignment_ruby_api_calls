@@ -7,5 +7,7 @@ gem 'httparty'
 gem 'pry'
 gem 'awesome_print'
 
+gem "github_api"
+
 gem 'rspec'
 gem 'guard-rspec', require: false
