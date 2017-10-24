@@ -13,36 +13,43 @@ class WeatherForecast
   def initialize(zip: 70115, days: 1)
     @zip = zip
     @days = days
-    @raw_response = set_raw_response
+    @raw_response = {}
   end
 
   API_KEY = ENV['API_KEY']
   BASE_URI = "http://api.openweathermap.org"
 
   def send_request
-    # return unless @raw_response.empty?
+    puts "Requesting weather data..."
     # url = "#{BASE_URI}/data/2.5/forecast?zip=#{@zip}&cnt=#{@days}&APPID=#{API_KEY}"
-    # url = "#{BASE_URI}/data/2.5/forecast/daily?zip=#{@zip}&cnt=#{@days}&APPID=#{API_KEY}"
-    url = "#{BASE_URI}/data/2.5/forecast?zip=#{@zip}&APPID=#{API_KEY}"
 
+    # should allow up to 16 days, but gives API key error
+    # url = "#{BASE_URI}/data/2.5/forecast/daily?zip=#{@zip}&cnt=#{@days}&APPID=#{API_KEY}"
+
+    # this one works well enough
+    url = "#{BASE_URI}/data/2.5/forecast?zip=#{@zip}&APPID=#{API_KEY}"
     response = HTTParty.get(url)
     save_response(response)
   end
 
   def high_temps
+    set_raw_response
     render_temps_data(type: 'High', key: 'temp_max')
   end
 
   def low_temps
+    set_raw_response
     render_temps_data(type: 'Low', key: 'temp_min')
   end
 
   def today
+    set_raw_response
     today = Date.today.strftime('%m-%d-%Y')
     render_day_data(today)
   end
 
   def tomorrow
+    set_raw_response
     tomorrow = Date.today + 1
     tomorrow = tomorrow.strftime('%m-%d-%Y')
     render_day_data(tomorrow)
@@ -51,19 +58,28 @@ class WeatherForecast
   private
 
   def save_response(response)
-    File.open("data/temp.json","w") do |f|
+    data_file = "data/temp.json"
+    File.open(data_file,"w") do |f|
       f.write(response)
     end
-    @raw_response = set_raw_response
+
+    if file_empty?(data_file) || file_error?(data_file)
+      puts "Something went wrong with the API call."
+    else
+      puts "Data import successful."
+    end
+  end
+
+  def file_empty?(data_file)
+    File.zero?("data_file")
+  end
+
+  def file_error?(data_file)
+    JSON.parse(File.read("data/temp.json"))['cod'] == 401
   end
 
   def set_raw_response
-    if File.zero?("data/temp.json")
-      puts "Whoops! Run 'forecast.send_request' once before running this method."
-      exit
-    else
-      JSON.parse(File.read("data/temp.json"))
-    end
+    JSON.parse(File.read("data/temp.json"))
   end
 
   def parse_date(date)
