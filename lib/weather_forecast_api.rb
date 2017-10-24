@@ -11,8 +11,10 @@ require 'pry'
 class WeatherForecast
   DEFAULT_ZIP = 70115
   DEFAULT_DAYS = 1
+  DATA_FILE = "data/temp.json"
   API_KEY = ENV['API_KEY']
   BASE_URI = "http://api.openweathermap.org"
+
   def initialize(zip: DEFAULT_ZIP, days: DEFAULT_DAYS)
     @zip = zip
     @days = days
@@ -21,8 +23,6 @@ class WeatherForecast
 
   def send_request
     puts "Requesting weather data..."
-    # url = "#{BASE_URI}/data/2.5/forecast?zip=#{@zip}&cnt=#{@days}&APPID=#{API_KEY}"
-
     # should allow up to 16 days, but gives API key error
     # url = "#{BASE_URI}/data/2.5/forecast/daily?zip=#{@zip}&cnt=#{@days}&APPID=#{API_KEY}"
 
@@ -58,28 +58,27 @@ class WeatherForecast
   private
 
   def save_response(response)
-    data_file = "data/temp.json"
-    File.open(data_file,"w") do |f|
+    File.open(DATA_FILE,"w") do |f|
       f.write(response)
     end
 
-    if file_empty?(data_file) || file_error?(data_file)
+    if file_empty? || file_error?
       puts "Something went wrong with the API call."
     else
       puts "Data import successful."
     end
   end
 
-  def file_empty?(data_file)
-    File.zero?("data_file")
+  def file_empty?
+    File.zero?(DATA_FILE)
   end
 
-  def file_error?(data_file)
-    JSON.parse(File.read("data/temp.json"))['cod'] == 401
+  def file_error?
+    JSON.parse(File.read(DATA_FILE))['cod'] == 401
   end
 
   def set_raw_response
-    JSON.parse(File.read("data/temp.json"))
+    JSON.parse(File.read(DATA_FILE))
   end
 
   def parse_date(date)

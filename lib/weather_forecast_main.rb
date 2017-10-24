@@ -5,7 +5,7 @@ require_relative 'weather_forecast_api'
 # 1) Run this file as-is 'ruby weather_forecast_main'
 # This will hit the api and store the results locally
 # You can only do this once per 10 minutes
-forecast = WeatherForecast.new(zip: 15601, days: 15)
+forecast = WeatherForecast.new(zip: 70115, days: 5)
 
 
 # 2) Now that you've pinged the api, comment out this line
